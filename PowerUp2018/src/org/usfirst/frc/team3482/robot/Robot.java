@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		double speed = oi.x.getRawAxis(1);
-		double turnSpeed = oi.x.getRawAxis(3);
+		double turnSpeed = oi.x.getRawAxis(4);
 		RobotMap.drive.arcadeDrive(speed, turnSpeed);
 	}
 
