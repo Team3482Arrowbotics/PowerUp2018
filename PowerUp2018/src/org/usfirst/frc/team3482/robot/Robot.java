@@ -16,6 +16,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
+		RobotMap.init();
 	}
 
 
@@ -37,10 +38,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
+		
 		double speed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
-		RobotMap.drive.arcadeDrive(speed, turnSpeed);
+		if(RobotMap.drive.isAlive()){
+			RobotMap.drive.arcadeDrive(speed, turnSpeed);			
+		}
+		Scheduler.getInstance().run();
 	}
 
 	/**

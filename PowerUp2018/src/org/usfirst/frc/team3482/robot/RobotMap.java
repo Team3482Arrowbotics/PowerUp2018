@@ -13,11 +13,11 @@ public class RobotMap {
 	public static DifferentialDrive drive;
 	public static SpeedControllerGroup left;
 	public static SpeedControllerGroup right;
-	public void init(){
-		frontLeft = new WPI_TalonSRX(0);
-		frontRight = new WPI_TalonSRX(1);
-		backLeft = new WPI_TalonSRX(2);
-		backRight = new WPI_TalonSRX(3);
+	public static void init(){
+		frontLeft = new WPI_TalonSRX(5);
+		frontRight = new WPI_TalonSRX(3);
+		backLeft = new WPI_TalonSRX(0);
+		backRight = new WPI_TalonSRX(12);
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new DifferentialDrive(left, right);
