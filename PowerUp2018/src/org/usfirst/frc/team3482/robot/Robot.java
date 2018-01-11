@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		
+		System.out.println("Hi");
 	}
 
 	/**
