@@ -10,6 +10,7 @@ public class RobotMap {
 	public static WPI_TalonSRX frontRight;
 	public static WPI_TalonSRX backLeft;
 	public static WPI_TalonSRX backRight;
+	public static WPI_TalonSRX intakeMotor;
 	public static DifferentialDrive drive;
 	public static SpeedControllerGroup left;
 	public static SpeedControllerGroup right;
@@ -18,6 +19,7 @@ public class RobotMap {
 		frontRight = new WPI_TalonSRX(3);
 		backLeft = new WPI_TalonSRX(0);
 		backRight = new WPI_TalonSRX(12);
+		intakeMotor = new WPI_TalonSRX(0);
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new DifferentialDrive(left, right);
