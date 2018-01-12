@@ -7,19 +7,23 @@
 
 package org.usfirst.frc.team3482.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 
 public class Robot extends IterativeRobot {
 	OI oi;
+	String gameData;
 	@Override
 	public void robotInit() {
 		oi = new OI();
 		RobotMap.init();
 	}
 
-
+	public void disabledPeriodic(){
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+	}
 	@Override
 	public void autonomousInit() {
 		
