@@ -13,6 +13,17 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
 	OI oi;
+	static boolean driveEnabled = true;
+	public static boolean isDriveEnabled() {
+		return driveEnabled;
+	}
+
+
+	public static void setDriveEnabled(boolean d) {
+		driveEnabled = d;
+	}
+
+
 	@Override
 	public void robotInit() {
 		oi = new OI();
@@ -39,10 +50,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		double speed = oi.x.getRawAxis(1);
+		double forwardSpeed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
-		if(RobotMap.drive.isAlive()){
-			RobotMap.drive.arcadeDrive(speed, turnSpeed);			
+		if(driveEnabled){
+			RobotMap.drive.arcadeDrive(forwardSpeed, turnSpeed);			
 		}
 		Scheduler.getInstance().run();
 	}
