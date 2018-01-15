@@ -11,8 +11,7 @@ public class DriveForwardAuto extends Command{
 		this.speed = speed;
 	}
 	protected void initialize(){
-		//negative because drive motors reversed
-		RobotMap.drive.arcadeDrive(-speed, 0);
+		RobotMap.drive.arcadeDrive(speed, 0);
 	}
 	protected void execute(){
 		
