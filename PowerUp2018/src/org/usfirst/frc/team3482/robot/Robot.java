@@ -17,12 +17,46 @@ public class Robot extends IterativeRobot {
 	String gameData;
 	@Override
 	public void robotInit() {
-		oi = new OI();
+		oi = new 
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				OI();
 		RobotMap.init();
 	}
 
 	public void disabledPeriodic(){
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		 
+	
 	}
 	@Override
 	public void autonomousInit() {
