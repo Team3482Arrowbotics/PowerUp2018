@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team3482.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -26,6 +27,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Hi");
+		String gameMessage = DriverStation.getInstance().getGameSpecificMessage();
 		RobotMap.gyro.enable();
 		RobotMap.gyro.setSetpoint(0);
 		
@@ -40,7 +42,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("NavX yaw", RobotMap.navx.getYaw());
 		if(RobotMap.gyro.onTarget()){
 			System.out.println("bye");
-			
 		}
 	}
 

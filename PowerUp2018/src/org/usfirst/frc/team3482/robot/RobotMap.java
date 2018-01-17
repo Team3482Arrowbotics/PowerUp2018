@@ -32,6 +32,7 @@ public class RobotMap {
 		drive = new DifferentialDrive(left, right);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
+		
 		pidDrive = new PIDDriveOutput(drive);
 		navx = new AHRSPID(SPI.Port.kMXP);
 		gyro = new PIDController(0.07, 0, 0, navx, pidDrive);
