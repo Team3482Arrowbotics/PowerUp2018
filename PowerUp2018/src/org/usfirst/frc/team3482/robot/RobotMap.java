@@ -19,10 +19,10 @@ public class RobotMap {
 	public static PIDController gyro;
 	public static PIDDriveOutput pidDrive;
 	public static void init(){
-		frontLeft = new WPI_TalonSRX(5);
-		frontRight = new WPI_TalonSRX(3);
-		backLeft = new WPI_TalonSRX(0);
-		backRight = new WPI_TalonSRX(12);
+		frontLeft = new WPI_TalonSRX(8); //5
+		frontRight = new WPI_TalonSRX(4); //3
+		backLeft = new WPI_TalonSRX(1); //0
+		backRight = new WPI_TalonSRX(0); //12
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new DifferentialDrive(left, right);
@@ -31,10 +31,10 @@ public class RobotMap {
 		
 		pidDrive = new PIDDriveOutput(drive);
 		navx = new AHRSPID(SPI.Port.kMXP);
-		gyro = new PIDController(0.07, 0, 0, navx, pidDrive);
+		gyro = new PIDController(0.09, 0, 0, navx, pidDrive);
 		gyro.setContinuous(true);
-	  	gyro.setAbsoluteTolerance(1);
+	  	gyro.setAbsoluteTolerance(2);
 		gyro.setInputRange(-180, 180);
-		gyro.setOutputRange(-.6, .6);
+		gyro.setOutputRange(-.8, .8);
 	}
 }

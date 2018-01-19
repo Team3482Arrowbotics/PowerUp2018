@@ -11,17 +11,21 @@ public class GyroTurn extends Command {
 	}
 
 	protected void initialize(){
+		RobotMap.gyro.reset();
+		RobotMap.navx.reset();
 		RobotMap.gyro.enable();
 		RobotMap.gyro.setSetpoint(turnAngle);
 	}
 	protected void execute(){
 		if(RobotMap.gyro.onTarget()) {
 			counter++;
+			System.out.println("OnTarget! - " + counter);
 		}
 	}
 	protected void end(){
 		//stop
 		RobotMap.gyro.reset();
+		RobotMap.navx.reset();
 		counter = 0;
 	}
 	
