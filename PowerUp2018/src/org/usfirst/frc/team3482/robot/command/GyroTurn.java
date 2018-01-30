@@ -18,7 +18,7 @@ public class GyroTurn extends Command {
 	}
 	protected void execute(){
 		if(RobotMap.gyro.onTarget()) {
-			counter++;
+			counter++; 
 			System.out.println("OnTarget! - " + counter);
 		}
 	}
@@ -32,7 +32,7 @@ public class GyroTurn extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return counter >= 2;
+		return counter >= 2; 
 	}
 
 }

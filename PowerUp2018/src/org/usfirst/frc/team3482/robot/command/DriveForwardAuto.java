@@ -6,19 +6,21 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveForwardAuto extends Command{
 	double speed;
-	public DriveForwardAuto(int timeout, double speed){
+	public DriveForwardAuto(double timeout, double speed){
 		super(timeout);
 		this.speed = speed;
 	}
 	protected void initialize(){
 		//negative because drive motors reversed
-		RobotMap.drive.arcadeDrive(-speed, 0);
+		System.out.println("Started going forward");
+		RobotMap.drive.arcadeDrive(0, -speed);
 	}
 	protected void execute(){
 		
 	}
 	protected void end(){
 		//stop
+		System.out.println("Stopped going forward");
 		RobotMap.drive.arcadeDrive(0, 0);
 	}
 	@Override
