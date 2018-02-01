@@ -16,14 +16,15 @@ public class RobotMap {
 	public static WPI_TalonSRX intakeMotorLeft;
 	public static WPI_TalonSRX intakeMotorRight;
 	public static void init(){
-		frontLeft = new WPI_TalonSRX(5);
-		frontRight = new WPI_TalonSRX(3);
-		backLeft = new WPI_TalonSRX(0);
-		backRight = new WPI_TalonSRX(12);
+		frontLeft = new WPI_TalonSRX(3);
+		frontRight = new WPI_TalonSRX(12);
+		backLeft = new WPI_TalonSRX(2);
+		backRight = new WPI_TalonSRX(6);
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new DifferentialDrive(left, right);
 		drive.setDeadband(0.1);
+		drive.setSafetyEnabled(false);
 		
 		intakeMotorLeft = new WPI_TalonSRX(9); 
 		intakeMotorRight = new WPI_TalonSRX(4);
