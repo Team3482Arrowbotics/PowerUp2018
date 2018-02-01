@@ -11,56 +11,26 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
-
 public class Robot extends IterativeRobot {
 	OI oi;
 	String gameData;
+
 	@Override
 	public void robotInit() {
-		oi = new 
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				OI();
+		oi = new
+
+		OI();
 		RobotMap.init();
 	}
 
-	public void disabledPeriodic(){
+	public void disabledPeriodic() {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		 
-	
+
 	}
+
 	@Override
 	public void autonomousInit() {
-		
+
 	}
 
 	/**
@@ -76,11 +46,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		
+
 		double speed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
-		if(RobotMap.drive.isAlive()){
-			RobotMap.drive.arcadeDrive(speed, turnSpeed);			
+		if (RobotMap.drive.isAlive()) {
+			RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		}
 		Scheduler.getInstance().run();
 	}
@@ -90,6 +60,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		
+
 	}
 }

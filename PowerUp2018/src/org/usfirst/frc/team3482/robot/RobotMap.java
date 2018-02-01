@@ -13,6 +13,8 @@ public class RobotMap {
 	public static DifferentialDrive drive;
 	public static SpeedControllerGroup left;
 	public static SpeedControllerGroup right;
+	public static WPI_TalonSRX intakeMotorLeft;
+	public static WPI_TalonSRX intakeMotorRight;
 	public static void init(){
 		frontLeft = new WPI_TalonSRX(5);
 		frontRight = new WPI_TalonSRX(3);
@@ -22,5 +24,8 @@ public class RobotMap {
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new DifferentialDrive(left, right);
 		drive.setDeadband(0.1);
+		
+		intakeMotorLeft = new WPI_TalonSRX(9); 
+		intakeMotorRight = new WPI_TalonSRX(4);
 	}
 }
