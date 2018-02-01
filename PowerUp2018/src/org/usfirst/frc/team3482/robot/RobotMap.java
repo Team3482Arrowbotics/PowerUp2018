@@ -2,6 +2,7 @@ package org.usfirst.frc.team3482.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -15,6 +16,8 @@ public class RobotMap {
 	public static SpeedControllerGroup right;
 	public static WPI_TalonSRX intakeMotorLeft;
 	public static WPI_TalonSRX intakeMotorRight;
+	public static DoubleSolenoid intakePistonLeft;
+	public static DoubleSolenoid intakePistonRight;
 	public static void init(){
 		frontLeft = new WPI_TalonSRX(3);
 		frontRight = new WPI_TalonSRX(12);
@@ -28,5 +31,8 @@ public class RobotMap {
 		
 		intakeMotorLeft = new WPI_TalonSRX(9); 
 		intakeMotorRight = new WPI_TalonSRX(4);
+		
+		intakePistonLeft = new DoubleSolenoid(5, 4);
+		intakePistonRight = new DoubleSolenoid(7, 6);
 	}
 }
