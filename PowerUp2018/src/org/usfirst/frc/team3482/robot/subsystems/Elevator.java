@@ -11,6 +11,7 @@ public class Elevator extends Subsystem {
 	public static WPI_TalonSRX talon;
 	public static int position, maxPosition, minPosition;
 	public static int[] positions = { 0, 2, 4, 6, 8 };
+	private int rotationsPerStage = 3;
 
 	public Elevator() {
 		position = 0;
@@ -42,7 +43,7 @@ public class Elevator extends Subsystem {
 		setPosition(position - 1);
 	}
 	public void moveElevator(){
-		talon.set(ControlMode.Position, positions[position]);
+		talon.set(ControlMode.Position, positions[position] * 4096 * rotationsPerStage );
 		
 	}
 	@Override

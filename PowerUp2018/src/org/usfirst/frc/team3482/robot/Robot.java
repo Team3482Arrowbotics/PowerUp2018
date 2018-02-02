@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team3482.robot;
 
+import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -17,6 +18,7 @@ public class Robot extends IterativeRobot {
 	OI oi;
 	String gameData;
 	public static Intake intake;
+	public static Elevator elevator;
 
 	@Override
 	public void robotInit() {
@@ -24,6 +26,7 @@ public class Robot extends IterativeRobot {
 		
 		RobotMap.init();
 		intake = new Intake();
+		elevator = new Elevator();
 		RobotMap.elevatorTalon.setSelectedSensorPosition(0, 0, 0);
 	}
 
@@ -51,6 +54,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		System.out.println("Position: " + RobotMap.elevatorTalon.getSelectedSensorPosition(0) + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
+		elevator.moveElevator();
 		double speed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
 		if (RobotMap.drive.isAlive()) {

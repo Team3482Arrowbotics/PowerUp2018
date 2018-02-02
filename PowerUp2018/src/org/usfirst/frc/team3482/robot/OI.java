@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3482.robot;
 
+import org.usfirst.frc.team3482.robot.commands.ElevatorDown;
 import org.usfirst.frc.team3482.robot.commands.ElevatorUp;
 import org.usfirst.frc.team3482.robot.commands.Spintake;
 import org.usfirst.frc.team3482.robot.commands.Spouttake;
@@ -14,6 +15,7 @@ public class OI {
 	private JoystickButton spouttake;
 	private JoystickButton switchtake;
 	private JoystickButton elevatorUp;
+	private JoystickButton elevatorDown;
 	public OI(){
 		x = new Joystick(0);
 		spintake = new JoystickButton(x, 6);
@@ -26,5 +28,8 @@ public class OI {
 		
 		elevatorUp = new JoystickButton(x, 2);
 		elevatorUp.whenPressed(new ElevatorUp());
+		
+		elevatorDown = new JoystickButton(x, 3);
+		elevatorDown.whenPressed(new ElevatorDown());
 	}
 }

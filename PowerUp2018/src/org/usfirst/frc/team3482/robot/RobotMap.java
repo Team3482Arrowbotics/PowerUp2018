@@ -39,7 +39,7 @@ public class RobotMap {
 		
 		elevatorTalon = new WPI_TalonSRX(5);
 		elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-		elevatorTalon.config_kP(0, .9, 0);
+		elevatorTalon.config_kP(0, 0.9, 0);
 		elevatorTalon.setInverted(false);
 	}
 }
