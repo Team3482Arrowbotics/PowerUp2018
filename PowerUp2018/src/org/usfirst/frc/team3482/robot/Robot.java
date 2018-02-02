@@ -24,6 +24,7 @@ public class Robot extends IterativeRobot {
 		
 		RobotMap.init();
 		intake = new Intake();
+		RobotMap.elevatorTalon.setSelectedSensorPosition(0, 0, 0);
 	}
 
 	public void disabledPeriodic() {
@@ -49,7 +50,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-
+		System.out.println("Position: " + RobotMap.elevatorTalon.getSelectedSensorPosition(0) + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
 		double speed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
 		if (RobotMap.drive.isAlive()) {
