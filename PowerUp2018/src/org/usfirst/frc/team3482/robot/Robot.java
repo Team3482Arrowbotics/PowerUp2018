@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
-	OI oi;
+	public static OI oi;
 	String gameData;
 	public static Intake intake;
 	public static Elevator elevator;
@@ -54,7 +54,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		System.out.println("Position: " + RobotMap.elevatorTalon.getSelectedSensorPosition(0) + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
-		elevator.moveElevator();
+		if(elevator.isLocked()) {
+			elevator.moveElevator();
+		} else {
+			elevator.moveElevatorManual();
+		}
 		double speed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
 		if (RobotMap.drive.isAlive()) {
