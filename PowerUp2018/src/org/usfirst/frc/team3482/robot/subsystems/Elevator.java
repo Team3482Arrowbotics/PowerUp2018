@@ -6,73 +6,70 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Elevator extends Subsystem {
-	public static WPI_TalonSRX talon;
-	public static int position, maxPosition, minPosition;
-	public static int[] positions = { 0, 2, 4, 6, 8 };
-	private static final int ROTATIONS_PER_STAGE = 3;
-	boolean locked;
+public class Elevator extends Subsystem implements Runnable {
+	//FIELDS
+	protected static WPI_TalonSRX talon;
+	protected static double targetPos, maxPos, minPos;
+	protected static int currentStage, numStages;
+	public static final int[] STAGE_POSITIONS = { 0, 2, 4, 6, 8 };
+	public static final int MAX_POSITION = 1000000, MIN_POSITION = 0;
 
-	public boolean isLocked() {
-		return locked;
-	}
-
-	// enable closed-loop control
-	public void lock() {
-		this.locked = true;
-	}
-
-	// disable closed-loop control
-	public void unlock() {
-		locked = false;
-	}
-
+	// CONSTRUCTOR
 	public Elevator() {
-		position = 0;
-		maxPosition = 4;
-		minPosition = 0;
 		talon = RobotMap.elevatorTalon;
+		targetPos = 0;
+		currentStage = 0;
+		numStages = STAGE_POSITIONS.length;
+		maxPos = MAX_POSITION;
+		minPos = MIN_POSITION;
 	}
-
-	public static int getPosition() {
-		return position;
-	}
-
-	public static void setPosition(int pos) {
-		// limit position between minPosition and maxPosition to prevent unwanted
-		// elevator movement
-		if (pos > maxPosition) {
-			pos = maxPosition;
-		}
-		if (pos < minPosition) {
-			pos = minPosition;
-		}
-		position = pos;
-		System.out.println("Set elevator position to " + position);
-	}
-
-	public void moveUp() {
-		setPosition(position + 1);
-	}
-
-	public void moveDown() {
-		setPosition(position - 1);
-	}
-
-	// use closed-loop control to set elevator top certain position
-	public void moveElevator() {
-		talon.set(ControlMode.Position, positions[position] * 4096 * ROTATIONS_PER_STAGE);
-	}
-	public void moveElevatorManual() {
-		RobotMap.elevatorTalon.set(Robot.oi.x.getRawAxis(5) * 0.5);
-	}
-
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
+		
+	}
+	
+	// GETTERS AND SETTERS
+	public static double getCurrentPos() {
+		return talon.getSelectedSensorPosition(0);
+	}
 
+	public static double getTargetPos() {
+		return targetPos;
+	}
+	
+	private static void setTargetPos(double tPos) {
+		//limit movement within MIN_POSITION and MAX_POSITION
+		if(tPos > maxPos) {
+			tPos = maxPos;
+		}
+		if(tPos < minPos) {
+			tPos = minPos;
+		}
+		Elevator.targetPos = tPos;
+	}
+	//RUNS EVERY TICK (see teleopPeriodic)
+	public void run() {
+		talon.set(ControlMode.Position, targetPos);
+	}
+	//SET ELEVATOR POSITION
+	public void set(double pos, boolean relative) {
+		if(relative) {
+			setTargetPos(getCurrentPos() + pos);
+		}
+		setTargetPos(pos);
+	}
+	
+	public void set(double pos) {
+		set(pos, false);
+	}
+	//MOVE ELEVATOR BY A*SPEED ENCODER TICKS EVERY ROBOT TICK
+	//!!!!!!!!!!!!!!!!SPEED CAN BE NEGATIVE!!!!!!!!!!!!!!!!!!!!
+	public void manualMove(double speed, int axis) {
+		double a = Robot.oi.x.getRawAxis(axis);
+		set(a * speed, true);
 	}
 
 }

@@ -1,8 +1,5 @@
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.commands.ElevatorDown;
-import org.usfirst.frc.team3482.robot.commands.ElevatorUp;
-import org.usfirst.frc.team3482.robot.commands.ManualElevator;
 import org.usfirst.frc.team3482.robot.commands.Spintake;
 import org.usfirst.frc.team3482.robot.commands.Spouttake;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
@@ -27,14 +24,6 @@ public class OI {
 		
 		switchtake = new JoystickButton(x, 1);
 		switchtake.whenPressed(new SwitchIntake());
-		
-		elevatorUp = new JoystickButton(x, 2);
-		elevatorUp.whenPressed(new ElevatorUp());
-		
-		elevatorDown = new JoystickButton(x, 3);
-		elevatorDown.whenPressed(new ElevatorDown());
-		
-		manualElevator = new JoystickButton(x, 10);
-		manualElevator.whileHeld(new ManualElevator());
+
 	}
 }

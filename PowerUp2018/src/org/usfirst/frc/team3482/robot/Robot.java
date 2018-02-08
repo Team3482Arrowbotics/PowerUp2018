@@ -19,6 +19,8 @@ public class Robot extends IterativeRobot {
 	String gameData;
 	public static Intake intake;
 	public static Elevator elevator;
+	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2; 
+	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 1.0;
 
 	@Override
 	public void robotInit() {
@@ -54,16 +56,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		System.out.println("Position: " + RobotMap.elevatorTalon.getSelectedSensorPosition(0) + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
-		if(elevator.isLocked()) {
-			elevator.moveElevator();
-		} else {
-			elevator.moveElevatorManual();
+		if(oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE && oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
+			elevator.manualMove(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
+		}
+		if(oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE && oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
+			elevator.manualMove(-ELEVATOR_SPEED, ELEVATOR_DOWN_AXIS);
 		}
 		double speed = oi.x.getRawAxis(1);
 		double turnSpeed = oi.x.getRawAxis(4);
 		if (RobotMap.drive.isAlive()) {
 			RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		}
+		elevator.run();
 		Scheduler.getInstance().run();
 	}
 
