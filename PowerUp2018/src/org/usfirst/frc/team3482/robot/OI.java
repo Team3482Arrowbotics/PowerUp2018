@@ -12,9 +12,7 @@ public class OI {
 	public JoystickButton spintake;
 	private JoystickButton spouttake;
 	private JoystickButton switchtake;
-	private JoystickButton elevatorUp;
-	private JoystickButton elevatorDown;
-	private JoystickButton manualElevator;
+
 	public OI(){
 		x = new Joystick(0);
 		spintake = new JoystickButton(x, 6);
