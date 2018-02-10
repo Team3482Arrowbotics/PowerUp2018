@@ -9,9 +9,9 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
@@ -20,16 +20,22 @@ public class Robot extends IterativeRobot {
 	public static Intake intake;
 	public static Elevator elevator;
 	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2; 
-	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 1.0;
+	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 1000;
+	public static boolean isElevatorTop;
+	public static double elevatorTopSpeed = 0.5;
+	public double speed;
+	public double turnSpeed;
 
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		
+
+		isElevatorTop = false;
+
 		RobotMap.init();
 		intake = new Intake();
 		elevator = new Elevator();
-		RobotMap.elevatorTalon.setSelectedSensorPosition(0, 0, 0);
+		RobotMap.elevatorTalon.setSelectedSensorPosition(elevator.BOTTOM_POSITION, 0, 0);
 	}
 
 	public void disabledPeriodic() {
@@ -55,17 +61,23 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		System.out.println("Position: " + RobotMap.elevatorTalon.getSelectedSensorPosition(0) + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
+		System.out.println("Position: " + elevator.getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
 		if(oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE && oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.manualMove(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
+			elevator.changePosition(-ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
 		}
-		if(oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE && oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.manualMove(-ELEVATOR_SPEED, ELEVATOR_DOWN_AXIS);
+		else if(oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE && oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
+			elevator.changePosition(ELEVATOR_SPEED*.6, ELEVATOR_DOWN_AXIS);
 		}
-		double speed = oi.x.getRawAxis(1);
-		double turnSpeed = oi.x.getRawAxis(4);
+
+		double elevatorRatio = ((elevator.getCurrentPos() / Elevator.BOTTOM_POSITION) * 0.5) + 0.5;
+		speed = -oi.x.getRawAxis(1) * elevatorRatio;
+		turnSpeed = oi.x.getRawAxis(4);
+		System.out.println("Ratio: " + elevatorRatio);
+		System.out.println("Speed: " + speed);
+
 		if (RobotMap.drive.isAlive()) {
-			RobotMap.drive.arcadeDrive(speed, turnSpeed);
+			
+			//RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		}
 		elevator.run();
 		Scheduler.getInstance().run();
@@ -76,6 +88,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+
 
 	}
 }

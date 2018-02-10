@@ -6,25 +6,27 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Elevator extends Subsystem implements Runnable {
 	//FIELDS
-	protected static WPI_TalonSRX talon;
+	protected static WPI_TalonSRX elevatorTalon;
 	protected static double targetPos, maxPos, minPos;
 	protected static int currentStage, numStages;
 	public static final int[] STAGE_POSITIONS = { 0, 2, 4, 6, 8 };
-	public static final int MAX_POSITION = 1000000, MIN_POSITION = 0;
+	public static final int BOTTOM_POSITION = 33750, TOP_POSITION = 0;
+	public static final int THRESHOLD_HEIGHT = TOP_POSITION+4000;
+	public static boolean locked;
 
 	// CONSTRUCTOR
 	public Elevator() {
-		talon = RobotMap.elevatorTalon;
-		targetPos = 0;
+		elevatorTalon = RobotMap.elevatorTalon;
+		targetPos = BOTTOM_POSITION;
 		currentStage = 0;
 		numStages = STAGE_POSITIONS.length;
-		maxPos = MAX_POSITION;
-		minPos = MIN_POSITION;
+		maxPos = BOTTOM_POSITION;
+		minPos = TOP_POSITION;
+		locked=true;
 	}
 	@Override
 	protected void initDefaultCommand() {
@@ -33,7 +35,7 @@ public class Elevator extends Subsystem implements Runnable {
 	
 	// GETTERS AND SETTERS
 	public static double getCurrentPos() {
-		return talon.getSelectedSensorPosition(0);
+		return elevatorTalon.getSelectedSensorPosition(0);
 	}
 
 	public static double getTargetPos() {
@@ -48,16 +50,24 @@ public class Elevator extends Subsystem implements Runnable {
 		if(tPos < minPos) {
 			tPos = minPos;
 		}
-		Elevator.targetPos = tPos;
+		targetPos = tPos;
+		//System.out.println("Target Position After: " + targetPos);
 	}
 	//RUNS EVERY TICK (see teleopPeriodic)
 	public void run() {
-		talon.set(ControlMode.Position, targetPos);
+		if(locked)
+		{
+			elevatorTalon.set(ControlMode.Position, targetPos);
+		}
+		//System.out.println("Set Pos: " + targetPos);
 	}
+	
 	//SET ELEVATOR POSITION
 	public void set(double pos, boolean relative) {
 		if(relative) {
+			//System.out.println("Target Position Before: " + (getCurrentPos() + pos));
 			setTargetPos(getCurrentPos() + pos);
+			return;
 		}
 		setTargetPos(pos);
 	}
@@ -67,9 +77,14 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 	//MOVE ELEVATOR BY A*SPEED ENCODER TICKS EVERY ROBOT TICK
 	//!!!!!!!!!!!!!!!!SPEED CAN BE NEGATIVE!!!!!!!!!!!!!!!!!!!!
-	public void manualMove(double speed, int axis) {
+	public void changePosition(double deltaPos, int axis) {
 		double a = Robot.oi.x.getRawAxis(axis);
-		set(a * speed, true);
+		System.out.println("Motor Output: " + elevatorTalon.getMotorOutputPercent());
+		set(a * deltaPos, true);
 	}
-
+	
+	public void lock(boolean islocked) {
+		targetPos=getCurrentPos();
+		locked=islocked;
+	}
 }
