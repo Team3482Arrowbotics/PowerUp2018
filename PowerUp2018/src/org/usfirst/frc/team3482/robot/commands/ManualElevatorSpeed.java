@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ManualElevatorSpeed extends Command{
 	private double speed;
 	public ManualElevatorSpeed(double speed) {
-		this.speed=speed;
+		this.speed = speed;
 	}
 	protected void initialize(){
 		Robot.elevator.lock(false);

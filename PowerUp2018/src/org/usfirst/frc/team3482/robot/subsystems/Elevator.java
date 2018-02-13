@@ -14,8 +14,8 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static double targetPos, maxPos, minPos;
 	protected static int currentStage, numStages;
 	public static final int[] STAGE_POSITIONS = { 0, 2, 4, 6, 8 };
-	public static final int BOTTOM_POSITION = 33750, TOP_POSITION = 0;
-	public static final int THRESHOLD_HEIGHT = TOP_POSITION+4000;
+	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 33750;
+	public static final int THRESHOLD_HEIGHT = TOP_POSITION-4000;
 	public static boolean locked;
 
 	// CONSTRUCTOR
@@ -24,8 +24,8 @@ public class Elevator extends Subsystem implements Runnable {
 		targetPos = BOTTOM_POSITION;
 		currentStage = 0;
 		numStages = STAGE_POSITIONS.length;
-		maxPos = BOTTOM_POSITION;
-		minPos = TOP_POSITION;
+		minPos = BOTTOM_POSITION;
+		maxPos = TOP_POSITION;
 		locked=true;
 	}
 	@Override
@@ -59,13 +59,11 @@ public class Elevator extends Subsystem implements Runnable {
 		{
 			elevatorTalon.set(ControlMode.Position, targetPos);
 		}
-		//System.out.println("Set Pos: " + targetPos);
 	}
 	
 	//SET ELEVATOR POSITION
 	public void set(double pos, boolean relative) {
 		if(relative) {
-			//System.out.println("Target Position Before: " + (getCurrentPos() + pos));
 			setTargetPos(getCurrentPos() + pos);
 			return;
 		}
