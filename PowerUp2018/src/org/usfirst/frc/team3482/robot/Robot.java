@@ -7,7 +7,6 @@
 
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.commands.MoveDistance;
 import org.usfirst.frc.team3482.robot.subsystems.Chassis;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
@@ -18,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
 	public static OI oi;
-	String gameData;
+	public static String gameData;
 	public static Intake intake;
 	public static Chassis chassis;
 	public static Elevator elevator;
@@ -26,7 +25,7 @@ public class Robot extends IterativeRobot {
 	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 1000;
 	public static boolean isElevatorTop;
 	public static double elevatorTopSpeed = 0.5;
-	public static boolean driveEnabled;
+	public static boolean driveEnabled, switchOnLeft, scaleOnLeft;
 	public double speed;
 	public double turnSpeed;
 
@@ -52,7 +51,10 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		new MoveDistance(1000).start();
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		String[] data = gameData.split("");
+		switchOnLeft = data[0].equals("L");
+		scaleOnLeft = data[1].equals("L");
 	}
 
 	/**

@@ -16,6 +16,8 @@ public class AutoDrive extends Command{
 		RobotMap.encoders.reset();
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
+		RobotMap.rotationController.enable();
+		RobotMap.rotationController.setSetpoint(RobotMap.rotationController.getSetpoint());
 	}
 	protected void end() {
 		RobotMap.driveController.disable();

@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
-import org.usfirst.frc.team3482.robot.subsystems.EncoderPIDSource;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -11,7 +10,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class RobotMap {
 	public static WPI_TalonSRX frontLeft;
@@ -29,7 +27,6 @@ public class RobotMap {
 	public static WPI_TalonSRX elevatorTalon;
 	public static Encoder encoderRight;
 	public static Encoder encoderLeft;
-	public static EncoderPIDSource driveEncoder;
 	public static DrivePIDOutput drivePID;
 	public static TwoEncoderPID encoders;
 	public static PIDController rotationController;
@@ -47,10 +44,9 @@ public class RobotMap {
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new PIDDifferentialDrive(left, right);
-		driveEncoder = new EncoderPIDSource();
 		drivePID = new DrivePIDOutput();
 		driveController = new PIDController(0.1, 0, 0, encoders, drivePID);
-		driveController.setOutputRange(-1, 1);
+		driveController.setOutputRange(-.7, .7);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
 
@@ -68,7 +64,7 @@ public class RobotMap {
 		navx = new AHRSPID(Port.kMXP);
 		rotationController = new PIDController(0.05, 0, 0, navx, drive);
 		rotationController.setInputRange(-180, 180);
-		rotationController.setOutputRange(-1, 1);
+		rotationController.setOutputRange(-.7, .7);
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 	}
