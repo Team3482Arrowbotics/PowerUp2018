@@ -5,9 +5,9 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AutoDrive extends Command{
+public class Move extends Command{
 	double distance;
-	public AutoDrive(double distance) {
+	public Move(double distance) {
 		this.distance = distance;
 	}
 	protected void initialize() { 

@@ -5,9 +5,9 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AutoTurn extends Command{
+public class Turn extends Command{
 	double angle;
-	public AutoTurn(double angle) {
+	public Turn(double angle) {
 		this.angle = angle;
 	}
 	protected void initialize() {

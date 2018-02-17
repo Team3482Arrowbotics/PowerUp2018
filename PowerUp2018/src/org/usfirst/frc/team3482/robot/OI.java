@@ -2,12 +2,14 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.DPadButton.Direction;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
+import org.usfirst.frc.team3482.robot.commands.SpinClimberHook;
 import org.usfirst.frc.team3482.robot.commands.Spintake;
 import org.usfirst.frc.team3482.robot.commands.Spouttake;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
-import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
+import org.usfirst.frc.team3482.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
@@ -17,6 +19,9 @@ public class OI {
 	private JoystickButton switchtake;
 	private DPadButton manualElevatorUp;
 	private DPadButton manualElevatorDown;
+	private DPadButton spinClimberButton;
+	private JoystickButton climbButton;
+	private DPadButton spinClimberReverseButton;
 
 	public OI(){
 		x = new Joystick(0);
@@ -30,8 +35,17 @@ public class OI {
 		switchtake.whenPressed(new SwitchIntake());
 		
 		manualElevatorUp = new DPadButton(x, Direction.NORTH);
-		manualElevatorUp.whileHeld(new ManualElevatorSpeed(1));
+		manualElevatorUp.whileHeld(new ManualElevatorSpeed(-1));
 		manualElevatorDown = new DPadButton(x, Direction.SOUTH);
-		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.75));
+		manualElevatorDown.whileHeld(new ManualElevatorSpeed(.6));
+		
+		spinClimberButton = new DPadButton(x, Direction.WEST);
+		spinClimberButton.whileHeld(new SpinClimberHook(-0.1));
+		
+		spinClimberReverseButton = new DPadButton(x, Direction.EAST);
+		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.1));
+		
+		climbButton = new JoystickButton(x, 3);
+		climbButton.whileHeld(new Climb());
 	}
 }

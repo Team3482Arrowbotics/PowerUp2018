@@ -7,11 +7,6 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class TwoEncoderPID implements PIDSource{
 	Encoder left, right;
 	PIDSourceType type;
-	public TwoEncoderPID(Encoder left, Encoder right, boolean back) {
-		this.left = left;
-		this.right = right;
-		type = PIDSourceType.kDisplacement;
-	}
 	public TwoEncoderPID(Encoder left, Encoder right) {
 		this.left = left;
 		this.right = right;

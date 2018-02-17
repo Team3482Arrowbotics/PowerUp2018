@@ -1,0 +1,17 @@
+package org.usfirst.frc.team3482.robot.commands;
+
+import org.usfirst.frc.team3482.robot.Robot;
+
+import edu.wpi.first.wpilibj.command.Command;
+
+public class GetBox extends Command{
+	protected void initialize() {
+		Robot.rangeFinder.goToBox();
+	}
+	@Override
+	protected boolean isFinished() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+}

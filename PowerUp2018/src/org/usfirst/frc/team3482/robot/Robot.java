@@ -7,27 +7,39 @@
 
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.subsystems.Chassis;
+import org.usfirst.frc.team3482.robot.commands.AutonomousFromLeft;
+import org.usfirst.frc.team3482.robot.commands.AutonomousFromRight;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
+import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
+import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static String gameData;
 	public static Intake intake;
-	public static Chassis chassis;
 	public static Elevator elevator;
+	public static LIDAR lidar;
+	public static Ultrasonic rangeFinder;
 	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2;
-	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 1000;
+	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 2000;
 	public static boolean isElevatorTop;
 	public static double elevatorTopSpeed = 0.5;
 	public static boolean driveEnabled, switchOnLeft, scaleOnLeft;
 	public double speed;
 	public double turnSpeed;
+	//230 encoder ticks per foot
+	//19 ticks/inch
+	//0.05 in per tick?
+	
+	public SendableChooser<String> autoChooser;
+	Command autoCommand;
 
 	@Override
 	public void robotInit() {
@@ -37,11 +49,17 @@ public class Robot extends IterativeRobot {
 
 		RobotMap.init();
 		intake = new Intake();
-		chassis = new Chassis();
 		elevator = new Elevator();
-
-		RobotMap.elevatorTalon.setSelectedSensorPosition(elevator.BOTTOM_POSITION, 0, 0);
+		lidar = new LIDAR();
+		rangeFinder = new Ultrasonic(0);
+		
+		RobotMap.elevatorTalon.setSelectedSensorPosition(Elevator.BOTTOM_POSITION, 0, 0);
 		RobotMap.encoders.reset();
+		
+		autoChooser = new SendableChooser<String>();
+		autoChooser.addDefault("Go for switch only from Middle", "middle");
+		autoChooser.addObject("Go for both from Left", "left");
+		autoChooser.addObject("Go for both from right", "right");
 	}
 
 	public void disabledPeriodic() {
@@ -55,6 +73,17 @@ public class Robot extends IterativeRobot {
 		String[] data = gameData.split("");
 		switchOnLeft = data[0].equals("L");
 		scaleOnLeft = data[1].equals("L");
+		String auto = autoChooser.getSelected();
+		switch(auto) {
+		case "left":
+			autoCommand = new AutonomousFromLeft(switchOnLeft, scaleOnLeft);
+			break;
+		case "middle":
+//			autoCommand = new AutonomousFromMiddle(switchOnLeft);
+			break;
+		case "right":
+			autoCommand = new AutonomousFromRight(switchOnLeft, scaleOnLeft);
+		}
 	}
 
 	/**
