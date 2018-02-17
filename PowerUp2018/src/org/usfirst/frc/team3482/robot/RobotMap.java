@@ -4,11 +4,13 @@ import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
@@ -37,7 +39,7 @@ public class RobotMap {
 	public static WPI_TalonSRX climberHook;
 	public static WPI_TalonSRX climber;
 	public static WPI_TalonSRX emptyTalon;
-	public static CANifier c;
+	public static CANifier c; 
 
 	public static void init() {
 		frontLeft = new WPI_TalonSRX(3);
@@ -82,7 +84,7 @@ public class RobotMap {
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 		
-		climberHook = new WPI_TalonSRX(9);
+		climberHook = new WPI_TalonSRX(0);
 		climber = new WPI_TalonSRX(0);
 		emptyTalon = new WPI_TalonSRX(7);
 		

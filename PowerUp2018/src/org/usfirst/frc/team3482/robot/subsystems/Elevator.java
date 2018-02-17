@@ -13,8 +13,7 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static WPI_TalonSRX elevatorTalon;
 	protected static double targetPos, maxPos, minPos;
 	protected static int currentStage, numStages;
-	public static final int[] STAGE_POSITIONS = { 0, 2, 4, 6, 8 };
-	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 33750, SWITCH_POSITION = 8000, SCALE_POSITION = 33000;
+	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 36000, SWITCH_POSITION = 8000, SCALE_POSITION = 33000;
 	public static final int THRESHOLD_HEIGHT = TOP_POSITION-4000;
 	public static boolean locked;
 
@@ -23,7 +22,6 @@ public class Elevator extends Subsystem implements Runnable {
 		elevatorTalon = RobotMap.elevatorTalon;
 		targetPos = BOTTOM_POSITION;
 		currentStage = 0;
-		numStages = STAGE_POSITIONS.length;
 		minPos = BOTTOM_POSITION;
 		maxPos = TOP_POSITION;
 		locked=true;

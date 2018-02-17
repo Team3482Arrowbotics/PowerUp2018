@@ -35,9 +35,9 @@ public class OI {
 		switchtake.whenPressed(new SwitchIntake());
 		
 		manualElevatorUp = new DPadButton(x, Direction.NORTH);
-		manualElevatorUp.whileHeld(new ManualElevatorSpeed(-1));
+		manualElevatorUp.whileHeld(new ManualElevatorSpeed(1));
 		manualElevatorDown = new DPadButton(x, Direction.SOUTH);
-		manualElevatorDown.whileHeld(new ManualElevatorSpeed(.6));
+		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.6));
 		
 		spinClimberButton = new DPadButton(x, Direction.WEST);
 		spinClimberButton.whileHeld(new SpinClimberHook(-0.1));
