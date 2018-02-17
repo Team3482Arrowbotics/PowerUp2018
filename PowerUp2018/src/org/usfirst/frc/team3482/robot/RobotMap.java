@@ -28,9 +28,8 @@ public class RobotMap {
 	public static DoubleSolenoid intakePistonLeft;
 	public static DoubleSolenoid intakePistonRight;
 	public static WPI_TalonSRX elevatorTalon;
-	//public static WPI_TalonSRX elevatorTalon2;
-	public static TwoMotorsOneEncoder elevator;
-	public static Encoder encoderRight;
+	public static WPI_TalonSRX elevatorTalon2;
+ 	public static Encoder encoderRight;
 	public static Encoder encoderLeft;
 	public static DrivePIDOutput drivePID;
 	public static TwoEncoderPID encoders;
@@ -74,8 +73,8 @@ public class RobotMap {
 		elevatorTalon.config_kP(0, 1.5, 0);
 		elevatorTalon.setInverted(false);
 		
-		//elevatorTalon2 = new WPI_TalonSRX(-1);
-		//elevator = new TwoMotorsOneEncoder(elevatorTalon, elevatorTalon2);
+		elevatorTalon2 = new WPI_TalonSRX(0);
+//		elevator = new TwoMotorsOneEncoder(elevatorTalon);
 		
 		navx = new AHRSPID(Port.kMXP);
 		rotationController = new PIDController(0.05, 0, 0, navx, drive);

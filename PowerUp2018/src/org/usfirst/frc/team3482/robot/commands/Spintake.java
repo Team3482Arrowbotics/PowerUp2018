@@ -12,8 +12,8 @@ public class Spintake extends Command{
 		super();
 	}
 	protected void initialize(){
-		RobotMap.intakeMotorLeft.set(.75);
-		RobotMap.intakeMotorRight.set(-.75);
+		RobotMap.intakeMotorLeft.set(-.75);
+		RobotMap.intakeMotorRight.set(.75);
 		System.out.println("Motors set!");
 	}
 	protected void end(){

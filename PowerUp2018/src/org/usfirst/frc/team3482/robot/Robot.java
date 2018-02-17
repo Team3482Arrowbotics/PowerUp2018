@@ -7,8 +7,8 @@
 
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.commands.AutonomousFromLeft;
-import org.usfirst.frc.team3482.robot.commands.AutonomousFromRight;
+import org.usfirst.frc.team3482.robot.commands.Autonomous;
+import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
@@ -31,14 +31,14 @@ public class Robot extends IterativeRobot {
 	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 2000;
 	public static boolean isElevatorTop;
 	public static double elevatorTopSpeed = 0.5;
-	public static boolean driveEnabled, switchOnLeft, scaleOnLeft;
+	public static boolean driveEnabled, switchOnLeft, scaleOnLeft, crossBaseline;
 	public double speed;
 	public double turnSpeed;
 	//230 encoder ticks per foot
 	//19 ticks/inch
 	//0.05 in per tick?
-	
-	public SendableChooser<String> autoChooser;
+	public SendableChooser<StartPosition> sPosChooser;
+	public SendableChooser<String> baselineChooser;
 	Command autoCommand;
 
 	@Override
@@ -56,10 +56,15 @@ public class Robot extends IterativeRobot {
 		RobotMap.elevatorTalon.setSelectedSensorPosition(Elevator.BOTTOM_POSITION, 0, 0);
 		RobotMap.encoders.reset();
 		
-		autoChooser = new SendableChooser<String>();
-		autoChooser.addDefault("Go for switch only from Middle", "middle");
-		autoChooser.addObject("Go for both from Left", "left");
-		autoChooser.addObject("Go for both from right", "right");
+		sPosChooser = new SendableChooser<StartPosition>();
+		sPosChooser.setName("Start Position");
+		sPosChooser.addObject("Middle", StartPosition.MIDDLE);
+		sPosChooser.addDefault("Left", StartPosition.LEFT);
+		sPosChooser.addObject("Right", StartPosition.RIGHT);
+		
+		baselineChooser = new SendableChooser<String>();
+		baselineChooser.addDefault("Cross Baseline", "base");
+		baselineChooser.addObject("Cross diagonally", "diag");
 	}
 
 	public void disabledPeriodic() {
@@ -73,17 +78,19 @@ public class Robot extends IterativeRobot {
 		String[] data = gameData.split("");
 		switchOnLeft = data[0].equals("L");
 		scaleOnLeft = data[1].equals("L");
-		String auto = autoChooser.getSelected();
-		switch(auto) {
-		case "left":
-			autoCommand = new AutonomousFromLeft(switchOnLeft, scaleOnLeft);
+		String baselineCrossed = baselineChooser.getSelected();
+		switch(baselineCrossed) {
+		case "base":
+			crossBaseline = true;
 			break;
-		case "middle":
-//			autoCommand = new AutonomousFromMiddle(switchOnLeft);
+		case "diag":
+			crossBaseline = false;
 			break;
-		case "right":
-			autoCommand = new AutonomousFromRight(switchOnLeft, scaleOnLeft);
+		default:
+			crossBaseline = false;
 		}
+		StartPosition sPos = sPosChooser.getSelected();
+		new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
 	}
 
 	/**
@@ -111,11 +118,10 @@ public class Robot extends IterativeRobot {
 		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.5) + 0.5;
 		speed = -oi.x.getRawAxis(1) * elevatorRatio;
 		turnSpeed = oi.x.getRawAxis(4);
-		System.out.println("Ratio: " + elevatorRatio);
-		System.out.println(
-				"Left Encoder: " + RobotMap.encoderLeft.get() + " Right Encoder: " + RobotMap.encoderRight.get());
+		//System.out.println("Ratio: " + elevatorRatio);
+		//System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
-			RobotMap.drive.arcadeDrive(speed, turnSpeed);
+			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
 		}
 		elevator.run();
 		Scheduler.getInstance().run();
