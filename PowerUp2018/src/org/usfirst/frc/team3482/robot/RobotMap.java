@@ -36,7 +36,9 @@ public class RobotMap {
 	public static PIDController rotationController;
 	public static AHRSPID navx;
 	public static WPI_TalonSRX climberHook;
+//	public static PWM climberHook;
 	public static WPI_TalonSRX climber;
+	public static PIDController climberHookController;
 	public static WPI_TalonSRX emptyTalon;
 	public static CANifier c; 
 
@@ -83,9 +85,11 @@ public class RobotMap {
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 		
-		climberHook = new WPI_TalonSRX(0);
-		climber = new WPI_TalonSRX(0);
-		emptyTalon = new WPI_TalonSRX(7);
+		climberHook = new WPI_TalonSRX(9); //Talon 9
+//		climberHook = new PWM(0);
+//		climberHook.configSel
+		climber = new WPI_TalonSRX(7); //Talon 7
+//		emptyTalon = new WPI_TalonSRX(7);
 		
 		c = new CANifier(0);
 	}

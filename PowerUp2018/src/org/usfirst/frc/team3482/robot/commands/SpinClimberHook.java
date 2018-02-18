@@ -11,9 +11,11 @@ public class SpinClimberHook extends Command{
 		this.speed = speed;
 	}
 	protected void initialize() {
+//		RobotMap.climberHook.setSpeed(speed);
 		RobotMap.climberHook.set(speed);
 	}
 	protected void end() {
+//		RobotMap.climberHook.setSpeed(0);
 		RobotMap.climberHook.set(0);
 	}
 	@Override

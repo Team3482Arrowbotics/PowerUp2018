@@ -40,10 +40,10 @@ public class OI {
 		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.6));
 		
 		spinClimberButton = new DPadButton(x, Direction.WEST);
-		spinClimberButton.whileHeld(new SpinClimberHook(-0.1));
+		spinClimberButton.whileHeld(new SpinClimberHook(-0.35));
 		
 		spinClimberReverseButton = new DPadButton(x, Direction.EAST);
-		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.1));
+		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.35));
 		
 		climbButton = new JoystickButton(x, 3);
 		climbButton.whileHeld(new Climb());

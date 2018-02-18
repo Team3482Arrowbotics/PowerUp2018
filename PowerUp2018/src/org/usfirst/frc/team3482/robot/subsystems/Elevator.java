@@ -13,7 +13,7 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static WPI_TalonSRX elevatorTalon;
 	protected static double targetPos, maxPos, minPos;
 	protected static int currentStage, numStages;
-	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 36000, SWITCH_POSITION = 8000, SCALE_POSITION = 35000;
+	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 37000, SWITCH_POSITION = 8000, SCALE_POSITION = 35000;
 	public static final int THRESHOLD_HEIGHT = TOP_POSITION-4000;
 	public static boolean locked;
 

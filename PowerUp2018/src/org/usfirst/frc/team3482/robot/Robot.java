@@ -9,6 +9,7 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.Autonomous;
 import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
+import org.usfirst.frc.team3482.robot.commands.Move;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	public static OI oi;
@@ -65,6 +67,9 @@ public class Robot extends IterativeRobot {
 		baselineChooser = new SendableChooser<String>();
 		baselineChooser.addDefault("Cross Baseline", "base");
 		baselineChooser.addObject("Cross diagonally", "diag");
+		
+		SmartDashboard.putData(sPosChooser);
+		SmartDashboard.putData(baselineChooser);
 	}
 
 	public void disabledPeriodic() {
@@ -74,23 +79,24 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		String[] data = gameData.split("");
-		switchOnLeft = data[0].equals("L");
-		scaleOnLeft = data[1].equals("L");
-		String baselineCrossed = baselineChooser.getSelected();
-		switch(baselineCrossed) {
-		case "base":
-			crossBaseline = true;
-			break;
-		case "diag":
-			crossBaseline = false;
-			break;
-		default:
-			crossBaseline = false;
-		}
-		StartPosition sPos = sPosChooser.getSelected();
-		new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
+		new Move(20).start();
+//		gameData = DriverStation.getInstance().getGameSpecificMessage();
+//		String[] data = gameData.split("");
+//		switchOnLeft = data[0].equals("L");
+//		scaleOnLeft = data[1].equals("L");
+//		String baselineCrossed = baselineChooser.getSelected();
+//		switch(baselineCrossed) {
+//		case "base":
+//			crossBaseline = true;
+//			break;
+//		case "diag":
+//			crossBaseline = false;
+//			break;
+//		default:
+//			crossBaseline = false;
+//		}
+//		StartPosition sPos = sPosChooser.getSelected();
+//		new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
 	}
 
 	/**
