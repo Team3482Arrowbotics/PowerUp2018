@@ -25,6 +25,7 @@ public class OI {
 
 	public OI(){
 		x = new Joystick(0);
+		
 		spintake = new JoystickButton(x, 6);
 		spintake.whileHeld(new Spintake());
 		

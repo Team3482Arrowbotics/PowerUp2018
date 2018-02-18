@@ -7,7 +7,6 @@
 
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.commands.Autonomous;
 import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
 import org.usfirst.frc.team3482.robot.commands.Move;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
@@ -15,6 +14,10 @@ import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
 import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
+
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -29,13 +32,15 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator;
 	public static LIDAR lidar;
 	public static Ultrasonic rangeFinder;
+	public static UsbCamera camera;
+	public static CameraServer cameraServer;
 	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2;
 	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 2000;
 	public static boolean isElevatorTop;
 	public static double elevatorTopSpeed = 0.5;
 	public static boolean driveEnabled, switchOnLeft, scaleOnLeft, crossBaseline;
 	public double speed;
-	public double turnSpeed;
+	public double turnSpeed;	
 	//230 encoder ticks per foot
 	//19 ticks/inch
 	//0.05 in per tick?
@@ -70,6 +75,8 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putData(sPosChooser);
 		SmartDashboard.putData(baselineChooser);
+		
+		camera = CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	public void disabledPeriodic() {
@@ -130,6 +137,17 @@ public class Robot extends IterativeRobot {
 			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
 		}
 		elevator.run();
+		
+		if(RobotMap.intakeLimitSwitch.get()) {
+			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelA);
+			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelB);
+		} else {
+			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelB);
+			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelA);
+		}
+		
+		SmartDashboard.putBoolean("Limit Switch: ", RobotMap.intakeLimitSwitch.get());
+		
 		Scheduler.getInstance().run();
 	}
 

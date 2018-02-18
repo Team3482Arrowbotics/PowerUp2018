@@ -4,13 +4,14 @@ import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
@@ -27,6 +28,7 @@ public class RobotMap {
 	public static WPI_TalonSRX intakeMotorRight;
 	public static DoubleSolenoid intakePistonLeft;
 	public static DoubleSolenoid intakePistonRight;
+	public static DigitalInput intakeLimitSwitch;
 	public static WPI_TalonSRX elevatorTalon;
 	public static WPI_TalonSRX elevatorTalon2;
  	public static Encoder encoderRight;
@@ -66,6 +68,8 @@ public class RobotMap {
 
 		intakeMotorLeft = new WPI_TalonSRX(8);
 		intakeMotorRight = new WPI_TalonSRX(4);
+		
+		intakeLimitSwitch = new DigitalInput(4); 
 
 		intakePistonLeft = new DoubleSolenoid(5, 4);
 		intakePistonRight = new DoubleSolenoid(7, 6);
