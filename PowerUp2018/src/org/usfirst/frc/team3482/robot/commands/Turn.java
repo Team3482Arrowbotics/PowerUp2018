@@ -11,7 +11,7 @@ public class Turn extends Command{
 		this.angle = angle;
 	}
 	protected void initialize() {
-		RobotMap.drive.setTurning(false); //true
+		RobotMap.drive.setTurning(true);
 //		RobotMap.navx.reset();
 		RobotMap.navx.zeroYaw();
 		Robot.driveEnabled = false;

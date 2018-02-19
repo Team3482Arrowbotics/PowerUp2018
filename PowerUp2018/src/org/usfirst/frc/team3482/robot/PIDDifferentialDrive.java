@@ -19,7 +19,7 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	}
 	public void pidWrite(double output) {
 		if(turning) {
-			arcadeDrive(0, -output);
+			arcadeDrive(0, output);
 		} else {
 			arcadeDrive(-output, 0);
 		}
