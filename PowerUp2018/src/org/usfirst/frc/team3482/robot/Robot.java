@@ -102,14 +102,14 @@ public class Robot extends IterativeRobot {
 					ledStrip.flash("white", 0.1);
 				} else if(isSpoutake){
 					ledStrip.flash("purple", 0.2);
-				} else if(isEMovingDown) {
+				} else if(isEMovingUp) {
 					ledStrip.flash("cyan", 0.2);
 				} else if(isEMovingDown){
 					ledStrip.flash("yellow", 0.1);
 				} else if(isClimberhook){
-					ledStrip.flashRainbow(colorsArray, 0.2);
+					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
-					ledStrip.ledBoxCondition("red", "red");
+					ledStrip.ledBoxCondition("red", "green");
 				}
 				//System.out.println("Thread is running");
 			}

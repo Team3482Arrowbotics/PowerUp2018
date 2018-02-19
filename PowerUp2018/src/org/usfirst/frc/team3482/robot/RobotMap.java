@@ -38,11 +38,12 @@ public class RobotMap {
 	public static PIDController rotationController;
 	public static AHRSPID navx;
 	public static WPI_TalonSRX climberHook;
-//	public static PWM climberHook;
 	public static WPI_TalonSRX climber;
 	public static PIDController climberHookController;
 	public static WPI_TalonSRX emptyTalon;
-	public static CANifier c; 
+	public static CANifier c;
+	public static PIDController counteractDrift; 
+	public static RotationAdjuster rotationAdjuster;
 
 	public static void init() {
 		frontLeft = new WPI_TalonSRX(3);
@@ -59,7 +60,7 @@ public class RobotMap {
 		
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
-		drive = new PIDDifferentialDrive(left, right);
+		drive = new PIDDifferentialDrive(left, right, rotationAdjuster);
 		drivePID = new DrivePIDOutput();
 		driveController = new PIDController(0.1, 0, 0, encoderRight, drivePID);
 		driveController.setOutputRange(-.7, .7);
@@ -90,11 +91,14 @@ public class RobotMap {
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 		
+		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
+		counteractDrift.setInputRange(-180, 180);
+		counteractDrift.setOutputRange(-.7, .7);
+		counteractDrift.setContinuous(true);
+		counteractDrift.setAbsoluteTolerance(1);
+		
 		climberHook = new WPI_TalonSRX(9); //Talon 9
-//		climberHook = new PWM(0);
-//		climberHook.configSel
 		climber = new WPI_TalonSRX(7); //Talon 7
-//		emptyTalon = new WPI_TalonSRX(7);
 		
 		c = new CANifier(0);
 	}

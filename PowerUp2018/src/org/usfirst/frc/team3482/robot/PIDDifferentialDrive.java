@@ -7,21 +7,24 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput{
 	//turns if true, straight if false
 	boolean turning;
-	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, boolean turn) {
+	RotationAdjuster rot;
+	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, RotationAdjuster r, boolean turn) {
 		super(leftMotor, rightMotor);
 		turning = turn;
+		this.rot = r;
 		// TODO Auto-generated constructor stub
 	}
-	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor) {
+	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, RotationAdjuster r) {
 		super(leftMotor, rightMotor);
 		turning = false;
+		this.rot = r;
 		// TODO Auto-generated constructor stub
 	}
 	public void pidWrite(double output) {
 		if(turning) {
 			arcadeDrive(0, output);
 		} else {
-			arcadeDrive(-output, 0);
+			curvatureDrive(-output, rot.adjustment, false);
 		}
 		
 	}

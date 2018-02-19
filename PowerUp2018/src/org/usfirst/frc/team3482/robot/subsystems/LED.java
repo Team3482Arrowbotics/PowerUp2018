@@ -23,9 +23,9 @@ public class LED extends Subsystem{
 			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelB);
 			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelC);
 		} else if(color.equals("green")) {
-			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelA);
+			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelA);
 			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelB);
-			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelC);
+			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelC);
 		} else if(color.equals("white")) {
 			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelA);
 			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelB);

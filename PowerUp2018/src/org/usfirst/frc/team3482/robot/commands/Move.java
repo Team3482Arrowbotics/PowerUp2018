@@ -12,7 +12,7 @@ public class Move extends Command{
 	}
 	protected void initialize() { 
 		Robot.driveEnabled = false;
-		RobotMap.drive.setTurning(false); //false
+		RobotMap.drive.setTurning(false);
 		RobotMap.encoders.reset();
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
