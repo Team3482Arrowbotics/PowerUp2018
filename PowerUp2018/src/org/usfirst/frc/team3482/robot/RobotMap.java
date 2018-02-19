@@ -61,10 +61,11 @@ public class RobotMap {
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new PIDDifferentialDrive(left, right);
 		drivePID = new DrivePIDOutput();
-		driveController = new PIDController(0.1, 0, 0, encoders, drivePID);
+		driveController = new PIDController(0.1, 0, 0, encoderRight, drivePID);
 		driveController.setOutputRange(-.7, .7);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
+		driveController.setAbsoluteTolerance(1);
 
 		intakeMotorLeft = new WPI_TalonSRX(8);
 		intakeMotorRight = new WPI_TalonSRX(4);

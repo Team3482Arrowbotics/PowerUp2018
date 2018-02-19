@@ -11,15 +11,16 @@ import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
 import org.usfirst.frc.team3482.robot.commands.Move;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
+import org.usfirst.frc.team3482.robot.subsystems.LED;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
 import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
-
-import com.ctre.phoenix.CANifier.LEDChannel;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static String gameData;
+	public static LED ledStrip;
 	public static Intake intake;
 	public static Elevator elevator;
 	public static LIDAR lidar;
@@ -40,7 +42,15 @@ public class Robot extends IterativeRobot {
 	public static double elevatorTopSpeed = 0.5;
 	public static boolean driveEnabled, switchOnLeft, scaleOnLeft, crossBaseline;
 	public double speed;
-	public double turnSpeed;	
+	public double turnSpeed;
+	public static boolean isSpintake;
+	public static boolean isSpoutake;
+	public static boolean isClimberhook;
+	public static boolean isEMovingUp;
+	public static boolean isEMovingDown;
+	public String colorsArray[];
+	public Preferences prefs;
+	
 	//230 encoder ticks per foot
 	//19 ticks/inch
 	//0.05 in per tick?
@@ -53,8 +63,16 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		driveEnabled = true;
 		isElevatorTop = false;
-
+		isSpoutake = false;
+		isSpintake = false;
+		isClimberhook = false;
+		isEMovingUp = false;
+		isEMovingDown = false;
+		
+		colorsArray = new String[]{"red", "yellow", "green", "cyan", "white", "purple"};
+		
 		RobotMap.init();
+		ledStrip = new LED();
 		intake = new Intake();
 		elevator = new Elevator();
 		lidar = new LIDAR();
@@ -77,11 +95,29 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(baselineChooser);
 		
 		camera = CameraServer.getInstance().startAutomaticCapture();
+		
+		new Thread (() -> {
+			while(true) {
+				if(isSpintake) {
+					ledStrip.flash("white", 0.1);
+				} else if(isSpoutake){
+					ledStrip.flash("purple", 0.2);
+				} else if(isEMovingDown) {
+					ledStrip.flash("cyan", 0.2);
+				} else if(isEMovingDown){
+					ledStrip.flash("yellow", 0.1);
+				} else if(isClimberhook){
+					ledStrip.flashRainbow(colorsArray, 0.2);
+				} else {
+					ledStrip.ledBoxCondition("red", "red");
+				}
+				//System.out.println("Thread is running");
+			}
+		}).start();
 	}
 
 	public void disabledPeriodic() {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-
 	}
 
 	@Override
@@ -111,7 +147,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-
+		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("Left Encoder: ", RobotMap.encoderLeft.getDistance());
+		SmartDashboard.putNumber("Right Encoder: ", RobotMap.encoderRight.getDistance());
+		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw());
 	}
 
 	/**
@@ -119,34 +158,49 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		System.out.println("Position: " + elevator.getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
+		//System.out.println("Position: " + elevator.getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
 		if (oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE
 				&& oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
 			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
+			isEMovingUp = true;
+			isEMovingDown = false;
 		} else if (oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE
 				&& oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
 			elevator.changePosition(-ELEVATOR_SPEED * .6, ELEVATOR_DOWN_AXIS);
+			isEMovingUp = false;
+			isEMovingDown = true;
+		} else {
+			isEMovingUp = false;
+			isEMovingDown = false;
 		}
 
-		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.5) + 0.5;
-		speed = -oi.x.getRawAxis(1) * elevatorRatio;
-		turnSpeed = oi.x.getRawAxis(4);
+		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.3) + 0.7;
+		speed = -oi.x2.getRawAxis(1) * elevatorRatio;
+		turnSpeed = oi.x2.getRawAxis(4) * elevatorRatio;
 		//System.out.println("Ratio: " + elevatorRatio);
 		//System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
 			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
+//			if(turnSpeed <= 0.1) {
+//				RobotMap.rotationController.enable();
+//				RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
+//			} else {
+//				RobotMap.rotationController.reset();
+//				RobotMap.navx.reset();
+//				RobotMap.rotationController.disable();
+//			}
 		}
 		elevator.run();
 		
-		if(RobotMap.intakeLimitSwitch.get()) {
-			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelA);
-			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelB);
-		} else {
-			RobotMap.c.setLEDOutput(0.0, LEDChannel.LEDChannelB);
-			RobotMap.c.setLEDOutput(1.0, LEDChannel.LEDChannelA);
-		}
+		SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakeLimitSwitch.get());
 		
-		SmartDashboard.putBoolean("Limit Switch: ", RobotMap.intakeLimitSwitch.get());
+		if(elevator.isTop()) {
+			oi.x.setRumble(RumbleType.kLeftRumble, 1.0);
+			oi.x.setRumble(RumbleType.kRightRumble, 1.0);
+		} else {
+			oi.x.setRumble(RumbleType.kLeftRumble, 0.0);
+			oi.x.setRumble(RumbleType.kRightRumble, 0.0);
+		}
 		
 		Scheduler.getInstance().run();
 	}
