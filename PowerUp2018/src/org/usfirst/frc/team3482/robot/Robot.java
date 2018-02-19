@@ -50,10 +50,10 @@ public class Robot extends IterativeRobot {
 	public static boolean isEMovingDown;
 	public String colorsArray[];
 	public Preferences prefs;
-	
-	//230 encoder ticks per foot
-	//19 ticks/inch
-	//0.05 in per tick?
+
+	// 230 encoder ticks per foot
+	// 19 ticks/inch
+	// 0.05 in per tick?
 	public SendableChooser<StartPosition> sPosChooser;
 	public SendableChooser<String> baselineChooser;
 	Command autoCommand;
@@ -68,50 +68,50 @@ public class Robot extends IterativeRobot {
 		isClimberhook = false;
 		isEMovingUp = false;
 		isEMovingDown = false;
-		
-		colorsArray = new String[]{"red", "yellow", "green", "cyan", "white", "purple"};
-		
+
+		colorsArray = new String[] { "red", "yellow", "green", "cyan", "white", "purple" };
+
 		RobotMap.init();
 		ledStrip = new LED();
 		intake = new Intake();
 		elevator = new Elevator();
 		lidar = new LIDAR();
 		rangeFinder = new Ultrasonic(0);
-		
+
 		RobotMap.elevatorTalon.setSelectedSensorPosition(Elevator.BOTTOM_POSITION, 0, 0);
 		RobotMap.encoders.reset();
-		
+
 		sPosChooser = new SendableChooser<StartPosition>();
 		sPosChooser.setName("Start Position");
 		sPosChooser.addObject("Middle", StartPosition.MIDDLE);
 		sPosChooser.addDefault("Left", StartPosition.LEFT);
 		sPosChooser.addObject("Right", StartPosition.RIGHT);
-		
+
 		baselineChooser = new SendableChooser<String>();
 		baselineChooser.addDefault("Cross Baseline", "base");
 		baselineChooser.addObject("Cross diagonally", "diag");
-		
+
 		SmartDashboard.putData(sPosChooser);
 		SmartDashboard.putData(baselineChooser);
-		
+
 		camera = CameraServer.getInstance().startAutomaticCapture();
-		
-		new Thread (() -> {
-			while(true) {
-				if(isSpintake) {
+
+		new Thread(() -> {
+			while (true) {
+				if (isSpintake) {
 					ledStrip.flash("white", 0.1);
-				} else if(isSpoutake){
+				} else if (isSpoutake) {
 					ledStrip.flash("purple", 0.2);
-				} else if(isEMovingUp) {
+				} else if (isEMovingUp) {
 					ledStrip.flash("cyan", 0.2);
-				} else if(isEMovingDown){
+				} else if (isEMovingDown) {
 					ledStrip.flash("yellow", 0.1);
-				} else if(isClimberhook){
+				} else if (isClimberhook) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
 					ledStrip.ledBoxCondition("red", "green");
 				}
-				//System.out.println("Thread is running");
+				// System.out.println("Thread is running");
 			}
 		}).start();
 	}
@@ -123,23 +123,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		new Move(20).start();
-//		gameData = DriverStation.getInstance().getGameSpecificMessage();
-//		String[] data = gameData.split("");
-//		switchOnLeft = data[0].equals("L");
-//		scaleOnLeft = data[1].equals("L");
-//		String baselineCrossed = baselineChooser.getSelected();
-//		switch(baselineCrossed) {
-//		case "base":
-//			crossBaseline = true;
-//			break;
-//		case "diag":
-//			crossBaseline = false;
-//			break;
-//		default:
-//			crossBaseline = false;
-//		}
-//		StartPosition sPos = sPosChooser.getSelected();
-//		new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
+		// gameData = DriverStation.getInstance().getGameSpecificMessage();
+		// String[] data = gameData.split("");
+		// switchOnLeft = data[0].equals("L");
+		// scaleOnLeft = data[1].equals("L");
+		// String baselineCrossed = baselineChooser.getSelected();
+		// switch(baselineCrossed) {
+		// case "base":
+		// crossBaseline = true;
+		// break;
+		// case "diag":
+		// crossBaseline = false;
+		// break;
+		// default:
+		// crossBaseline = false;
+		// }
+		// StartPosition sPos = sPosChooser.getSelected();
+		// new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
 	}
 
 	/**
@@ -158,7 +158,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//System.out.println("Position: " + elevator.getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
+		// System.out.println("Position: " + elevator.getCurrentPos() + " Error: " +
+		// RobotMap.elevatorTalon.getClosedLoopError(0));
 		if (oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE
 				&& oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
 			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
@@ -174,34 +175,36 @@ public class Robot extends IterativeRobot {
 			isEMovingDown = false;
 		}
 
+		@SuppressWarnings("static-access")
 		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.3) + 0.7;
 		speed = -oi.x2.getRawAxis(1) * elevatorRatio;
 		turnSpeed = oi.x2.getRawAxis(4) * elevatorRatio;
-		//System.out.println("Ratio: " + elevatorRatio);
-		//System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right Encoder: " + RobotMap.encoderRight.get());
+		// System.out.println("Ratio: " + elevatorRatio);
+		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
+		// Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
 			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
-//			if(turnSpeed <= 0.1) {
-//				RobotMap.rotationController.enable();
-//				RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
-//			} else {
-//				RobotMap.rotationController.reset();
-//				RobotMap.navx.reset();
-//				RobotMap.rotationController.disable();
-//			}
+			// if(turnSpeed <= 0.1) {
+			// RobotMap.rotationController.enable();
+			// RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
+			// } else {
+			// RobotMap.rotationController.reset();
+			// RobotMap.navx.reset();
+			// RobotMap.rotationController.disable();
+			// }
 		}
 		elevator.run();
-		
+
 		SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakeLimitSwitch.get());
-		
-		if(elevator.isTop()) {
+
+		if (elevator.isTop()) {
 			oi.x.setRumble(RumbleType.kLeftRumble, 1.0);
 			oi.x.setRumble(RumbleType.kRightRumble, 1.0);
 		} else {
 			oi.x.setRumble(RumbleType.kLeftRumble, 0.0);
 			oi.x.setRumble(RumbleType.kRightRumble, 0.0);
 		}
-		
+
 		Scheduler.getInstance().run();
 	}
 

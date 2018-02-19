@@ -91,6 +91,7 @@ public class RobotMap {
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 		
+		rotationAdjuster = new RotationAdjuster();
 		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
 		counteractDrift.setInputRange(-180, 180);
 		counteractDrift.setOutputRange(-.7, .7);
