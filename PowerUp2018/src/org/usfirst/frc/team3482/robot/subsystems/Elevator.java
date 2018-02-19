@@ -13,7 +13,7 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static WPI_TalonSRX elevatorTalon;
 	protected static double targetPos, maxPos, minPos;
 	protected static int currentStage, numStages;
-	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 37000, SWITCH_POSITION = 8000, SCALE_POSITION = 35000;
+	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 40000, SWITCH_POSITION = 8000, SCALE_POSITION = 35000;
 	public static final int THRESHOLD_HEIGHT = TOP_POSITION-4000;
 	public static boolean locked;
 
@@ -54,7 +54,6 @@ public class Elevator extends Subsystem implements Runnable {
 	//RUNS EVERY TICK (see teleopPeriodic)
 	public void run() {
 		RobotMap.elevatorTalon2.set(elevatorTalon.getMotorOutputPercent());
-		System.out.println("Motor Speed: "+elevatorTalon.getMotorOutputPercent());
 		if(locked)
 		{
 			elevatorTalon.set(ControlMode.Position, targetPos);
@@ -81,7 +80,11 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 	
 	public void lock(boolean islocked) {
-		targetPos=getCurrentPos();
-		locked=islocked;
+		targetPos = getCurrentPos();
+		locked = islocked;
+	}
+	
+	public boolean isTop() {
+		return elevatorTalon.getSelectedSensorPosition(0) >= TOP_POSITION;
 	}
 }

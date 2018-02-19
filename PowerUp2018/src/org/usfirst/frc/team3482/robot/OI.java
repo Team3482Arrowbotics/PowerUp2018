@@ -1,3 +1,4 @@
+
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.DPadButton.Direction;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
 	public Joystick x;
+	public Joystick x2;
 	public JoystickButton spintake;
 	private JoystickButton spouttake;
 	private JoystickButton switchtake;
@@ -25,7 +27,7 @@ public class OI {
 
 	public OI(){
 		x = new Joystick(0);
-		
+		x2 = new Joystick(1);
 		spintake = new JoystickButton(x, 6);
 		spintake.whileHeld(new Spintake());
 		
@@ -41,10 +43,10 @@ public class OI {
 		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.6));
 		
 		spinClimberButton = new DPadButton(x, Direction.WEST);
-		spinClimberButton.whileHeld(new SpinClimberHook(-0.35));
+		spinClimberButton.whileHeld(new SpinClimberHook(-0.5));
 		
 		spinClimberReverseButton = new DPadButton(x, Direction.EAST);
-		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.35));
+		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.5));
 		
 		climbButton = new JoystickButton(x, 3);
 		climbButton.whileHeld(new Climb());
