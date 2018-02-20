@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot {
 	public static Ultrasonic rangeFinder;
 	public static UsbCamera camera;
 	public static CameraServer cameraServer;
-	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2;
+	public static final int ELEVATOR_UP_AXIS = 1, ELEVATOR_DOWN_AXIS = 1;
 	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 2000;
 	public static boolean isElevatorTop;
 	public static double elevatorTopSpeed = 0.5;
@@ -48,6 +48,12 @@ public class Robot extends IterativeRobot {
 	public static boolean isClimberhook;
 	public static boolean isEMovingUp;
 	public static boolean isEMovingDown;
+	public static String spintakeColor;
+	public static String spoutakeColor;
+	public static String eUpColor;
+	public static String eDownColor;
+	public static String boxInColor;
+	public static String boxOutColor;
 	public String colorsArray[];
 	public Preferences prefs;
 
@@ -95,21 +101,48 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(baselineChooser);
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
+		
+		spintakeColor = "white";
+		spoutakeColor = "purple";
+		eUpColor = "cyan";
+		eDownColor = "yellow";
+		boxInColor = "green";
+		boxOutColor = "red";
+		
 
 		new Thread(() -> {
 			while (true) {
+				if (oi.flightStick.getRawButtonPressed(12)) {
+					ledStrip.resetToOriginalColors();
+				}
 				if (isSpintake) {
-					ledStrip.flash("white", 0.1);
+					ledStrip.flash(spintakeColor, 0.1);
+					if (oi.flightStick.getRawButtonPressed(11)) {
+						ledStrip.rotateColors(spintakeColor);
+					}
 				} else if (isSpoutake) {
-					ledStrip.flash("purple", 0.2);
+					ledStrip.flash(spoutakeColor, 0.2);
+					if (oi.flightStick.getRawButtonPressed(11)) {
+						ledStrip.rotateColors(spoutakeColor);
+					}
 				} else if (isEMovingUp) {
-					ledStrip.flash("cyan", 0.2);
+					ledStrip.flash(eUpColor, 0.2);
+					if (oi.flightStick.getRawButtonPressed(11)) {
+						ledStrip.rotateColors(eUpColor);
+					}
 				} else if (isEMovingDown) {
-					ledStrip.flash("yellow", 0.1);
+					ledStrip.flash(eDownColor, 0.1);
+					if (oi.flightStick.getRawButtonPressed(11)) {
+						ledStrip.rotateColors(eDownColor);
+					}
 				} else if (isClimberhook) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
-					ledStrip.ledBoxCondition("red", "green");
+					ledStrip.ledBoxCondition(boxOutColor, boxInColor);
+					if (oi.flightStick.getRawButtonPressed(11)) {
+						ledStrip.rotateColors(boxOutColor);
+						ledStrip.rotateColors(boxInColor);
+					}
 				}
 				// System.out.println("Thread is running");
 			}
@@ -160,14 +193,12 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// System.out.println("Position: " + elevator.getCurrentPos() + " Error: " +
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
-		if (oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE
-				&& oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
+		if (oi.flightStick.getRawAxis(ELEVATOR_UP_AXIS) < -ELEVATOR_AXIS_DEADZONE) {
+			elevator.changePosition(-ELEVATOR_SPEED * 0.6, ELEVATOR_UP_AXIS);
 			isEMovingUp = true;
 			isEMovingDown = false;
-		} else if (oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE
-				&& oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(-ELEVATOR_SPEED * .6, ELEVATOR_DOWN_AXIS);
+		} else if (oi.flightStick.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE) {
+			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_DOWN_AXIS);
 			isEMovingUp = false;
 			isEMovingDown = true;
 		} else {
@@ -203,6 +234,18 @@ public class Robot extends IterativeRobot {
 			oi.x.setRumble(RumbleType.kLeftRumble, 0.0);
 			oi.x.setRumble(RumbleType.kRightRumble, 0.0);
 		}
+		
+		if (oi.flightStick.getRawAxis(2) > 0.05) {
+			RobotMap.climberHook.set(0.2);
+			isClimberhook = true;
+		} else if (oi.flightStick.getRawAxis(2) < -0.05) {
+			RobotMap.climberHook.set(-0.2);
+			isClimberhook = true;
+		} else {
+			RobotMap.climberHook.set(0.0);
+			isClimberhook = false;
+		}
+		
 		Scheduler.getInstance().run();
 	}
 

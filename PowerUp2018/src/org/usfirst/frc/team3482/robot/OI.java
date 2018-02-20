@@ -16,39 +16,47 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	public Joystick x;
 	public Joystick x2;
+	public Joystick flightStick;
+	public Joystick arcadeButtons;
 	public JoystickButton spintake;
 	private JoystickButton spouttake;
 	private JoystickButton switchtake;
-	private DPadButton manualElevatorUp;
-	private DPadButton manualElevatorDown;
-	private DPadButton spinClimberButton;
+	private JoystickButton manualElevatorUp;
+	private JoystickButton manualElevatorDown;
+	private JoystickButton spinClimberButton;
 	private JoystickButton climbButton;
 	private DPadButton spinClimberReverseButton;
 
 	public OI(){
 		x = new Joystick(0);
 		x2 = new Joystick(1);
-		spintake = new JoystickButton(x, 6);
+		flightStick = new Joystick(2);
+		arcadeButtons = new Joystick(3);
+		
+		spintake = new JoystickButton(flightStick, 2);
 		spintake.whileHeld(new Spintake());
 		
-		spouttake = new JoystickButton(x, 5);
+		spouttake = new JoystickButton(flightStick, 1);
 		spouttake.whileHeld(new Spouttake());
 		
-		switchtake = new JoystickButton(x, 1);
+		switchtake = new JoystickButton(flightStick, 3);
 		switchtake.whenPressed(new SwitchIntake());
 		
-		manualElevatorUp = new DPadButton(x, Direction.NORTH);
+		manualElevatorUp = new JoystickButton(flightStick, 9);
 		manualElevatorUp.whileHeld(new ManualElevatorSpeed(1));
-		manualElevatorDown = new DPadButton(x, Direction.SOUTH);
+		manualElevatorDown = new JoystickButton(flightStick, 10);
 		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.6));
 		
-		spinClimberButton = new DPadButton(x, Direction.WEST);
-		spinClimberButton.whileHeld(new SpinClimberHook(-0.5));
-		
-		spinClimberReverseButton = new DPadButton(x, Direction.EAST);
-		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.5));
-		
-		climbButton = new JoystickButton(x, 3);
+		climbButton = new JoystickButton(flightStick, 5);
 		climbButton.whileHeld(new Climb());
+		
+		/*1 outake
+		 * 2 intake
+		 * 4 toggle pistons
+		 * Forward back up and down elevator
+		 * Twist = spin climberhook
+		 * 9 & 10 manual climb
+		 * 5 = climb
+		 * */
 	}
 }

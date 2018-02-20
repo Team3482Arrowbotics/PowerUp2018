@@ -67,8 +67,9 @@ public class LED extends Subsystem{
 	public void ledBoxCondition(String colorBoxOut, String colorBoxIn) {
 		if(!RobotMap.intakeLimitSwitch.get()) {
 			turnColor(colorBoxIn);
+		} else {
+			turnColor(colorBoxOut);
 		}
-		turnColor(colorBoxOut);
 	}
 
 	public void flashRainbow(String[] colorsToFlash, double blinkDelay) {
@@ -77,6 +78,33 @@ public class LED extends Subsystem{
 			Timer.delay(blinkDelay);
 		}
 	}
+	
+	public void rotateColors(String color) {
+		//red green white purple cyan yellow
+		if(color.equals("red")) {
+			color = "green";
+		} else if(color.equals("green")) {
+			color = "white";
+		} else if(color.equals("white")) {
+			color = "purple";
+		} else if(color.equals("purple")) {
+			color = "cyan";
+		} else if(color.equals("cyan")) {
+			color = "yellow";
+		} else if(color.equals("yellow")) {
+			color = "red";
+		}
+	}
+	
+	public void resetToOriginalColors() {
+		Robot.spintakeColor = "white";
+		Robot.spoutakeColor = "purple";
+		Robot.boxInColor = "green";
+		Robot.boxOutColor = "red";
+		Robot.eDownColor = "yellow";
+		Robot.eUpColor = "cyan";
+	}
+	
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
