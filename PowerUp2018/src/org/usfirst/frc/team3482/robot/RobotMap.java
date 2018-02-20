@@ -58,11 +58,12 @@ public class RobotMap {
 		encoderRight.setDistancePerPulse(0.05);
 		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
 		
+		rotationAdjuster = new RotationAdjuster();
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new PIDDifferentialDrive(left, right, rotationAdjuster);
 		drivePID = new DrivePIDOutput();
-		driveController = new PIDController(0.1, 0, 0, encoderRight, drivePID);
+		driveController = new PIDController(0.1, 0, 0, encoderRight, drive);
 		driveController.setOutputRange(-.7, .7);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
@@ -91,7 +92,7 @@ public class RobotMap {
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 		
-		rotationAdjuster = new RotationAdjuster();
+		
 		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
 		counteractDrift.setInputRange(-180, 180);
 		counteractDrift.setOutputRange(-.7, .7);

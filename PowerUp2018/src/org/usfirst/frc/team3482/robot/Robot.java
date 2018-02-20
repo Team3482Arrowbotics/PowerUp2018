@@ -175,7 +175,6 @@ public class Robot extends IterativeRobot {
 			isEMovingDown = false;
 		}
 
-		@SuppressWarnings("static-access")
 		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.3) + 0.7;
 		speed = -oi.x2.getRawAxis(1) * elevatorRatio;
 		turnSpeed = oi.x2.getRawAxis(4) * elevatorRatio;
@@ -204,7 +203,6 @@ public class Robot extends IterativeRobot {
 			oi.x.setRumble(RumbleType.kLeftRumble, 0.0);
 			oi.x.setRumble(RumbleType.kRightRumble, 0.0);
 		}
-
 		Scheduler.getInstance().run();
 	}
 
