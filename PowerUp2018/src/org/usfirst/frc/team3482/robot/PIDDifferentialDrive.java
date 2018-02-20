@@ -41,7 +41,7 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 
 	public void arcadeDrive(double xSpeed, double zRotation) {
 		if(zRotation < this.m_deadband && zRotation > -m_deadband) {
-			if(turning && xSpeed < m_deadband && xSpeed > -m_deadband) {
+			if(turning && xSpeed > m_deadband && xSpeed < -m_deadband) {
 				startAdjusting();
 				turning = false;
 			}
