@@ -1,16 +1,13 @@
 
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.DPadButton.Direction;
+import org.usfirst.frc.team3482.robot.commands.Climb;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
-import org.usfirst.frc.team3482.robot.commands.SpinClimberHook;
 import org.usfirst.frc.team3482.robot.commands.Spintake;
 import org.usfirst.frc.team3482.robot.commands.Spouttake;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
-import org.usfirst.frc.team3482.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {

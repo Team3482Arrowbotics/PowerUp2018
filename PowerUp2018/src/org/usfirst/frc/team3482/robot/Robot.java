@@ -8,14 +8,13 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
-import org.usfirst.frc.team3482.robot.commands.Move;
+import org.usfirst.frc.team3482.robot.commands.paths.AutoTesting;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LED;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
 import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -34,7 +33,7 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator;
 	public static LIDAR lidar;
 	public static Ultrasonic rangeFinder;
-	public static UsbCamera camera;
+	//public static UsbCamera camera;
 	public static CameraServer cameraServer;
 	public static final int ELEVATOR_UP_AXIS = 1, ELEVATOR_DOWN_AXIS = 1;
 	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 2000;
@@ -100,7 +99,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(sPosChooser);
 		SmartDashboard.putData(baselineChooser);
 
-		camera = CameraServer.getInstance().startAutomaticCapture();
+		//camera = CameraServer.getInstance().startAutomaticCapture();
 		
 		spintakeColor = "white";
 		spoutakeColor = "purple";
@@ -112,37 +111,18 @@ public class Robot extends IterativeRobot {
 
 		new Thread(() -> {
 			while (true) {
-				if (oi.flightStick.getRawButtonPressed(12)) {
-					ledStrip.resetToOriginalColors();
-				}
 				if (isSpintake) {
 					ledStrip.flash(spintakeColor, 0.1);
-					if (oi.flightStick.getRawButtonPressed(11)) {
-						ledStrip.rotateColors(spintakeColor);
-					}
 				} else if (isSpoutake) {
 					ledStrip.flash(spoutakeColor, 0.2);
-					if (oi.flightStick.getRawButtonPressed(11)) {
-						ledStrip.rotateColors(spoutakeColor);
-					}
 				} else if (isEMovingUp) {
 					ledStrip.flash(eUpColor, 0.2);
-					if (oi.flightStick.getRawButtonPressed(11)) {
-						ledStrip.rotateColors(eUpColor);
-					}
 				} else if (isEMovingDown) {
 					ledStrip.flash(eDownColor, 0.1);
-					if (oi.flightStick.getRawButtonPressed(11)) {
-						ledStrip.rotateColors(eDownColor);
-					}
 				} else if (isClimberhook) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
 					ledStrip.ledBoxCondition(boxOutColor, boxInColor);
-					if (oi.flightStick.getRawButtonPressed(11)) {
-						ledStrip.rotateColors(boxOutColor);
-						ledStrip.rotateColors(boxInColor);
-					}
 				}
 				// System.out.println("Thread is running");
 			}
@@ -155,7 +135,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		new Move(20).start();
+		new AutoTesting().start();
 		// gameData = DriverStation.getInstance().getGameSpecificMessage();
 		// String[] data = gameData.split("");
 		// switchOnLeft = data[0].equals("L");
@@ -181,9 +161,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		elevator.run();
 		SmartDashboard.putNumber("Left Encoder: ", RobotMap.encoderLeft.getDistance());
+		SmartDashboard.putNumber("Left Encoder Raw: ", RobotMap.encoderLeft.get());
 		SmartDashboard.putNumber("Right Encoder: ", RobotMap.encoderRight.getDistance());
-		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw());
+		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw()); 
+		SmartDashboard.putNumber("Lidar distance", lidar.getDistance());
+		System.out.println("Current Position: " + Robot.elevator.getCurrentPos() + " Target Position: " + Robot.elevator.getTargetPos());
 	}
 
 	/**
@@ -194,11 +178,11 @@ public class Robot extends IterativeRobot {
 		// System.out.println("Position: " + elevator.getCurrentPos() + " Error: " +
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
 		if (oi.flightStick.getRawAxis(ELEVATOR_UP_AXIS) < -ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(-ELEVATOR_SPEED * 0.6, ELEVATOR_UP_AXIS);
+			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
 			isEMovingUp = true;
 			isEMovingDown = false;
 		} else if (oi.flightStick.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_DOWN_AXIS);
+			elevator.changePosition(-ELEVATOR_SPEED * 0.6, ELEVATOR_DOWN_AXIS);
 			isEMovingUp = false;
 			isEMovingDown = true;
 		} else {
@@ -214,14 +198,6 @@ public class Robot extends IterativeRobot {
 		// Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
 			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
-			// if(turnSpeed <= 0.1) {
-			// RobotMap.rotationController.enable();
-			// RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
-			// } else {
-			// RobotMap.rotationController.reset();
-			// RobotMap.navx.reset();
-			// RobotMap.rotationController.disable();
-			// }
 		}
 		elevator.run();
 
@@ -235,10 +211,10 @@ public class Robot extends IterativeRobot {
 			oi.x.setRumble(RumbleType.kRightRumble, 0.0);
 		}
 		
-		if (oi.flightStick.getRawAxis(2) > 0.05) {
+		if (oi.flightStick.getRawAxis(2) > 0.5) {
 			RobotMap.climberHook.set(0.2);
 			isClimberhook = true;
-		} else if (oi.flightStick.getRawAxis(2) < -0.05) {
+		} else if (oi.flightStick.getRawAxis(2) < -0.5) {
 			RobotMap.climberHook.set(-0.2);
 			isClimberhook = true;
 		} else {

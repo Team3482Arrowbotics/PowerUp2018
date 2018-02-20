@@ -51,11 +51,11 @@ public class RobotMap {
 		backLeft = new WPI_TalonSRX(2);
 		backRight = new WPI_TalonSRX(6);
 		
-		encoderLeft = new Encoder(0, 1);
-		encoderRight = new Encoder(2, 3);
-		encoderRight.setReverseDirection(true);
-		encoderLeft.setDistancePerPulse(0.05);
-		encoderRight.setDistancePerPulse(0.05);
+		encoderRight = new Encoder(0, 1);
+		encoderLeft = new Encoder(2, 3);
+		encoderLeft.setReverseDirection(true);
+		encoderLeft.setDistancePerPulse(0.05179);
+		encoderRight.setDistancePerPulse(0.05179);
 		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
 		
 		rotationAdjuster = new RotationAdjuster();
@@ -63,11 +63,11 @@ public class RobotMap {
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new PIDDifferentialDrive(left, right, rotationAdjuster);
 		drivePID = new DrivePIDOutput();
-		driveController = new PIDController(0.1, 0, 0, encoderRight, drive);
-		driveController.setOutputRange(-.7, .7);
+		driveController = new PIDController(0.05, 0, 0, encoderLeft, drive);
+		driveController.setOutputRange(-.6, .6);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
-		driveController.setAbsoluteTolerance(1);
+		driveController.setAbsoluteTolerance(2);
 
 		intakeMotorLeft = new WPI_TalonSRX(8);
 		intakeMotorRight = new WPI_TalonSRX(4);
@@ -86,14 +86,14 @@ public class RobotMap {
 //		elevator = new TwoMotorsOneEncoder(elevatorTalon);
 		
 		navx = new AHRSPID(Port.kMXP);
-		rotationController = new PIDController(0.05, 0, 0, navx, drive);
+		rotationController = new PIDController(0.1, 0, 0, navx, drive);
 		rotationController.setInputRange(-180, 180);
-		rotationController.setOutputRange(-.7, .7);
+		rotationController.setOutputRange(-.65, .65);
 		rotationController.setContinuous(true);
-		rotationController.setAbsoluteTolerance(1);
+		rotationController.setAbsoluteTolerance(2);
 		
 		
-		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
+		counteractDrift = new PIDController(0.08, 0, 0, navx, rotationAdjuster);
 		counteractDrift.setInputRange(-180, 180);
 		counteractDrift.setOutputRange(-.7, .7);
 		counteractDrift.setContinuous(true);

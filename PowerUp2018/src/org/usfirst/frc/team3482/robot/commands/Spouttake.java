@@ -15,8 +15,8 @@ public class Spouttake extends Command{
 	}
 	
 	protected void initialize(){
-		RobotMap.intakeMotorLeft.set(.75);
-		RobotMap.intakeMotorRight.set(-.75);
+		RobotMap.intakeMotorLeft.set(1);
+		RobotMap.intakeMotorRight.set(-1);
 		System.out.println("Motors set!");
 		Robot.isSpoutake = true;
 	}

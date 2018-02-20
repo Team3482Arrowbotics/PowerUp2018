@@ -22,20 +22,20 @@ public class LIDAR extends Subsystem{
 		if(backwards) {
 			while(getDistance() > distance) {
 				counter ++; 
-				if(counter > 2000) {
+				if(counter > 10000) {
 					RobotMap.drive.arcadeDrive(0, 0);
 					return true;
 				}
-				RobotMap.drive.arcadeDrive(-.7, 0);
+				RobotMap.drive.arcadeDrive(-.3, 0);
 			}
 		} else {
 			while(getDistance() > distance) {
 				counter ++; 
-				if(counter > 2000) {
+				if(counter > 10000) {
 					RobotMap.drive.arcadeDrive(0, 0);
 					return true;
 				}
-				RobotMap.drive.arcadeDrive(.7, 0);
+				RobotMap.drive.arcadeDrive(.3, 0);
 			}
 		}
 		RobotMap.drive.arcadeDrive(0, 0);

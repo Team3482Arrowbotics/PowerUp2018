@@ -2,6 +2,7 @@
 
 import org.usfirst.frc.team3482.robot.commands.SetElevatorPosition;
 import org.usfirst.frc.team3482.robot.commands.Spouttake;
+import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
 import org.usfirst.frc.team3482.robot.commands.Turn;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
@@ -18,9 +19,10 @@ public class PlaceBoxOnScale extends CommandGroup{
 		} else {
 			turnMultiplier = 1;
 		}
-		addParallel(new Turn(turnMultiplier * 45));
-		addParallel(new SetElevatorPosition(Elevator.SCALE_POSITION));
-		addSequential(new Spouttake(0.25));
+		//addSequential(new Turn(turnMultiplier * 45));
+		addSequential(new SetElevatorPosition(Elevator.SCALE_POSITION));
+		addSequential(new Spouttake(0.75));
+		addSequential(new SwitchIntake());
 		addSequential(new SetElevatorPosition(Elevator.BOTTOM_POSITION));
 	}
 

@@ -13,7 +13,7 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static WPI_TalonSRX elevatorTalon;
 	protected static double targetPos, maxPos, minPos;
 	protected static int currentStage, numStages;
-	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 40000, SWITCH_POSITION = 8000, SCALE_POSITION = 35000;
+	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 40000, SWITCH_POSITION = 8000, SCALE_POSITION = 40000;
 	public static final int THRESHOLD_HEIGHT = TOP_POSITION-4000;
 	public static boolean locked;
 
@@ -75,8 +75,8 @@ public class Elevator extends Subsystem implements Runnable {
 	//MOVE ELEVATOR BY A*SPEED ENCODER TICKS EVERY ROBOT TICK
 	//!!!!!!!!!!!!!!!!SPEED CAN BE NEGATIVE!!!!!!!!!!!!!!!!!!!!
 	public void changePosition(double deltaPos, int axis) {
-		double a = Robot.oi.x.getRawAxis(axis);
-		set(a * deltaPos, true);
+		double a = Robot.oi.flightStick.getRawAxis(axis);
+		set(Math.abs(a) * deltaPos, true);
 	}
 	
 	public void lock(boolean islocked) {

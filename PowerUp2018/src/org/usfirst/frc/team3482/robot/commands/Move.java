@@ -16,10 +16,11 @@ public class Move extends Command{
 		RobotMap.encoders.reset();
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
-		RobotMap.rotationController.enable();
-		RobotMap.rotationController.setSetpoint(RobotMap.rotationController.getSetpoint());
+		RobotMap.counteractDrift.setSetpoint(RobotMap.navx.getYaw());
+		RobotMap.counteractDrift.enable();
 	}
 	protected void end() {
+		RobotMap.counteractDrift.disable();
 		RobotMap.driveController.disable();
 		Robot.driveEnabled = true;
 	}

@@ -32,7 +32,7 @@ public class Autonomous extends CommandGroup{
 		switch(sPos) {
 		case LEFT:
 			if(scaleOnLeft) {
-				addSequential(new StartToScale());
+				addSequential(new StartToScale(false));
 				addSequential(new PlaceBoxOnScale(false));
 				addSequential(new ScaleToSameSideBox(false));
 				if(switchOnLeft) {
@@ -48,7 +48,7 @@ public class Autonomous extends CommandGroup{
 			} else {
 				if(crossBaseline) {
 					addSequential(new AcrossBaseline(false));
-					addSequential(new StartToScale());
+					addSequential(new StartToScale(true));
 				}
 				else {
 					addSequential(new StartToOppoAutoLine(false));
@@ -73,7 +73,7 @@ public class Autonomous extends CommandGroup{
 				
 				if(crossBaseline) {
 					addSequential(new AcrossBaselineFromMiddle(false));
-					addSequential(new StartToScale());
+					addSequential(new StartToScale(false));
 				} else {
 					addSequential(new MiddleStartToLeftAutoLine());
 					addSequential(new AutoLineToScale());
@@ -116,7 +116,7 @@ public class Autonomous extends CommandGroup{
 			if(scaleOnLeft) {
 				if(crossBaseline) {
 					addSequential(new AcrossBaseline(true));
-					addSequential(new StartToScale());
+					addSequential(new StartToScale(false));
 				}
 				else {
 					addSequential(new StartToOppoAutoLine(true));
@@ -138,7 +138,7 @@ public class Autonomous extends CommandGroup{
 				
 
 			} else {
-				addSequential(new StartToScale());
+				addSequential(new StartToScale(true));
 				addSequential(new PlaceBoxOnScale(true));
 				addSequential(new ScaleToSameSideBox(true));
 				if(switchOnLeft) {
