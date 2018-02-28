@@ -1,13 +1,12 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
+import org.usfirst.frc.team3482.robot.subsystems.SpeedPIDOutput;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -34,7 +33,7 @@ public class RobotMap {
  	public static Encoder encoderRight;
 	public static Encoder encoderLeft;
 	public static DrivePIDOutput drivePID;
-	public static TwoEncoderPID encoders;
+	public static TwoEncoderPID encodersDistance;
 	public static PIDController rotationController;
 	public static AHRSPID navx;
 	public static WPI_TalonSRX climberHook;
@@ -44,6 +43,9 @@ public class RobotMap {
 	public static CANifier c;
 	public static PIDController counteractDrift; 
 	public static RotationAdjuster rotationAdjuster;
+	public static PIDController accelerationControl;
+	public static TwoEncoderPID encodersSpeed;
+	public static SpeedPIDOutput speedPID;
 
 	public static void init() {
 		frontLeft = new WPI_TalonSRX(3);
@@ -56,7 +58,8 @@ public class RobotMap {
 		encoderLeft.setReverseDirection(true);
 		encoderLeft.setDistancePerPulse(0.05179);
 		encoderRight.setDistancePerPulse(0.05179);
-		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
+		encodersDistance = new TwoEncoderPID(encoderLeft, encoderRight, "Distance");
+		
 		
 		rotationAdjuster = new RotationAdjuster();
 		left = new SpeedControllerGroup(frontLeft, backLeft);
@@ -98,6 +101,20 @@ public class RobotMap {
 		counteractDrift.setOutputRange(-.7, .7);
 		counteractDrift.setContinuous(true);
 		counteractDrift.setAbsoluteTolerance(1);
+		
+		//EXPERIMENTAL
+		encodersSpeed = new TwoEncoderPID(encoderLeft, encoderRight, "Speed");
+		
+		
+		accelerationControl = new PIDController(0, 0, .5, encodersSpeed, speedPID);
+		//Beware the magic numbers                   ^^^
+		accelerationControl.setInputRange(-1000, 1000);
+		//Figure out what that should actually be^^^^
+		
+		accelerationControl.setOutputRange(-1, 1);
+		accelerationControl.setContinuous(true);
+		accelerationControl.setPercentTolerance(1);
+		//EXPERIMENTAL
 		
 		climberHook = new WPI_TalonSRX(9); //Talon 9
 		climber = new WPI_TalonSRX(7); //Talon 7

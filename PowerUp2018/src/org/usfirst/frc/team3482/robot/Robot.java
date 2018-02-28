@@ -62,6 +62,8 @@ public class Robot extends IterativeRobot {
 	public SendableChooser<StartPosition> sPosChooser;
 	public SendableChooser<String> baselineChooser;
 	Command autoCommand;
+	private double speedControl=1;
+	private double driveOutput;
 
 	@Override
 	public void robotInit() {
@@ -84,7 +86,7 @@ public class Robot extends IterativeRobot {
 		rangeFinder = new Ultrasonic(0);
 
 		RobotMap.elevatorTalon.setSelectedSensorPosition(Elevator.BOTTOM_POSITION, 0, 0);
-		RobotMap.encoders.reset();
+		RobotMap.encodersDistance.reset();
 
 		sPosChooser = new SendableChooser<StartPosition>();
 		sPosChooser.setName("Start Position");
@@ -190,17 +192,26 @@ public class Robot extends IterativeRobot {
 			isEMovingDown = false;
 		}
 
-		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.3) + 0.7;
-		speed = -oi.x2.getRawAxis(1) * elevatorRatio;
-		turnSpeed = oi.x2.getRawAxis(4) * elevatorRatio;
+		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.5) + 0.5;
+		
+		System.out.println("Drive Motor Encoder Speed "+RobotMap.encodersSpeed.pidGet());
+		driveOutput = (RobotMap.frontLeft.getMotorOutputPercent() + RobotMap.backLeft.getMotorOutputPercent()
+					- RobotMap.frontRight.getMotorOutputPercent()-RobotMap.backRight.getMotorOutputPercent())/4;
+		System.out.println("Drive Motor Percent Output "+driveOutput);
+		//speedControl=RobotMap.speedPID.getOutput();
+		speed = -oi.x2.getRawAxis(1) * elevatorRatio * speedControl;
+		
+		turnSpeed = oi.x2.getRawAxis(4);
 		// System.out.println("Ratio: " + elevatorRatio);
 		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
 		// Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
-			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
+			RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		}
 		elevator.run();
 
+		
+		
 		SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakeLimitSwitch.get());
 
 		if (elevator.isTop()) {

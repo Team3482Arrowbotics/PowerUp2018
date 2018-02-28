@@ -10,7 +10,6 @@ public class DrivePIDOutput implements PIDOutput {
 	public void pidWrite(double output) {
 		RobotMap.drive.arcadeDrive(output, 0);
 		// TODO Auto-generated method stub
-		
 	}
 
 }

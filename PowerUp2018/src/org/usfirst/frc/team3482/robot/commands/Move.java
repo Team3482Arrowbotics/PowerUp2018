@@ -13,7 +13,7 @@ public class Move extends Command{
 	protected void initialize() { 
 		Robot.driveEnabled = false;
 		RobotMap.drive.setTurning(false);
-		RobotMap.encoders.reset();
+		RobotMap.encodersDistance.reset();
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
 		RobotMap.counteractDrift.setSetpoint(RobotMap.navx.getYaw());

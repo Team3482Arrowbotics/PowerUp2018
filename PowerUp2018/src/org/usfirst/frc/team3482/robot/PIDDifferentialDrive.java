@@ -8,7 +8,7 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	// turns if true, straight if false
 	boolean turning;
 	RotationAdjuster rot;
-
+	
 	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, RotationAdjuster r,
 			boolean turn) {
 		super(leftMotor, rightMotor);
@@ -28,7 +28,6 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 		} else {
 			curvatureDrive(output, rot.adjustment, false);
 		}
-
 	}
 
 	public boolean isTurning() {
@@ -57,13 +56,11 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 
 	private void stopAdjusting() {
 		RobotMap.counteractDrift.disable();
-		
 	}
 
 	private void startAdjusting() {
 		RobotMap.counteractDrift.setSetpoint(RobotMap.navx.getYaw());
 		RobotMap.counteractDrift.enable();
-		
 	}
 
 }
