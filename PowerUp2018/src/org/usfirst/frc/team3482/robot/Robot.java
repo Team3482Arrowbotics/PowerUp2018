@@ -109,7 +109,7 @@ public class Robot extends IterativeRobot {
 				} else if (isClimberhook) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
-					ledStrip.ledBoxCondition("red", "green");
+					ledStrip.ledBoxCondition("green", "red");
 				}
 				// System.out.println("Thread is running");
 			}
@@ -194,7 +194,7 @@ public class Robot extends IterativeRobot {
 		}
 		elevator.run();
 
-		SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakeLimitSwitch.get());
+		SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
 
 		if (elevator.isTop()) {
 			oi.x.setRumble(RumbleType.kLeftRumble, 1.0);

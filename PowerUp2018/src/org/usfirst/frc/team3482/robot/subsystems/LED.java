@@ -65,7 +65,7 @@ public class LED extends Subsystem{
 	}
 	
 	public void ledBoxCondition(String colorBoxOut, String colorBoxIn) {
-		if(!RobotMap.intakeLimitSwitch.get()) {
+		if(!RobotMap.intakePhotoelectric.get()) {
 			turnColor(colorBoxIn);
 		}
 		turnColor(colorBoxOut);

@@ -28,7 +28,7 @@ public class RobotMap {
 	public static WPI_TalonSRX intakeMotorRight;
 	public static DoubleSolenoid intakePistonLeft;
 	public static DoubleSolenoid intakePistonRight;
-	public static DigitalInput intakeLimitSwitch;
+	public static DigitalInput intakePhotoelectric;
 	public static WPI_TalonSRX elevatorTalon;
 	public static WPI_TalonSRX elevatorTalon2;
  	public static Encoder encoderRight;
@@ -72,7 +72,7 @@ public class RobotMap {
 		intakeMotorLeft = new WPI_TalonSRX(8);
 		intakeMotorRight = new WPI_TalonSRX(4);
 		
-		intakeLimitSwitch = new DigitalInput(4); 
+		intakePhotoelectric = new DigitalInput(4); 
 
 		intakePistonLeft = new DoubleSolenoid(5, 4);
 		intakePistonRight = new DoubleSolenoid(7, 6);
