@@ -1,14 +1,15 @@
 package org.usfirst.frc.team3482.robot.commands;
 
+import org.usfirst.frc.team3482.robot.Robot;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Spintake extends Command{
+public class Outtake extends Command{
 	protected void initialize(){
-		RobotMap.intakeMotorLeft.set(.75);
-		RobotMap.intakeMotorRight.set(-.75);
-		System.out.println("Motors set!");
+		RobotMap.intakeMotorLeft.set(-Robot.outtakeSpeed);
+		RobotMap.intakeMotorRight.set(Robot.outtakeSpeed);
+		System.out.println("Outtake Speed: "+ Robot.outtakeSpeed);
 	}
 	protected void end(){
 		RobotMap.intakeMotorLeft.set(0);

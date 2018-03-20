@@ -21,26 +21,21 @@ public class Robot extends IterativeRobot {
 	public static Intake intake;
 	public static Chassis chassis;
 	public static Elevator elevator;
-	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2;
-	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 1000;
-	public static boolean isElevatorTop;
-	public static double elevatorTopSpeed = 0.5;
 	public static boolean driveEnabled, switchOnLeft, scaleOnLeft;
-	public double speed;
+	public double newSpeed;
+	public double currentSpeed = 0;
+	public static final double MAX_SPEED_CHANGE = 0.1;
 	public double turnSpeed;
+	public static double outtakeSpeed = 1;
 
 	@Override
 	public void robotInit() {
 		oi = new OI();
 		driveEnabled = true;
-		isElevatorTop = false;
-
 		RobotMap.init();
 		intake = new Intake();
 		chassis = new Chassis();
 		elevator = new Elevator();
-
-		RobotMap.elevatorTalon.setSelectedSensorPosition(elevator.BOTTOM_POSITION, 0, 0);
 		RobotMap.encoders.reset();
 	}
 
@@ -70,25 +65,33 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		System.out.println("Position: " + elevator.getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
-		if (oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE
-				&& oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
-		} else if (oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE
-				&& oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(-ELEVATOR_SPEED * .6, ELEVATOR_DOWN_AXIS);
-		}
 
-		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.5) + 0.5;
-		speed = -oi.x.getRawAxis(1) * elevatorRatio;
-		turnSpeed = oi.x.getRawAxis(4);
-		System.out.println("Ratio: " + elevatorRatio);
-		System.out.println(
-				"Left Encoder: " + RobotMap.encoderLeft.get() + " Right Encoder: " + RobotMap.encoderRight.get());
-		if (driveEnabled) {
-			RobotMap.drive.arcadeDrive(speed, turnSpeed);
-		}
+		outtakeSpeed = oi.flightStick.getRawAxis(3);
+		outtakeSpeed = (outtakeSpeed*.5)+.5;
+		
 		elevator.run();
+
+		newSpeed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
+		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
+		
+		if (Math.abs(newSpeed - currentSpeed) > MAX_SPEED_CHANGE) {
+			if (newSpeed < currentSpeed) {
+				newSpeed = currentSpeed - MAX_SPEED_CHANGE;
+			} else {
+				newSpeed = currentSpeed + MAX_SPEED_CHANGE;
+			}
+		}
+		
+		if (driveEnabled) {
+			RobotMap.drive.arcadeDrive(newSpeed, turnSpeed);
+		}
+		
+		currentSpeed = newSpeed;
+		
+//		System.out.println("Ratio: " + elevatorRatio);
+//		System.out.println(
+//				"Left Encoder: " + RobotMap.encoderLeft.get() + " Right Encoder: " + RobotMap.encoderRight.get());
+		
 		Scheduler.getInstance().run();
 	}
 

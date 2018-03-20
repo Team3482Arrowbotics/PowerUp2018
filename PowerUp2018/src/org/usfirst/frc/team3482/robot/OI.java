@@ -2,8 +2,8 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.DPadButton.Direction;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
-import org.usfirst.frc.team3482.robot.commands.Spintake;
-import org.usfirst.frc.team3482.robot.commands.Spouttake;
+import org.usfirst.frc.team3482.robot.commands.Intake;
+import org.usfirst.frc.team3482.robot.commands.Outtake;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
 
@@ -11,27 +11,31 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
-	public Joystick x;
-	public JoystickButton spintake;
-	private JoystickButton spouttake;
+	public Joystick flightStick;
+	public Joystick xBox;
+	public JoystickButton intake;
+	private JoystickButton outtake;
 	private JoystickButton switchtake;
 	private DPadButton manualElevatorUp;
 	private DPadButton manualElevatorDown;
+	public static final int ELEVATOR_AXIS = 1;
 
 	public OI(){
-		x = new Joystick(0);
-		spintake = new JoystickButton(x, 6);
-		spintake.whileHeld(new Spintake());
+		flightStick = new Joystick(0);
+		xBox = new Joystick(1);
 		
-		spouttake = new JoystickButton(x, 5);
-		spouttake.whileHeld(new Spouttake());
+		intake = new JoystickButton(flightStick, 2);
+		intake.whileHeld(new Intake());
 		
-		switchtake = new JoystickButton(x, 1);
+		outtake = new JoystickButton(flightStick, 1);
+		outtake.whileHeld(new Outtake());
+		
+		switchtake = new JoystickButton(flightStick, 3);
 		switchtake.whenPressed(new SwitchIntake());
 		
-		manualElevatorUp = new DPadButton(x, Direction.NORTH);
-		manualElevatorUp.whileHeld(new ManualElevatorSpeed(1));
-		manualElevatorDown = new DPadButton(x, Direction.SOUTH);
-		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.75));
+//		manualElevatorUp = new DPadButton(flightStick, Direction.NORTH);
+//		manualElevatorUp.whileHeld(new ManualElevatorSpeed(1));
+//		manualElevatorDown = new DPadButton(flightStick, Direction.SOUTH);
+//		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.75));
 	}
 }
