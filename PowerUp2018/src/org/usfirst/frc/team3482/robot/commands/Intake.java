@@ -6,12 +6,12 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Spintake extends Command{
+public class Intake extends Command{
 	boolean finished = false;
-	public Spintake(double timeout) {
+	public Intake(double timeout) {
 		super(timeout);
 	}
-	public Spintake() {
+	public Intake() {
 		super();
 	}
 	protected void initialize(){

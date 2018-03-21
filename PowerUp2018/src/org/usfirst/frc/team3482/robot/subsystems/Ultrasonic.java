@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Ultrasonic extends AnalogInput {
 	public static final double BOX_THRESHOLD = 1.0;
-
+	public static final double SCALE_FACTOR = 0.0098; //sFactor is 9.8 mV/in
 	public Ultrasonic(int channel) {
 		super(channel);
 	}
@@ -25,6 +25,11 @@ public class Ultrasonic extends AnalogInput {
 		RobotMap.drive.arcadeDrive(0, 0);
 		return false;
 
+	}
+	
+	public double getDistance()
+	{
+		return SCALE_FACTOR*getVoltage();
 	}
 
 }

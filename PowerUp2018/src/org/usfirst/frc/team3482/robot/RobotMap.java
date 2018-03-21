@@ -1,13 +1,13 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
+import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -44,9 +44,20 @@ public class RobotMap {
 	public static CANifier c;
 	public static PIDController counteractDrift; 
 	public static RotationAdjuster rotationAdjuster;
-
+	
 	public static void init() {
-		frontLeft = new WPI_TalonSRX(3);
+		//ACTUAL FRONT LEFT IS 3
+		
+		
+		
+		
+		frontLeft = new WPI_TalonSRX(15);
+		
+		
+		
+		
+		
+		
 		frontRight = new WPI_TalonSRX(12);
 		backLeft = new WPI_TalonSRX(2);
 		backRight = new WPI_TalonSRX(6);
@@ -72,18 +83,43 @@ public class RobotMap {
 		intakeMotorLeft = new WPI_TalonSRX(8);
 		intakeMotorRight = new WPI_TalonSRX(4);
 		
-		intakePhotoelectric = new DigitalInput(4); 
+		//intakePhotoelectric = new DigitalInput(4); 
 
 		intakePistonLeft = new DoubleSolenoid(5, 4);
 		intakePistonRight = new DoubleSolenoid(7, 6);
 
-		elevatorTalon = new WPI_TalonSRX(5);
+		
+		
+		
+		//ACTUAL ELEVATOR TALON IS 5
+		
+		
+		
+		
+		elevatorTalon = new WPI_TalonSRX(0);
+		
+		
+		
+		
+		
 		elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-		elevatorTalon.config_kP(0, 1.5, 0);
+		elevatorTalon.config_kP(0, Elevator.ELEVATOR_P_VALUE, 0);
 		elevatorTalon.setInverted(false);
 		
-		elevatorTalon2 = new WPI_TalonSRX(0);
-//		elevator = new TwoMotorsOneEncoder(elevatorTalon);
+		
+		
+		//ACTUAL ELEVATOR TALON 2 IS 0
+		
+		
+		
+		
+		elevatorTalon2 = new WPI_TalonSRX(3);
+		
+		
+		
+		
+		
+		
 		
 		navx = new AHRSPID(Port.kMXP);
 		rotationController = new PIDController(0.05, 0, 0, navx, drive);

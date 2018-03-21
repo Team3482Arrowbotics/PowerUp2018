@@ -12,7 +12,7 @@ public class ManualElevatorSpeed extends Command{
 	}
 	protected void initialize(){
 		Robot.elevator.lock(false);
-		System.out.println("Motor Speed: "+speed);
+		//System.out.println("Motor Speed: "+speed);
 		RobotMap.elevatorTalon.set(speed);
 	}
 	protected void end(){

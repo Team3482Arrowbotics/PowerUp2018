@@ -4,8 +4,8 @@ package org.usfirst.frc.team3482.robot;
 import org.usfirst.frc.team3482.robot.DPadButton.Direction;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
 import org.usfirst.frc.team3482.robot.commands.SpinClimberHook;
-import org.usfirst.frc.team3482.robot.commands.Spintake;
-import org.usfirst.frc.team3482.robot.commands.Spouttake;
+import org.usfirst.frc.team3482.robot.commands.Intake;
+import org.usfirst.frc.team3482.robot.commands.Outtake;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
 import org.usfirst.frc.team3482.robot.commands.Climb;
 
@@ -14,41 +14,45 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
-	public Joystick x;
-	public Joystick x2;
+	public Joystick flightStick;
+	public Joystick xBox;
 	public JoystickButton spintake;
 	private JoystickButton spouttake;
 	private JoystickButton switchtake;
-	private DPadButton manualElevatorUp;
-	private DPadButton manualElevatorDown;
-	private DPadButton spinClimberButton;
+	private JoystickButton manualElevatorUp;
+	private JoystickButton manualElevatorDown;
+	private JoystickButton spinClimberButton;
 	private JoystickButton climbButton;
 	private DPadButton spinClimberReverseButton;
+	public static final int ELEVATOR_AXIS = 1;
 
 	public OI(){
-		x = new Joystick(0);
-		x2 = new Joystick(1);
-		spintake = new JoystickButton(x, 6);
-		spintake.whileHeld(new Spintake());
+		flightStick = new Joystick(0);
+		xBox = new Joystick(1);
+		spintake = new JoystickButton(flightStick, 2);
+		spintake.whileHeld(new Intake());
 		
-		spouttake = new JoystickButton(x, 5);
-		spouttake.whileHeld(new Spouttake());
+		spouttake = new JoystickButton(flightStick, 1);
+		spouttake.whileHeld(new Outtake());
 		
-		switchtake = new JoystickButton(x, 1);
+		switchtake = new JoystickButton(flightStick, 3);
 		switchtake.whenPressed(new SwitchIntake());
 		
-		manualElevatorUp = new DPadButton(x, Direction.NORTH);
+		manualElevatorUp = new JoystickButton(flightStick, 9);
 		manualElevatorUp.whileHeld(new ManualElevatorSpeed(1));
-		manualElevatorDown = new DPadButton(x, Direction.SOUTH);
-		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.6));
+		manualElevatorDown = new JoystickButton(flightStick, 10);
+		manualElevatorDown.whileHeld(new ManualElevatorSpeed(-.8));
 		
-		spinClimberButton = new DPadButton(x, Direction.WEST);
-		spinClimberButton.whileHeld(new SpinClimberHook(-0.2));
+//		spinClimberButton = new JoyStickButton(flightStick, Direction.WEST);
+//		spinClimberButton.whileHeld(new SpinClimberHook(-0.2));
+//		
+//		spinClimberReverseButton = new DPadButton(flightStick, Direction.EAST);
+//		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.2));
 		
-		spinClimberReverseButton = new DPadButton(x, Direction.EAST);
-		spinClimberReverseButton.whileHeld(new SpinClimberHook(0.2));
-		
-		climbButton = new JoystickButton(x, 3);
+		climbButton = new JoystickButton(flightStick, 6);
 		climbButton.whileHeld(new Climb());
+		
+//		reverseClimbButton = new JoystickButton(flightStick, 5);
+//		reverseClimbButton.whileHeld(new Climb());
 	}
 }

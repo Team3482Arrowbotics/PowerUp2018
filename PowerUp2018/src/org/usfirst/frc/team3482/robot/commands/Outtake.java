@@ -5,19 +5,22 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Spouttake extends Command{
-	public Spouttake(double timeout) {
+public class Outtake extends Command{
+	private double outtakeSpeed;
+	
+	public Outtake(double timeout) {
 		super(timeout);
 	}
 	
-	public Spouttake() {
+	public Outtake() {
 		super();
 	}
 	
 	protected void initialize(){
-		RobotMap.intakeMotorLeft.set(.75);
-		RobotMap.intakeMotorRight.set(-.75);
-		System.out.println("Motors set!");
+		outtakeSpeed = ((Robot.oi.flightStick.getRawAxis(3)*.5)+.5);
+		System.out.println("Outtake Speed: "+ outtakeSpeed);
+		RobotMap.intakeMotorLeft.set(outtakeSpeed);
+		RobotMap.intakeMotorRight.set(-outtakeSpeed);
 		Robot.isSpoutake = true;
 	}
 	

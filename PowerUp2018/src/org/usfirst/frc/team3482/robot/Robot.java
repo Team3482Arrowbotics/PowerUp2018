@@ -78,7 +78,6 @@ public class Robot extends IterativeRobot {
 		lidar = new LIDAR();
 		rangeFinder = new Ultrasonic(0);
 
-		RobotMap.elevatorTalon.setSelectedSensorPosition(Elevator.BOTTOM_POSITION, 0, 0);
 		RobotMap.encoders.reset();
 
 		sPosChooser = new SendableChooser<StartPosition>();
@@ -158,31 +157,17 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		elevator.run();
 		// System.out.println("Position: " + elevator.getCurrentPos() + " Error: " +
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
-		if (oi.x.getRawAxis(ELEVATOR_UP_AXIS) > ELEVATOR_AXIS_DEADZONE
-				&& oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(ELEVATOR_SPEED, ELEVATOR_UP_AXIS);
-			isEMovingUp = true;
-			isEMovingDown = false;
-		} else if (oi.x.getRawAxis(ELEVATOR_DOWN_AXIS) > ELEVATOR_AXIS_DEADZONE
-				&& oi.x.getRawAxis(ELEVATOR_UP_AXIS) < ELEVATOR_AXIS_DEADZONE) {
-			elevator.changePosition(-ELEVATOR_SPEED * .6, ELEVATOR_DOWN_AXIS);
-			isEMovingUp = false;
-			isEMovingDown = true;
-		} else {
-			isEMovingUp = false;
-			isEMovingDown = false;
-		}
 
-		double elevatorRatio = ((1 - (elevator.getCurrentPos() / Elevator.TOP_POSITION)) * 0.3) + 0.7;
-		speed = -oi.x2.getRawAxis(1) * elevatorRatio;
-		turnSpeed = oi.x2.getRawAxis(4) * elevatorRatio;
+		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
+		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
 		// System.out.println("Ratio: " + elevatorRatio);
 		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
 		// Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
-			RobotMap.drive.arcadeDrive(speed * elevatorRatio, turnSpeed);
+			RobotMap.drive.arcadeDrive(speed, turnSpeed);
 			// if(turnSpeed <= 0.1) {
 			// RobotMap.rotationController.enable();
 			// RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
@@ -192,16 +177,17 @@ public class Robot extends IterativeRobot {
 			// RobotMap.rotationController.disable();
 			// }
 		}
-		elevator.run();
+		
 
-		SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
-
+		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
+		SmartDashboard.putBoolean("Is box in: ", !(rangeFinder.getAverageVoltage()>0));
+		
 		if (elevator.isTop()) {
-			oi.x.setRumble(RumbleType.kLeftRumble, 1.0);
-			oi.x.setRumble(RumbleType.kRightRumble, 1.0);
+			oi.xBox.setRumble(RumbleType.kLeftRumble, 1.0);
+			oi.xBox.setRumble(RumbleType.kRightRumble, 1.0);
 		} else {
-			oi.x.setRumble(RumbleType.kLeftRumble, 0.0);
-			oi.x.setRumble(RumbleType.kRightRumble, 0.0);
+			oi.xBox.setRumble(RumbleType.kLeftRumble, 0.0);
+			oi.xBox.setRumble(RumbleType.kRightRumble, 0.0);
 		}
 		Scheduler.getInstance().run();
 	}

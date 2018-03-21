@@ -65,7 +65,8 @@ public class LED extends Subsystem{
 	}
 	
 	public void ledBoxCondition(String colorBoxOut, String colorBoxIn) {
-		if(!RobotMap.intakePhotoelectric.get()) {
+		if(Robot.rangeFinder.getDistance()<6) { //!RobotMap.intakePhotoelectric.get()
+			//6 for approx. max number for box
 			turnColor(colorBoxIn);
 		}
 		turnColor(colorBoxOut);

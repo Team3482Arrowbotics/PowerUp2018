@@ -11,80 +11,151 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Elevator extends Subsystem implements Runnable {
 	//FIELDS
 	protected static WPI_TalonSRX elevatorTalon;
-	protected static double targetPos, maxPos, minPos;
-	protected static int currentStage, numStages;
-	public static final int BOTTOM_POSITION = 0, TOP_POSITION = 40000, SWITCH_POSITION = 8000, SCALE_POSITION = 35000;
-	public static final int THRESHOLD_HEIGHT = TOP_POSITION-4000;
+	protected static WPI_TalonSRX elevatorTalon2;
+	protected static double targetPos;
+	public static final int AXIS = Robot.oi.ELEVATOR_AXIS; 
+	private double AxisPos;
+	public static final double AXIS_DEADZONE = 0.05;
+	public static final int MAX_POSITION = 280000, ELEVATOR_SPEED = 12000;
+	public static final double	ELEVATOR_P_VALUE = 0.15;
+	public static final double BOTTOM_POSITION = 0,
+							TOP_POSITION = MAX_POSITION,
+							SWITCH_POSITION = MAX_POSITION/10,
+							SCALE_POSITION = MAX_POSITION/(4.0/5.0);
+
+	//15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
+	//15:1 Small Spool Max = 665000 Speed = 50000
+	//10:1 Big Spool Max = 335000 Speed = 20000?
+	
+	//Old setup: Max = 33750 P = 1.5 Speed = 1000
+
 	public static boolean locked;
 
 	// CONSTRUCTOR
 	public Elevator() {
 		elevatorTalon = RobotMap.elevatorTalon;
-		targetPos = BOTTOM_POSITION;
-		currentStage = 0;
-		minPos = BOTTOM_POSITION;
-		maxPos = TOP_POSITION;
+		elevatorTalon2 = RobotMap.elevatorTalon2;
 		locked=true;
-	}
-	@Override
-	protected void initDefaultCommand() {
-		
+		resetEncoder();
 	}
 	
+	@Override
+	protected void initDefaultCommand() {
+
+	}
+
+	//RUNS EVERY TICK (see teleopPeriodic)
+	public void run() {
+
+		AxisPos = -Robot.oi.flightStick.getRawAxis(AXIS);
+
+		if(AxisPos > AXIS_DEADZONE) {
+			Robot.isEMovingUp=true;
+			Robot.isEMovingDown=false;
+			changePosition(AxisPos);
+		}
+		if(AxisPos < -AXIS_DEADZONE) {
+			Robot.isEMovingUp=false;
+			Robot.isEMovingDown=true;
+			changePosition(AxisPos*.7);
+		}
+		
+		if(locked)
+		{
+			elevatorTalon.set(ControlMode.Position, targetPos);
+		}
+		
+		elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
+		
+		//System.out.println("Set Pos: " + targetPos);
+		System.out.println("Position: " + getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
+		//System.out.println("Velocity: "+getCurrentVelocity());
+		System.out.println("Percent Output Motor 1: "+elevatorTalon.getMotorOutputPercent());
+		System.out.println("Percent Output Motor 2: "+elevatorTalon2.getMotorOutputPercent());
+		//System.out.println("Speed Ratio: "+ getSpeedRatio());
+		//System.out.println("Turn Ratio: "+ getTurnRatio());
+	}
+	
+	public void resetEncoder()
+	{
+		RobotMap.elevatorTalon.setSelectedSensorPosition(0, 0, 0);
+		targetPos = 0;
+		
+		//SOMETIMES ENCODER VALUES FLIP WHEN SWAPPING MOTORS
+		//IF BOTTOM IS MAX AND TOP IS 0, USE THIS
+		
+		//RobotMap.elevatorTalon.setSelectedSensorPosition(MAX_POSITION, 0, 0);
+		//targetPos = MAX_POSITION;
+	}
+
 	// GETTERS AND SETTERS
 	public static double getCurrentPos() {
 		return elevatorTalon.getSelectedSensorPosition(0);
+	}
+	
+	public static double getCurrentVelocity() {
+		return elevatorTalon.getSelectedSensorVelocity(0);
 	}
 
 	public static double getTargetPos() {
 		return targetPos;
 	}
 	
-	private static void setTargetPos(double tPos) {
-		//limit movement within MIN_POSITION and MAX_POSITION
-		if(tPos > maxPos) {
-			tPos = maxPos;
-		}
-		if(tPos < minPos) {
-			tPos = minPos;
-		}
-		targetPos = tPos;
-		//System.out.println("Target Position After: " + targetPos);
-	}
-	//RUNS EVERY TICK (see teleopPeriodic)
-	public void run() {
-		RobotMap.elevatorTalon2.set(elevatorTalon.getMotorOutputPercent());
-		if(locked)
-		{
-			elevatorTalon.set(ControlMode.Position, targetPos);
-		}
+	public static double getSpeedRatio() {
+		
+		//IF ENCODER VALUES FLIP (TOP IS 0, BOTTOM IS MAX)
+		//return ((getCurrentPos() / MAX_POSITION) * 0.75) + 0.25;
+		
+		return (1-((getCurrentPos() / MAX_POSITION) * 0.75));
 	}
 	
+	public static double getTurnRatio()
+	{
+		//IF ENCODER VALUES FLIP (TOP IS 0, BOTTOM IS MAX)
+		//return ((getCurrentPos() / MAX_POSITION) * 0.5) + 0.5;
+		
+		return (1-((getCurrentPos() / MAX_POSITION) * 0.5));
+	}
+
 	//SET ELEVATOR POSITION
 	public void set(double pos, boolean relative) {
 		if(relative) {
-			setTargetPos(getCurrentPos() + pos);
-			return;
+			//System.out.println("Target Position Before: " + (getCurrentPos() + pos));
+			pos+=getCurrentPos();
 		}
-		setTargetPos(pos);
+		
+		if(pos > MAX_POSITION) {
+			pos = MAX_POSITION;
+		}
+		
+		if(pos < 0) {
+			pos = 0;
+		}
+		
+		targetPos = pos;
 	}
-	
+
 	public void set(double pos) {
 		set(pos, false);
 	}
-	//MOVE ELEVATOR BY A*SPEED ENCODER TICKS EVERY ROBOT TICK
-	//!!!!!!!!!!!!!!!!SPEED CAN BE NEGATIVE!!!!!!!!!!!!!!!!!!!!
-	public void changePosition(double deltaPos, int axis) {
-		double a = Robot.oi.x.getRawAxis(axis);
-		set(a * deltaPos, true);
+
+	public void changePosition(double axisPos) {
+		System.out.println("Axis Output" + axisPos);
+		//System.out.println("Motor Output: " + elevatorTalon.getMotorOutputPercent());
+		set(axisPos * ELEVATOR_SPEED, true); // add true when suing original function
 	}
-	
+
 	public void lock(boolean islocked) {
-		targetPos = getCurrentPos();
-		locked = islocked;
+		targetPos=getCurrentPos();
+		locked=islocked;
 	}
 	
-	public boolean isTop() {
-		return elevatorTalon.getSelectedSensorPosition(0) >= TOP_POSITION;
+	public boolean isTop()
+	{
+		if(getCurrentPos() > (MAX_POSITION-(MAX_POSITION/100)))
+		{
+			return true;
+		}
+		return false;
 	}
 }
