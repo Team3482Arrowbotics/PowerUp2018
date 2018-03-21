@@ -6,7 +6,9 @@ import org.usfirst.frc.team3482.robot.commands.Intake;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
 import org.usfirst.frc.team3482.robot.commands.Outtake;
 import org.usfirst.frc.team3482.robot.commands.ReverseClimb;
+import org.usfirst.frc.team3482.robot.commands.SetElevatorPosition;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
+import org.usfirst.frc.team3482.robot.commands.ResetPID;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	public Joystick flightStick;
 	public Joystick xBox;
+	public Joystick arcadeButtons;
 	public JoystickButton spintake;
 	private JoystickButton spouttake;
 	private JoystickButton switchtake;
@@ -22,15 +25,19 @@ public class OI {
 	private JoystickButton manualElevatorDown;
 	private JoystickButton climbButton;
 	private JoystickButton reverseClimbButton;
-	
-	private JoystickButton spinClimberButton;
-	private DPadButton spinClimberReverseButton;
+	private JoystickButton resetPID;
+	private JoystickButton goToSwitch;
+	private JoystickButton goToScale;
+
 	public static final int ELEVATOR_AXIS = 1;
 	public static final int CLIMBER_AXIS = 2;
 
 	public OI(){
 		flightStick = new Joystick(0);
 		xBox = new Joystick(1);
+		arcadeButtons = new Joystick(2);
+		
+		
 		spintake = new JoystickButton(flightStick, 2);
 		spintake.whileHeld(new Intake());
 		
@@ -50,5 +57,14 @@ public class OI {
 		
 		reverseClimbButton = new JoystickButton(flightStick, 5);
 		reverseClimbButton.whileHeld(new ReverseClimb());
+		
+		goToSwitch = new JoystickButton(flightStick, 11);
+		goToSwitch.whenPressed(new SetElevatorPosition(Elevator.SWITCH_POSITION));
+		
+		goToScale = new JoystickButton(flightStick, 12);
+		goToScale.whenPressed(new SetElevatorPosition(Elevator.SCALE_POSITION));
+		
+		resetPID = new JoystickButton(flightStick, 13);
+		resetPID.whenPressed(new ResetPID());
 	}
 }
