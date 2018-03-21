@@ -9,6 +9,7 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
 import org.usfirst.frc.team3482.robot.commands.Move;
+import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LED;
@@ -32,20 +33,17 @@ public class Robot extends IterativeRobot {
 	public static LED ledStrip;
 	public static Intake intake;
 	public static Elevator elevator;
+	public static Climber climber;
 	public static LIDAR lidar;
 	public static Ultrasonic rangeFinder;
 	public static UsbCamera camera;
 	public static CameraServer cameraServer;
-	public static final int ELEVATOR_UP_AXIS = 3, ELEVATOR_DOWN_AXIS = 2;
-	public static final double ELEVATOR_AXIS_DEADZONE = 0.05, ELEVATOR_SPEED = 2000;
-	public static boolean isElevatorTop;
-	public static double elevatorTopSpeed = 0.5;
 	public static boolean driveEnabled, switchOnLeft, scaleOnLeft, crossBaseline;
 	public double speed;
 	public double turnSpeed;
 	public static boolean isSpintake;
 	public static boolean isSpoutake;
-	public static boolean isClimberhook;
+	public static boolean isClimberHook;
 	public static boolean isEMovingUp;
 	public static boolean isEMovingDown;
 	public String colorsArray[];
@@ -62,10 +60,9 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = new OI();
 		driveEnabled = true;
-		isElevatorTop = false;
 		isSpoutake = false;
 		isSpintake = false;
-		isClimberhook = false;
+		isClimberHook = false;
 		isEMovingUp = false;
 		isEMovingDown = false;
 
@@ -75,6 +72,7 @@ public class Robot extends IterativeRobot {
 		ledStrip = new LED();
 		intake = new Intake();
 		elevator = new Elevator();
+		climber = new Climber();
 		lidar = new LIDAR();
 		rangeFinder = new Ultrasonic(0);
 
@@ -95,24 +93,24 @@ public class Robot extends IterativeRobot {
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
 
-		new Thread(() -> {
-			while (true) {
-				if (isSpintake) {
-					ledStrip.flash("white", 0.1);
-				} else if (isSpoutake) {
-					ledStrip.flash("purple", 0.2);
-				} else if (isEMovingUp) {
-					ledStrip.flash("cyan", 0.2);
-				} else if (isEMovingDown) {
-					ledStrip.flash("yellow", 0.1);
-				} else if (isClimberhook) {
-					ledStrip.flashRainbow(colorsArray, 0.15);
-				} else {
-					ledStrip.ledBoxCondition("green", "red");
-				}
-				// System.out.println("Thread is running");
-			}
-		}).start();
+//		new Thread(() -> {
+//			while (true) {
+//				if (isSpintake) {
+//					ledStrip.flash("white", 0.1);
+//				} else if (isSpoutake) {
+//					ledStrip.flash("purple", 0.2);
+//				} else if (isEMovingUp) {
+//					ledStrip.flash("cyan", 0.2);
+//				} else if (isEMovingDown) {
+//					ledStrip.flash("yellow", 0.1);
+//				} else if (isClimberHook) {
+//					ledStrip.flashRainbow(colorsArray, 0.15);
+//				} else {
+//					ledStrip.ledBoxCondition("green", "red");
+//				}
+//				// System.out.println("Thread is running");
+//			}
+//		}).start();
 	}
 
 	public void disabledPeriodic() {
@@ -158,12 +156,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		elevator.run();
-		// System.out.println("Position: " + elevator.getCurrentPos() + " Error: " +
-		// RobotMap.elevatorTalon.getClosedLoopError(0));
-
+		climber.run();
+		
 		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
 		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
-		// System.out.println("Ratio: " + elevatorRatio);
+
 		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
 		// Encoder: " + RobotMap.encoderRight.get());
 		if (driveEnabled) {
@@ -178,10 +175,9 @@ public class Robot extends IterativeRobot {
 			// }
 		}
 		
-
 		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
-		SmartDashboard.putBoolean("Is box in: ", !(rangeFinder.getAverageVoltage()>0));
-		
+		SmartDashboard.putBoolean("Is box in: ", !(rangeFinder.getAverageVoltage()<6));
+		System.out.println("Distance" + rangeFinder.getDistance());
 		if (elevator.isTop()) {
 			oi.xBox.setRumble(RumbleType.kLeftRumble, 1.0);
 			oi.xBox.setRumble(RumbleType.kRightRumble, 1.0);

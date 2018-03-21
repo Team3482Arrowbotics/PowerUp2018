@@ -94,8 +94,6 @@ public class RobotMap {
 		//ACTUAL ELEVATOR TALON IS 5
 		
 		
-		
-		
 		elevatorTalon = new WPI_TalonSRX(0);
 		
 		

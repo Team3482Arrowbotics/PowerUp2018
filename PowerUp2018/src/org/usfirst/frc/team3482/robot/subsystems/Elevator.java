@@ -21,7 +21,15 @@ public class Elevator extends Subsystem implements Runnable {
 	public static final double BOTTOM_POSITION = 0,
 							TOP_POSITION = MAX_POSITION,
 							SWITCH_POSITION = MAX_POSITION/10,
-							SCALE_POSITION = MAX_POSITION/(4.0/5.0);
+							SCALE_POSITION = MAX_POSITION/(4.0/5.0),
+							MANUAL_UP_SPEED = .4, MANUAL_DOWN_SPEED = -.4;
+	public static final double[] POSITIONS = {MAX_POSITION/10.0,
+											//SWITCH is 0
+												MAX_POSITION/(4.0/5.0),
+												//SCALE is 1
+												MAX_POSITION};
+												//MAX HEIGHT is 2
+											
 
 	//15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
 	//15:1 Small Spool Max = 665000 Speed = 50000
@@ -57,7 +65,7 @@ public class Elevator extends Subsystem implements Runnable {
 		if(AxisPos < -AXIS_DEADZONE) {
 			Robot.isEMovingUp=false;
 			Robot.isEMovingDown=true;
-			changePosition(AxisPos*.7);
+			changePosition(AxisPos*.9);
 		}
 		
 		if(locked)
@@ -68,10 +76,10 @@ public class Elevator extends Subsystem implements Runnable {
 		elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
 		
 		//System.out.println("Set Pos: " + targetPos);
-		System.out.println("Position: " + getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
+		//System.out.println("Position: " + getCurrentPos() + " Error: " + RobotMap.elevatorTalon.getClosedLoopError(0));
 		//System.out.println("Velocity: "+getCurrentVelocity());
 		System.out.println("Percent Output Motor 1: "+elevatorTalon.getMotorOutputPercent());
-		System.out.println("Percent Output Motor 2: "+elevatorTalon2.getMotorOutputPercent());
+		//System.out.println("Percent Output Motor 2: "+elevatorTalon2.getMotorOutputPercent());
 		//System.out.println("Speed Ratio: "+ getSpeedRatio());
 		//System.out.println("Turn Ratio: "+ getTurnRatio());
 	}
@@ -138,9 +146,13 @@ public class Elevator extends Subsystem implements Runnable {
 	public void set(double pos) {
 		set(pos, false);
 	}
+	
+	public void presetPosition(int pos) {
+		set(POSITIONS[pos], false);
+	}
 
 	public void changePosition(double axisPos) {
-		System.out.println("Axis Output" + axisPos);
+		//System.out.println("Axis Output" + axisPos);
 		//System.out.println("Motor Output: " + elevatorTalon.getMotorOutputPercent());
 		set(axisPos * ELEVATOR_SPEED, true); // add true when suing original function
 	}
