@@ -17,12 +17,13 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static double absoluteTarget;
 	public static final int AXIS = Robot.oi.ELEVATOR_AXIS;
 	private double AxisPos;
+	private boolean isMovingDown;
 	public static final double AXIS_DEADZONE = 0.05;
 	public static final int MAX_POSITION = 280000, ELEVATOR_SPEED = 12000;
 	public static final double ELEVATOR_P_VALUE = 0.15, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
-			SWITCH_POSITION = MAX_POSITION / 8, SCALE_POSITION = MAX_POSITION / (4.0 / 5.0), MANUAL_UP_SPEED = .4,
-			MANUAL_DOWN_SPEED = -.2, ELEVATOR_FALLING_RATIO = 0.9;
-
+			SWITCH_POSITION = MAX_POSITION *.1, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .4,
+			MANUAL_DOWN_SPEED = -.2, ELEVATOR_FALLING_RATIO = 0.8;
+	
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
 	// 15:1 Small Spool Max = 665000 Speed = 50000
 	// 10:1 Big Spool Max = 335000 Speed = 20000
@@ -50,12 +51,12 @@ public class Elevator extends Subsystem implements Runnable {
 		if (AxisPos > AXIS_DEADZONE) {
 			Robot.isEMovingUp = true;
 			Robot.isEMovingDown = false;
-			targetPos = set(AxisPos);
+			set(AxisPos);
 		}
 		if (AxisPos < -AXIS_DEADZONE) {
 			Robot.isEMovingUp = false;
 			Robot.isEMovingDown = true;
-			targetPos = set(AxisPos * ELEVATOR_FALLING_RATIO);
+			set(AxisPos);
 		}
 		
 		run();
@@ -92,47 +93,51 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 
 	// SET ELEVATOR POSITION
-	public double set(double pos) {
-		
-		double position = pos;
+	public void set(double axisPos) {
+		double axisRatio = axisPos;
 
-		position *= ELEVATOR_SPEED;
+		if(axisRatio<0)
+		{
+			axisRatio*=ELEVATOR_FALLING_RATIO;
+		}
 		
-		position += getCurrentPos();
+		axisRatio *= ELEVATOR_SPEED;
+		axisRatio += getCurrentPos();
 
-		if (position > MAX_POSITION) {
-			position = MAX_POSITION;
+		if (axisRatio > MAX_POSITION) {
+			axisRatio = MAX_POSITION;
 		}
 
-		if (position < 0) {
-			position = 0;
+		if (axisRatio < 0) {
+			axisRatio = 0;
 		}
 
-		return position;
+		targetPos = axisRatio;
 	}
 
 	public void autonomousSet(double pos) {
+		//System.out.println(elevatorTalon.configPeakOutputReverse(ELEVATOR_FALLING_RATIO, 1));
 		targetPos = pos;
 	}
 	
-	public void absoluteSet(double pos) {
-		absolutePos = pos;
-
-		while (absolutePos - getCurrentPos() > 500) {
-
-			if (absolutePos - getCurrentPos() > 0) {
-				absoluteTarget = set(1);
-			}
-			
-			if (absolutePos - getCurrentPos() < 0) {
-				absoluteTarget = set(-ELEVATOR_FALLING_RATIO);
-			}
-
-			elevatorTalon.set(ControlMode.Position, absoluteTarget);
-			elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
-		}
-		targetPos = getCurrentPos();
-	}
+//	public void absoluteSet(double pos) {
+//		absolutePos = pos;
+//
+//		while (absolutePos - getCurrentPos() > 500) {
+//
+//			if (absolutePos - getCurrentPos() > 0) {
+//				absoluteTarget = set(1);
+//			}
+//			
+//			if (absolutePos - getCurrentPos() < 0) {
+//				absoluteTarget = set(-ELEVATOR_FALLING_RATIO);
+//			}
+//
+//			elevatorTalon.set(ControlMode.Position, absoluteTarget);
+//			elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
+//		}
+//		targetPos = getCurrentPos();
+//	}
 
 	public void lock(boolean islocked) {
 		targetPos = getCurrentPos();
