@@ -93,24 +93,23 @@ public class Robot extends IterativeRobot {
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
 
-//		new Thread(() -> {
-//			while (true) {
-//				if (isSpintake) {
-//					ledStrip.flash("white", 0.1);
-//				} else if (isSpoutake) {
-//					ledStrip.flash("purple", 0.2);
-//				} else if (isEMovingUp) {
-//					ledStrip.flash("cyan", 0.2);
-//				} else if (isEMovingDown) {
-//					ledStrip.flash("yellow", 0.1);
-//				} else if (isClimberHook) {
-//					ledStrip.flashRainbow(colorsArray, 0.15);
-//				} else {
-//					ledStrip.ledBoxCondition("green", "red");
-//				}
-//				// System.out.println("Thread is running");
-//			}
-//		}).start();
+		new Thread(() -> {
+			while (true) {
+				if (isSpintake) {
+					ledStrip.flash("white", 0.1);
+				} else if (isSpoutake) {
+					ledStrip.flash("purple", 0.2);
+				} else if (isEMovingUp) {
+					ledStrip.flash("cyan", 0.2);
+				} else if (isEMovingDown) {
+					ledStrip.flash("yellow", 0.1);
+				} else if (isClimberHook) {
+					ledStrip.flashRainbow(colorsArray, 0.15);
+				} else {
+					ledStrip.ledBoxCondition("green", "red");
+				}
+			}
+		}).start();
 	}
 
 	public void disabledPeriodic() {
@@ -145,6 +144,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		elevator.run();
 		SmartDashboard.putNumber("Left Encoder: ", RobotMap.encoderLeft.getDistance());
 		SmartDashboard.putNumber("Right Encoder: ", RobotMap.encoderRight.getDistance());
 		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw());
@@ -155,7 +155,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		elevator.run();
+		elevator.teleopRun();
 		climber.run();
 		
 		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();

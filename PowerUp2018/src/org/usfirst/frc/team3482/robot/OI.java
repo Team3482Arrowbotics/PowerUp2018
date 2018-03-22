@@ -37,26 +37,29 @@ public class OI {
 		xBox = new Joystick(1);
 		arcadeButtons = new Joystick(2);
 		
+		spouttake = new JoystickButton(flightStick, 1);
+		spouttake.whileHeld(new Outtake());
 		
 		spintake = new JoystickButton(flightStick, 2);
 		spintake.whileHeld(new Intake());
 		
-		spouttake = new JoystickButton(flightStick, 1);
-		spouttake.whileHeld(new Outtake());
-		
 		switchtake = new JoystickButton(flightStick, 3);
 		switchtake.whenPressed(new SwitchIntake());
 		
-		manualElevatorUp = new JoystickButton(flightStick, 9);
-		manualElevatorUp.whileHeld(new ManualElevatorSpeed(Elevator.MANUAL_UP_SPEED));
-		manualElevatorDown = new JoystickButton(flightStick, 10);
-		manualElevatorDown.whileHeld(new ManualElevatorSpeed(Elevator.MANUAL_DOWN_SPEED));
+		reverseClimbButton = new JoystickButton(flightStick, 5);
+		reverseClimbButton.whileHeld(new ReverseClimb());
 		
 		climbButton = new JoystickButton(flightStick, 6);
 		climbButton.whileHeld(new Climb());
 		
-		reverseClimbButton = new JoystickButton(flightStick, 5);
-		reverseClimbButton.whileHeld(new ReverseClimb());
+		resetPID = new JoystickButton(flightStick, 8);
+		resetPID.whenPressed(new ResetPID());
+		
+		manualElevatorUp = new JoystickButton(flightStick, 9);
+		manualElevatorUp.whileHeld(new ManualElevatorSpeed(Elevator.MANUAL_UP_SPEED));
+		
+		manualElevatorDown = new JoystickButton(flightStick, 10);
+		manualElevatorDown.whileHeld(new ManualElevatorSpeed(Elevator.MANUAL_DOWN_SPEED));
 		
 		goToSwitch = new JoystickButton(flightStick, 11);
 		goToSwitch.whenPressed(new SetElevatorPosition(Elevator.SWITCH_POSITION));
@@ -64,7 +67,6 @@ public class OI {
 		goToScale = new JoystickButton(flightStick, 12);
 		goToScale.whenPressed(new SetElevatorPosition(Elevator.SCALE_POSITION));
 		
-		resetPID = new JoystickButton(flightStick, 13);
-		resetPID.whenPressed(new ResetPID());
+		
 	}
 }
