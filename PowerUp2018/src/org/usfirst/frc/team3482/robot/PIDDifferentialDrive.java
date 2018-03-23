@@ -41,29 +41,34 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 		this.turning = turning;
 	}
 
-	public void arcadeDrive(double xSpeed, double zRotation) {
-		
-		if (Math.abs(xSpeed - currentSpeed) > MAX_ACCELERATION) {
-			if (xSpeed < currentSpeed) {
-				xSpeed = currentSpeed - MAX_ACCELERATION;
+	public void arcadeDrive(double speed, double rotation) {
+	
+		//Acceleration Control (Prevents bot tipping)
+		if (Math.abs(speed - currentSpeed) > MAX_ACCELERATION) {
+			if (speed < currentSpeed) {
+				speed = currentSpeed - MAX_ACCELERATION;
 			} else {
-				xSpeed = currentSpeed + MAX_ACCELERATION;
+				speed = currentSpeed + MAX_ACCELERATION;
 			}
 		}
-		currentSpeed = xSpeed;
-		System.out.println("Current Speed: " + currentSpeed);
-		if(zRotation < this.m_deadband && zRotation > -m_deadband) {
-			if(turning && xSpeed > m_deadband && xSpeed < -m_deadband) {
+		
+		currentSpeed = speed;
+		
+		//System.out.println("Current Speed: " + currentSpeed);
+		
+		if(rotation < this.m_deadband && rotation > -m_deadband) {
+			if(turning && speed > m_deadband && speed < -m_deadband) {
 				startAdjusting();
 				turning = false;
+				System.out.println("Does this wonky thing ever run?");
 			}
-			curvatureDrive(xSpeed, rot.adjustment, false);
+			curvatureDrive(speed, rot.adjustment, false);
 		} else {
 			if(!turning) {
 				stopAdjusting();
 			}
 			turning = true;
-			super.arcadeDrive(xSpeed, zRotation);
+			super.arcadeDrive(speed, rotation);
 		}
 	}
 

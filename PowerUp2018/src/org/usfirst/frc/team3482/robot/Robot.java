@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot {
 	public static Ultrasonic rangeFinder;
 	public static UsbCamera camera;
 	public static CameraServer cameraServer;
-	public static boolean driveEnabled, switchOnLeft, scaleOnLeft, crossBaseline;
+	public static boolean switchOnLeft, scaleOnLeft, crossBaseline;
 	public double speed;
 	public double turnSpeed;
 	public static boolean isSpintake;
@@ -59,7 +59,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		driveEnabled = true;
 		isSpoutake = false;
 		isSpintake = false;
 		isClimberHook = false;
@@ -91,9 +90,11 @@ public class Robot extends IterativeRobot {
 
 
 		autoChooser = new SendableChooser<String>();
-		autoChooser.addDefault("Timed Autonomous", "Time");
+		autoChooser.addDefault("Cross The Line", "Blitz");
+		autoChooser.addObject("Timed Autonomous", "Time");
 		autoChooser.addObject("Encoder Autonomous", "Encoders");
 		autoChooser.addObject("Individual Function Testing", "Test");
+		autoChooser.addDefault("Switch Straight Ahead", "Basic");
 
 		SmartDashboard.putData(sPosChooser);
 		SmartDashboard.putData(baselineChooser);
@@ -130,9 +131,9 @@ public class Robot extends IterativeRobot {
 		String[] data = gameData.split("");
 		switchOnLeft = data[0].equals("L");
 		scaleOnLeft = data[1].equals("L");
-		
+
 		String crossingMethod = baselineChooser.getSelected();
-		
+
 		switch(crossingMethod) {
 		case "base":
 			crossBaseline = true;
@@ -183,22 +184,20 @@ public class Robot extends IterativeRobot {
 		elevator.teleopRun();
 		climber.run();
 
-		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
-		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
-
 		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
 		// Encoder: " + RobotMap.encoderRight.get());
-		if (driveEnabled) {
-			RobotMap.drive.arcadeDrive(speed, turnSpeed);
-			// if(turnSpeed <= 0.1) {
-			// RobotMap.rotationController.enable();
-			// RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
-			// } else {
-			// RobotMap.rotationController.reset();
-			// RobotMap.navx.reset();
-			// RobotMap.rotationController.disable();
-			// }
-		}
+		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
+		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
+		RobotMap.drive.arcadeDrive(speed, turnSpeed);
+		// if(turnSpeed <= 0.1) {
+		// RobotMap.rotationController.enable();
+		// RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
+		// } else {
+		// RobotMap.rotationController.reset();
+		// RobotMap.navx.reset();
+		// RobotMap.rotationController.disable();
+		// }
+
 
 		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
 

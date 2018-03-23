@@ -59,6 +59,7 @@ public class RobotMap {
 		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
 		
 		rotationAdjuster = new RotationAdjuster();
+		
 		left = new SpeedControllerGroup(frontLeft, backLeft);
 		right = new SpeedControllerGroup(frontRight, backRight);
 		drive = new PIDDifferentialDrive(left, right, rotationAdjuster);
@@ -85,6 +86,7 @@ public class RobotMap {
 		elevatorTalon2 = new WPI_TalonSRX(7);
 		
 		navx = new AHRSPID(Port.kMXP);
+		
 		rotationController = new PIDController(0.05, 0, 0, navx, drive);
 		rotationController.setInputRange(-180, 180);
 		rotationController.setOutputRange(-.7, .7);

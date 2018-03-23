@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3482.robot.commands;
 
-import org.usfirst.frc.team3482.robot.Robot;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -14,13 +13,11 @@ public class Turn extends Command{
 		RobotMap.drive.setTurning(true);
 //		RobotMap.navx.reset();
 		RobotMap.navx.zeroYaw();
-		Robot.driveEnabled = false;
 		RobotMap.rotationController.enable();
 		RobotMap.rotationController.setSetpoint(angle);
 	}
 	protected void end() {
 		RobotMap.rotationController.disable();
-		Robot.driveEnabled = true;
 	}
 	@Override
 	protected boolean isFinished() {
