@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.EncoderAutonomous;
@@ -137,7 +130,9 @@ public class Robot extends IterativeRobot {
 		String[] data = gameData.split("");
 		switchOnLeft = data[0].equals("L");
 		scaleOnLeft = data[1].equals("L");
+		
 		String crossingMethod = baselineChooser.getSelected();
+		
 		switch(crossingMethod) {
 		case "base":
 			crossBaseline = true;

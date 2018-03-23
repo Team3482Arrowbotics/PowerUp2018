@@ -7,6 +7,7 @@ import org.usfirst.frc.team3482.robot.commands.Outtake;
 import org.usfirst.frc.team3482.robot.commands.Turn;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class PlaceBoxOnScale extends CommandGroup{
@@ -22,10 +23,10 @@ public class PlaceBoxOnScale extends CommandGroup{
 		}
 		addParallel(new Turn(turnMultiplier * 45));
 		addParallel(new SetElevatorPosition(Elevator.SCALE_POSITION));
-		//delay ?
+		Timer.delay(1);
 		addSequential(new Outtake(0.25));
 		addParallel(new SetIntakeOut());
-		//delay ?
+		Timer.delay(.25);
 		addSequential(new SetIntakeIn());
 		addSequential(new SetElevatorPosition(Elevator.BOTTOM_POSITION));
 	}
