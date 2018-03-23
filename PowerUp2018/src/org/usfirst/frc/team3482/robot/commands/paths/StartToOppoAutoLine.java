@@ -6,12 +6,12 @@ import org.usfirst.frc.team3482.robot.commands.Turn;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class StartToOppoAutoLine extends CommandGroup {
-	boolean opposite;
+	boolean fromRight;
 	int turnMultiplier;
-	public StartToOppoAutoLine(boolean opposite) {
+	public StartToOppoAutoLine(boolean right) {
 		super();
-		this.opposite = opposite;
-		if(opposite) {
+		this.fromRight = right;
+		if(right) {
 			turnMultiplier = -1;
 		} else {
 			turnMultiplier = 1;

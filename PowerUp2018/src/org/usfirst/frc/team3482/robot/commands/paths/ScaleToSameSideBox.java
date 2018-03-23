@@ -6,12 +6,12 @@ import org.usfirst.frc.team3482.robot.commands.Turn;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class ScaleToSameSideBox extends CommandGroup{
-	boolean opposite;
+	boolean fromRight;
 	int turnMultiplier;
 	public ScaleToSameSideBox(boolean fromRight) {
 		//Precondition: Assume position 45 (if Left) or -45 (if Right)
-		this.opposite = fromRight;
-		if(opposite) {
+		this.fromRight = fromRight;
+		if(fromRight) {
 			turnMultiplier = -1;
 		} else {
 			turnMultiplier = 1;

@@ -5,16 +5,16 @@ import org.usfirst.frc.team3482.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class FindBox extends Command{
-	boolean backwards;
+	boolean fromRight;
 	public static int boxDistance = 2000;
-	public FindBox(boolean backwards) {
-		this.backwards = backwards;
+	public FindBox(boolean fromRight) {
+		this.fromRight = fromRight;
 	}
 	public FindBox() {
-		this.backwards = false;
+		this.fromRight = false;
 	}
 	protected void initialize() {
-		Robot.sideLidar.findFirstBox(backwards, boxDistance);
+		Robot.sideLidar.findFirstBox(fromRight, boxDistance);
 	}
 	protected void execute() {
 		

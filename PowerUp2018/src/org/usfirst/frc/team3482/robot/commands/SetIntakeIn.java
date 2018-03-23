@@ -4,12 +4,12 @@ import org.usfirst.frc.team3482.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
-public class SetIntake extends InstantCommand{
-	boolean in;
-	public SetIntake(boolean b) {
-		in = b;
+public class SetIntakeIn extends InstantCommand{
+
+	public SetIntakeIn() {
+		
 	}
 	protected void initialize() {
-		Robot.intake.setPistons(in);
+		Robot.intake.setPistons(false);
 	}
 }

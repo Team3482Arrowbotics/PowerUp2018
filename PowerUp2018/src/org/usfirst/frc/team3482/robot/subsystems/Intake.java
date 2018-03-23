@@ -30,8 +30,8 @@ public class Intake extends Subsystem {
 			rightPiston.set(Value.kForward);
 		}
 	}
-	public void setPistons(boolean in) {
-		if(in) {
+	public void setPistons(boolean out) {
+		if(out) {
 			leftPiston.set(Value.kForward);
 			rightPiston.set(Value.kForward);
 		} else {

@@ -6,52 +6,48 @@ import org.usfirst.frc.team3482.robot.commands.paths.AcrossSwitchLane;
 import org.usfirst.frc.team3482.robot.commands.paths.AutoLineToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.FindBox;
 import org.usfirst.frc.team3482.robot.commands.paths.GetBox;
-import org.usfirst.frc.team3482.robot.commands.paths.MiddleStartToLeftAutoLine;
-import org.usfirst.frc.team3482.robot.commands.paths.MiddleStartToRightAutoLine;
+import org.usfirst.frc.team3482.robot.commands.paths.MiddleToAutoLine;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnScale;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.ScaleToSameSideBox;
+import org.usfirst.frc.team3482.robot.commands.paths.StartPosition;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToOppoAutoLine;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class Autonomous extends CommandGroup{
-	public enum StartPosition {
-		LEFT, MIDDLE, RIGHT;
-	}
-	boolean switchOnLeft, scaleOnLeft, crossBaseline;
+public class EncoderAutonomous extends CommandGroup{
+		
+	boolean fromRight = true, fromLeft = false, 
+			toRight = true, toLeft = false;
+	
 	StartPosition sPos;
-	public Autonomous(boolean switchOnLeft, boolean scaleOnLeft, boolean crossBaseline, StartPosition sPos) {
+	public EncoderAutonomous(boolean crossBaseline, boolean switchOnLeft, boolean scaleOnLeft, StartPosition sPos) {
 		super();
-		this.switchOnLeft = switchOnLeft;
-		this.scaleOnLeft = scaleOnLeft;
-		this.crossBaseline = crossBaseline;
-		this.sPos = sPos;
 		addSequential(new Move(6));
 		switch(sPos) {
 		case LEFT:
 			if(scaleOnLeft) {
 				addSequential(new StartToScale());
-				addSequential(new PlaceBoxOnScale(false));
-				addSequential(new ScaleToSameSideBox(false));
+				addSequential(new PlaceBoxOnScale(fromLeft));
+				addSequential(new ScaleToSameSideBox(fromLeft));
 				if(switchOnLeft) {
-					addSequential(new FindBox());
+					addSequential(new FindBox(fromLeft));
 					addSequential(new GetBox());
 					addSequential(new PlaceBoxOnSwitch());
 				} else {
-					addSequential(new AcrossSwitchLane(false));
-					addSequential(new FindBox(true));
+					addSequential(new AcrossSwitchLane(fromLeft));
+					addSequential(new FindBox(fromRight));
 					addSequential(new GetBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
 			} else {
 				if(crossBaseline) {
-					addSequential(new AcrossBaseline(false));
+					addSequential(new AcrossBaseline(fromLeft));
 					addSequential(new StartToScale());
 				}
 				else {
-					addSequential(new StartToOppoAutoLine(false));
+					addSequential(new StartToOppoAutoLine(fromLeft));
 					addSequential(new AutoLineToScale());
 				}
 				addSequential(new PlaceBoxOnScale(true));
@@ -68,86 +64,85 @@ public class Autonomous extends CommandGroup{
 				}
 			}
 			break;
+
 		case MIDDLE:
 			if(scaleOnLeft) {
-				
 				if(crossBaseline) {
-					addSequential(new AcrossBaselineFromMiddle(false));
+					addSequential(new AcrossBaselineFromMiddle(toLeft));
 					addSequential(new StartToScale());
 				} else {
-					addSequential(new MiddleStartToLeftAutoLine());
+					addSequential(new MiddleToAutoLine(toLeft));
 					addSequential(new AutoLineToScale());
 				}
-				addSequential(new PlaceBoxOnScale(false));
-				addSequential(new ScaleToSameSideBox(false));
-				
+				addSequential(new PlaceBoxOnScale(fromLeft));
+				addSequential(new ScaleToSameSideBox(fromLeft));
+
 				if(switchOnLeft) {
-					addSequential(new FindBox()); // true or false?
+					addSequential(new FindBox(fromLeft));
 
 				} else {
-					addSequential(new AcrossSwitchLane(false));
-					addSequential(new FindBox(true)); // true or false?
+					addSequential(new AcrossSwitchLane(fromLeft));
+					addSequential(new FindBox(fromRight));
 				}
 				addSequential(new GetBox());
 				addSequential(new PlaceBoxOnSwitch());
-				
+
 			} else {
 				if(crossBaseline) {
-					addSequential(new AcrossBaselineFromMiddle(true));
+					addSequential(new AcrossBaselineFromMiddle(toRight));
 				} else {
-					addSequential(new MiddleStartToRightAutoLine());
+					addSequential(new MiddleToAutoLine(toRight));
 					addSequential(new AutoLineToScale());
 				}
-				addSequential(new PlaceBoxOnScale(true));
-				addSequential(new ScaleToSameSideBox(true));
-				
-				if(!switchOnLeft) {
-					addSequential(new FindBox()); // true or false?
+				addSequential(new PlaceBoxOnScale(fromRight));
+				addSequential(new ScaleToSameSideBox(fromRight));
 
+				if(switchOnLeft) {
+					addSequential(new AcrossSwitchLane(fromRight));
+					addSequential(new FindBox(fromLeft));
+					
 				} else {
-					addSequential(new AcrossSwitchLane(true));
-					addSequential(new FindBox(true)); // true or false?
+					addSequential(new FindBox(fromRight));
 				}
 				addSequential(new GetBox());
 				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;
+
 		case RIGHT:
 			if(scaleOnLeft) {
 				if(crossBaseline) {
-					addSequential(new AcrossBaseline(true));
+					addSequential(new AcrossBaseline(fromRight));
 					addSequential(new StartToScale());
 				}
 				else {
-					addSequential(new StartToOppoAutoLine(true));
+					addSequential(new StartToOppoAutoLine(fromRight));
 					addSequential(new AutoLineToScale());
 				}
-				addSequential(new PlaceBoxOnScale(false));
-				addSequential(new ScaleToSameSideBox(false));
+
+				addSequential(new PlaceBoxOnScale(fromLeft));
+				addSequential(new ScaleToSameSideBox(fromLeft));
 				if(switchOnLeft) {
-					addSequential(new FindBox());
+					addSequential(new FindBox(fromLeft));
 					addSequential(new GetBox());
 					addSequential(new PlaceBoxOnSwitch());
 				} else {
-					addSequential(new AcrossSwitchLane(false));
-					addSequential(new FindBox(true));
+					addSequential(new AcrossSwitchLane(fromLeft));
+					addSequential(new FindBox(fromRight));
 					addSequential(new GetBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
-
-				
-
 			} else {
 				addSequential(new StartToScale());
-				addSequential(new PlaceBoxOnScale(true));
-				addSequential(new ScaleToSameSideBox(true));
+				addSequential(new PlaceBoxOnScale(fromRight));
+				addSequential(new ScaleToSameSideBox(fromRight));
 				if(switchOnLeft) {
-					addSequential(new AcrossSwitchLane(true));
-					addSequential(new FindBox(true));
+					addSequential(new AcrossSwitchLane(fromRight));
+					addSequential(new FindBox(fromLeft));
 					addSequential(new GetBox());
 					addSequential(new PlaceBoxOnSwitch());
 				} else {
-					addSequential(new FindBox());
+					addSequential(new FindBox(fromRight));
 					addSequential(new GetBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
@@ -155,7 +150,7 @@ public class Autonomous extends CommandGroup{
 			}
 			break;
 		}
-		
+
 	}
-	
+
 }

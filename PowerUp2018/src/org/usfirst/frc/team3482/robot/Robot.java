@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
- /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,8 +7,10 @@
 
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
+import org.usfirst.frc.team3482.robot.commands.EncoderAutonomous;
+import org.usfirst.frc.team3482.robot.commands.TestAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
+import org.usfirst.frc.team3482.robot.commands.paths.StartPosition;
 import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
@@ -57,8 +59,9 @@ public class Robot extends IterativeRobot {
 	// 0.05 in per tick?
 	public SendableChooser<StartPosition> sPosChooser;
 	public SendableChooser<String> baselineChooser;
+	public SendableChooser<String> autoChooser;
 	Command autoCommand;
-	
+
 
 	@Override
 	public void robotInit() {
@@ -93,6 +96,12 @@ public class Robot extends IterativeRobot {
 		baselineChooser.addDefault("Cross Baseline", "base");
 		baselineChooser.addObject("Cross diagonally", "diag");
 
+
+		autoChooser = new SendableChooser<String>();
+		autoChooser.addDefault("Timed Autonomous", "Time");
+		autoChooser.addObject("Encoder Autonomous", "Encoders");
+		autoChooser.addObject("Individual Function Testing", "Test");
+
 		SmartDashboard.putData(sPosChooser);
 		SmartDashboard.putData(baselineChooser);
 
@@ -124,24 +133,39 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		 gameData = DriverStation.getInstance().getGameSpecificMessage();
-		 String[] data = gameData.split("");
-		 switchOnLeft = data[0].equals("L");
-		 scaleOnLeft = data[1].equals("L");
-		 String baselineCrossed = baselineChooser.getSelected();
-		 switch(baselineCrossed) {
-		 case "base":
-		 crossBaseline = true;
-		 break;
-		 case "diag":
-		 crossBaseline = false;
-		 break;
-		 default:
-		 crossBaseline = false;
-		 }
-		 StartPosition sPos = sPosChooser.getSelected();
-		 new TimedAutonomous(switchOnLeft).start();
-		// new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		String[] data = gameData.split("");
+		switchOnLeft = data[0].equals("L");
+		scaleOnLeft = data[1].equals("L");
+		String crossingMethod = baselineChooser.getSelected();
+		switch(crossingMethod) {
+		case "base":
+			crossBaseline = true;
+			break;
+		case "diag":
+			crossBaseline = false;
+			break;
+		default:
+			crossBaseline = false;
+		}
+
+		StartPosition sPos = sPosChooser.getSelected();
+
+		String autoType = autoChooser.getSelected();
+		switch(autoType) {
+		case "Encoders":
+			new EncoderAutonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
+			break;
+		case "Timed":
+			new TimedAutonomous(crossBaseline, switchOnLeft, sPos).start();
+			break;
+		case "Test":
+			new TestAutonomous().start();
+			break;
+		}
+
+
+
 	}
 
 	/**
@@ -163,7 +187,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		elevator.teleopRun();
 		climber.run();
-		
+
 		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
 		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
 
@@ -180,7 +204,7 @@ public class Robot extends IterativeRobot {
 			// RobotMap.rotationController.disable();
 			// }
 		}
-		
+
 		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
 
 		if (elevator.isTop()) {
