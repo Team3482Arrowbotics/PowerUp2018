@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+ /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,13 +8,15 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.Autonomous.StartPosition;
-import org.usfirst.frc.team3482.robot.commands.Move;
+import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
 import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LED;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
 import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
+
+import com.ctre.phoenix.CANifier;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -34,7 +36,8 @@ public class Robot extends IterativeRobot {
 	public static Intake intake;
 	public static Elevator elevator;
 	public static Climber climber;
-	public static LIDAR lidar;
+	public static LIDAR sideLidar;
+	public static LIDAR intakeLidar;
 	public static Ultrasonic rangeFinder;
 	public static UsbCamera camera;
 	public static CameraServer cameraServer;
@@ -55,6 +58,7 @@ public class Robot extends IterativeRobot {
 	public SendableChooser<StartPosition> sPosChooser;
 	public SendableChooser<String> baselineChooser;
 	Command autoCommand;
+	
 
 	@Override
 	public void robotInit() {
@@ -73,7 +77,8 @@ public class Robot extends IterativeRobot {
 		intake = new Intake();
 		elevator = new Elevator();
 		climber = new Climber();
-		lidar = new LIDAR();
+		sideLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel0);
+		intakeLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel1);
 		rangeFinder = new Ultrasonic(0);
 
 		RobotMap.encoders.reset();
@@ -106,8 +111,9 @@ public class Robot extends IterativeRobot {
 				} else if (isClimberHook) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
-					ledStrip.ledBoxCondition("green", "red");
+					ledStrip.ledBoxCondition("red", "green");
 				}
+				//System.out.println("Side Lidar: "+sideLidar.getDistance());
 			}
 		}).start();
 	}
@@ -118,23 +124,23 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		new Move(20).start();
-		// gameData = DriverStation.getInstance().getGameSpecificMessage();
-		// String[] data = gameData.split("");
-		// switchOnLeft = data[0].equals("L");
-		// scaleOnLeft = data[1].equals("L");
-		// String baselineCrossed = baselineChooser.getSelected();
-		// switch(baselineCrossed) {
-		// case "base":
-		// crossBaseline = true;
-		// break;
-		// case "diag":
-		// crossBaseline = false;
-		// break;
-		// default:
-		// crossBaseline = false;
-		// }
-		// StartPosition sPos = sPosChooser.getSelected();
+		 gameData = DriverStation.getInstance().getGameSpecificMessage();
+		 String[] data = gameData.split("");
+		 switchOnLeft = data[0].equals("L");
+		 scaleOnLeft = data[1].equals("L");
+		 String baselineCrossed = baselineChooser.getSelected();
+		 switch(baselineCrossed) {
+		 case "base":
+		 crossBaseline = true;
+		 break;
+		 case "diag":
+		 crossBaseline = false;
+		 break;
+		 default:
+		 crossBaseline = false;
+		 }
+		 StartPosition sPos = sPosChooser.getSelected();
+		 new TimedAutonomous(switchOnLeft).start();
 		// new Autonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
 	}
 
@@ -176,8 +182,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
-		SmartDashboard.putBoolean("Is box in: ", !(rangeFinder.getAverageVoltage()<6));
-		System.out.println("Distance" + rangeFinder.getDistance());
+
 		if (elevator.isTop()) {
 			oi.xBox.setRumble(RumbleType.kLeftRumble, 1.0);
 			oi.xBox.setRumble(RumbleType.kRightRumble, 1.0);

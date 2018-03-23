@@ -30,4 +30,13 @@ public class Intake extends Subsystem {
 			rightPiston.set(Value.kForward);
 		}
 	}
+	public void setPistons(boolean in) {
+		if(in) {
+			leftPiston.set(Value.kForward);
+			rightPiston.set(Value.kForward);
+		} else {
+			rightPiston.set(Value.kReverse);
+			leftPiston.set(Value.kReverse);
+		}
+	}
 }

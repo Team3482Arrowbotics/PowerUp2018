@@ -14,7 +14,7 @@ public class FindNextBox extends InstantCommand{
 		this.backwards = false;
 	}
 	protected void initialize() {
-		Robot.lidar.findNextBox(backwards, boxDistance);
+		Robot.sideLidar.findNextBox(backwards, boxDistance);
 	}
 
 }

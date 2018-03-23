@@ -3,18 +3,21 @@ package org.usfirst.frc.team3482.robot.subsystems;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
 import com.ctre.phoenix.CANifier;
+import com.ctre.phoenix.CANifier.PWMChannel;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class LIDAR extends Subsystem{
 	
 	CANifier c;
-	public LIDAR() {
-		c = RobotMap.c;
+	PWMChannel channel;
+	public LIDAR(CANifier c, PWMChannel channel) {
+		this.c = c;
+		this.channel = channel;
 	}
 	public double getDistance() {
 		double[] data = new double[2];
-		c.getPWMInput(CANifier.PWMChannel.PWMChannel0, data);
+		c.getPWMInput(channel, data);
 		return data[0];
 	}
 	public boolean findFirstBox(boolean backwards, int distance) {
@@ -57,6 +60,18 @@ public class LIDAR extends Subsystem{
 			}
 		}
 		
+	}
+	public void goToBox() {
+		int counter = 0;
+		while(getDistance() > 200) {
+			counter ++; 
+			if(counter > 2000) {
+				RobotMap.drive.arcadeDrive(0, 0);
+				return;
+			}
+			RobotMap.drive.arcadeDrive(.7, 0);
+		}
+		RobotMap.drive.arcadeDrive(0, 0);
 	}
 	@Override
 	protected void initDefaultCommand() {		

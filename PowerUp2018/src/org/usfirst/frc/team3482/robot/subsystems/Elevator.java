@@ -17,16 +17,16 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static double absoluteTarget;
 	public static final int AXIS = Robot.oi.ELEVATOR_AXIS;
 	private double AxisPos;
-	private boolean isMovingDown;
 	public static final double AXIS_DEADZONE = 0.05;
-	public static final int MAX_POSITION = 280000, ELEVATOR_SPEED = 12000;
-	public static final double ELEVATOR_P_VALUE = 0.15, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
-			SWITCH_POSITION = MAX_POSITION *.1, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .4,
-			MANUAL_DOWN_SPEED = -.2, ELEVATOR_FALLING_RATIO = 0.8;
+	public static final int MAX_POSITION = 335000, ELEVATOR_SPEED = 25000;
+	public static final double ELEVATOR_P_VALUE = 0.2, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
+			SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .4,
+			MANUAL_DOWN_SPEED = -.2, ELEVATOR_FALLING_RATIO = 0.6;
 	
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
 	// 15:1 Small Spool Max = 665000 Speed = 50000
 	// 10:1 Big Spool Max = 335000 Speed = 20000
+	//10:1 Fat Spool Max = 280000 Speed = 12000 P = .15
 	// Old setup: Max = 33750 P = 1.5 Speed = 1000
 
 	public static boolean locked;
@@ -52,12 +52,15 @@ public class Elevator extends Subsystem implements Runnable {
 			Robot.isEMovingUp = true;
 			Robot.isEMovingDown = false;
 			set(AxisPos);
-		}
-		if (AxisPos < -AXIS_DEADZONE) {
+		} else if (AxisPos < -AXIS_DEADZONE) {
 			Robot.isEMovingUp = false;
 			Robot.isEMovingDown = true;
-			set(AxisPos);
+			set(AxisPos * ELEVATOR_FALLING_RATIO);
+		} else {
+			Robot.isEMovingUp = false;
+			Robot.isEMovingDown = false;
 		}
+		
 		
 		run();
 	}
@@ -71,7 +74,7 @@ public class Elevator extends Subsystem implements Runnable {
 		elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
 
 		// System.out.println("Set Pos: " + targetPos);
-		// System.out.println("Position: " + getCurrentPos() + " Error: " +
+		System.out.println("Position: " + getCurrentPos());
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
 		// System.out.println("Velocity: "+getCurrentVelocity());
 		//System.out.println("Percent Output Motor 1: " + elevatorTalon.getMotorOutputPercent());

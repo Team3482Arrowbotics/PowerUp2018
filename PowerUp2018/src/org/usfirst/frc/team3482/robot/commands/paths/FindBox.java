@@ -14,7 +14,7 @@ public class FindBox extends Command{
 		this.backwards = false;
 	}
 	protected void initialize() {
-		Robot.lidar.findFirstBox(backwards, boxDistance);
+		Robot.sideLidar.findFirstBox(backwards, boxDistance);
 	}
 	protected void execute() {
 		

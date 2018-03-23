@@ -8,6 +8,8 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	// turns if true, straight if false
 	boolean turning;
 	RotationAdjuster rot;
+	public static final double MAX_ACCELERATION = 0.05;
+	public double currentSpeed = 0;
 
 	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, RotationAdjuster r,
 			boolean turn) {
@@ -40,6 +42,16 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	}
 
 	public void arcadeDrive(double xSpeed, double zRotation) {
+		
+		if (Math.abs(xSpeed - currentSpeed) > MAX_ACCELERATION) {
+			if (xSpeed < currentSpeed) {
+				xSpeed = currentSpeed - MAX_ACCELERATION;
+			} else {
+				xSpeed = currentSpeed + MAX_ACCELERATION;
+			}
+		}
+		currentSpeed = xSpeed;
+		System.out.println("Current Speed: " + currentSpeed);
 		if(zRotation < this.m_deadband && zRotation > -m_deadband) {
 			if(turning && xSpeed > m_deadband && xSpeed < -m_deadband) {
 				startAdjusting();

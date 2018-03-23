@@ -65,11 +65,13 @@ public class LED extends Subsystem{
 	}
 	
 	public void ledBoxCondition(String colorBoxOut, String colorBoxIn) {
-		if(Robot.rangeFinder.getDistance()<6) { //!RobotMap.intakePhotoelectric.get()
+		if(Robot.intakeLidar.getDistance()<200) { //!RobotMap.intakePhotoelectric.get()
 			//6 for approx. max number for box
 			turnColor(colorBoxIn);
 		}
-		turnColor(colorBoxOut);
+		else{
+			turnColor(colorBoxOut);
+		}
 	}
 
 	public void flashRainbow(String[] colorsToFlash, double blinkDelay) {

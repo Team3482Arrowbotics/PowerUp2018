@@ -7,7 +7,6 @@ import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -42,22 +41,12 @@ public class RobotMap {
 	public static PIDController climberHookController;
 	public static WPI_TalonSRX emptyTalon;
 	public static CANifier c;
+//	public static CANifier c2;
 	public static PIDController counteractDrift; 
 	public static RotationAdjuster rotationAdjuster;
 	
 	public static void init() {
-		//ACTUAL FRONT LEFT IS 3
-		
-		
-		
-		
-		frontLeft = new WPI_TalonSRX(15);
-		
-		
-		
-		
-		
-		
+		frontLeft = new WPI_TalonSRX(3);		
 		frontRight = new WPI_TalonSRX(12);
 		backLeft = new WPI_TalonSRX(2);
 		backRight = new WPI_TalonSRX(6);
@@ -88,36 +77,12 @@ public class RobotMap {
 		intakePistonLeft = new DoubleSolenoid(5, 4);
 		intakePistonRight = new DoubleSolenoid(7, 6);
 
-		
-		
-		
-		//ACTUAL ELEVATOR TALON IS 5
-		
-		
-		elevatorTalon = new WPI_TalonSRX(0);
-		
-		
-		
-		
-		
+		elevatorTalon = new WPI_TalonSRX(5);
 		elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		elevatorTalon.config_kP(0, Elevator.ELEVATOR_P_VALUE, 0);
 		elevatorTalon.setInverted(false);
 		
-		
-		
-		//ACTUAL ELEVATOR TALON 2 IS 0
-		
-		
-		
-		
-		elevatorTalon2 = new WPI_TalonSRX(3);
-		
-		
-		
-		
-		
-		
+		elevatorTalon2 = new WPI_TalonSRX(7);
 		
 		navx = new AHRSPID(Port.kMXP);
 		rotationController = new PIDController(0.05, 0, 0, navx, drive);
@@ -126,16 +91,16 @@ public class RobotMap {
 		rotationController.setContinuous(true);
 		rotationController.setAbsoluteTolerance(1);
 		
-		
 		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
 		counteractDrift.setInputRange(-180, 180);
 		counteractDrift.setOutputRange(-.7, .7);
 		counteractDrift.setContinuous(true);
 		counteractDrift.setAbsoluteTolerance(1);
 		
-		climberHook = new WPI_TalonSRX(9); //Talon 9
-		climber = new WPI_TalonSRX(7); //Talon 7
+		climberHook = new WPI_TalonSRX(9);
+		climber = new WPI_TalonSRX(0);
 		
 		c = new CANifier(0);
+//		c2 = new CANifier(4);
 	}
 }

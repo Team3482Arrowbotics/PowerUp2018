@@ -12,7 +12,7 @@ public class Climber extends Subsystem implements Runnable {
 	protected static WPI_TalonSRX climberHook;
 	public static final int AXIS = Robot.oi.CLIMBER_AXIS;
 	private double AxisPos = 0;
-	public static final double AXIS_DEADZONE = 0.05;
+	public static final double AXIS_DEADZONE = 0.25;
 
 	// CONSTRUCTOR
 	public Climber() {
@@ -42,19 +42,19 @@ public class Climber extends Subsystem implements Runnable {
 	}
 	
 	public void spinHook(double axisPos) {
-		climberHook.set(axisPos);
+		climberHook.set(-axisPos * 0.3);
 		System.out.println("Hook Spinning "+axisPos);
 	}
 	
 	public void climb()
 	{
-		climber.set(-1);
+		climber.set(-1.0);
 		Robot.isClimberHook = true;
 	}
 	
 	public void reverseClimb()
 	{
-		climber.set(1);
+		climber.set(1.0);
 		Robot.isClimberHook = true;
 	}
 	

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class GetBox extends Command{
 	protected void initialize() {
-		Robot.rangeFinder.goToBox();
+		Robot.intakeLidar.goToBox();
 	}
 	@Override
 	protected boolean isFinished() {
