@@ -1,7 +1,7 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.BlitzAutonomous;
-import org.usfirst.frc.team3482.robot.commands.EncoderAutonomous;
+import org.usfirst.frc.team3482.robot.commands.TwoBoxAutonomous;
 import org.usfirst.frc.team3482.robot.commands.SwitchAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TestAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
@@ -51,9 +51,10 @@ public class Robot extends IterativeRobot {
 	// 230 encoder ticks per foot
 	// 19 ticks/inch
 	// 0.05 in per tick?
-	public SendableChooser<String> sPosChooser;
-	public SendableChooser<String> baselineChooser;
+	public SendableChooser sPosChooser;
+//	public SendableChooser<String> baselineChooser;
 	public SendableChooser<String> autoChooser;
+	String startPos;
 	Command autoCommand;
 
 
@@ -79,15 +80,18 @@ public class Robot extends IterativeRobot {
 
 		RobotMap.encoders.reset();
 
-		sPosChooser = new SendableChooser<String>();
-		sPosChooser.setName("Start Position");
-		sPosChooser.addObject("Middle", "MIDDLE");
-		sPosChooser.addDefault("Left", "LEFT");
-		sPosChooser.addObject("Right", "RIGHT");
+		sPosChooser = new SendableChooser<>();
+//		sPosChooser.setName("Start Position");
+//		sPosChooser.addObject("Middle", "MIDDLE");
+//		sPosChooser.addDefault("Left", "LEFT");
+//		sPosChooser.addObject("Right", "RIGHT");
+		sPosChooser.addDefault("Left", startPos = "LEFT");
+		sPosChooser.addObject("Middle", startPos = "MIDDLE");
+		sPosChooser.addObject("Right", startPos = "RIGHT");
 
-		baselineChooser = new SendableChooser<String>();
-		baselineChooser.addDefault("Cross Baseline", "base");
-		baselineChooser.addObject("Cross diagonally", "diag");
+//		baselineChooser = new SendableChooser<String>();
+//		baselineChooser.addDefault("Cross Baseline", "base");
+//		baselineChooser.addObject("Cross diagonally", "diag");
 
 
 		autoChooser = new SendableChooser<String>();
@@ -138,34 +142,34 @@ public class Robot extends IterativeRobot {
 		switchOnLeft = data[0].equals("L");
 		scaleOnLeft = data[1].equals("L");
 
-		String crossingMethod = baselineChooser.getSelected();
-		if(crossingMethod == null) {
-			crossingMethod = "";
-		}
+//		String crossingMethod = baselineChooser.getSelected();
+//		if(crossingMethod == null) {
+//			crossingMethod = "";
+//		}
+//
+//		switch(crossingMethod) {
+//		case "base":
+//			crossBaseline = true;
+//			break;
+//		case "diag":
+//			crossBaseline = false;
+//			break;
+//		default:
+//			crossBaseline = true;
+//		}
 
-		switch(crossingMethod) {
-		case "base":
-			crossBaseline = true;
-			break;
-		case "diag":
-			crossBaseline = false;
-			break;
-		default:
-			crossBaseline = true;
-		}
-
-		String sPos = sPosChooser.getSelected();
+		//String sPos = sPosChooser.getSelected();
 		
-		System.out.println(sPos);
+		System.out.println(startPos);
 		
 		String autoType = autoChooser.getSelected();
 		System.out.println(autoType);
 		switch(autoType) {
 		case "Encoders":
-			new EncoderAutonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
+			new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
 			break;
 		case "Timed":
-			new TimedAutonomous(crossBaseline, switchOnLeft, sPos).start();
+			new TimedAutonomous(switchOnLeft, startPos).start();
 			break;
 		case "Test":
 			new TestAutonomous().start();
@@ -175,7 +179,7 @@ public class Robot extends IterativeRobot {
 			new BlitzAutonomous().start();
 			break;
 		case "Basic":
-			new SwitchAutonomous().start();
+			new SwitchAutonomous(switchOnLeft, startPos).start();
 			break;
 		default:
 			break;

@@ -16,13 +16,13 @@ import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class EncoderAutonomous extends CommandGroup{
-		
+public class TwoBoxAutonomous extends CommandGroup{
+
 	boolean fromRight = true, fromLeft = false, 
 			toRight = true, toLeft = false;
-	
+
 	StartPosition sPos;
-	public EncoderAutonomous(boolean crossBaseline, boolean switchOnLeft, boolean scaleOnLeft, String sPos) {
+	public TwoBoxAutonomous(boolean switchOnLeft, boolean scaleOnLeft, String sPos) {
 		super();
 		addSequential(new Move(6));
 		switch(sPos) {
@@ -42,14 +42,9 @@ public class EncoderAutonomous extends CommandGroup{
 					addSequential(new PlaceBoxOnSwitch());
 				}
 			} else {
-				if(crossBaseline) {
-					addSequential(new AcrossBaseline(fromLeft));
-					addSequential(new StartToScale());
-				}
-				else {
-					addSequential(new StartToOppoAutoLine(fromLeft));
-					addSequential(new AutoLineToScale());
-				}
+
+				addSequential(new AcrossBaseline(fromLeft));
+				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(true));
 				addSequential(new ScaleToSameSideBox(true));
 				if(switchOnLeft) {
@@ -67,13 +62,9 @@ public class EncoderAutonomous extends CommandGroup{
 
 		case "MIDDLE":
 			if(scaleOnLeft) {
-				if(crossBaseline) {
-					addSequential(new AcrossBaselineFromMiddle(toLeft));
-					addSequential(new StartToScale());
-				} else {
-					addSequential(new MiddleToAutoLine(toLeft));
-					addSequential(new AutoLineToScale());
-				}
+
+				addSequential(new AcrossBaselineFromMiddle(toLeft));
+				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(fromLeft));
 				addSequential(new ScaleToSameSideBox(fromLeft));
 
@@ -88,19 +79,15 @@ public class EncoderAutonomous extends CommandGroup{
 				addSequential(new PlaceBoxOnSwitch());
 
 			} else {
-				if(crossBaseline) {
-					addSequential(new AcrossBaselineFromMiddle(toRight));
-				} else {
-					addSequential(new MiddleToAutoLine(toRight));
-					addSequential(new AutoLineToScale());
-				}
+				addSequential(new AcrossBaselineFromMiddle(toRight));
+
 				addSequential(new PlaceBoxOnScale(fromRight));
 				addSequential(new ScaleToSameSideBox(fromRight));
 
 				if(switchOnLeft) {
 					addSequential(new AcrossSwitchLane(fromRight));
 					addSequential(new FindBox(fromLeft));
-					
+
 				} else {
 					addSequential(new FindBox(fromRight));
 				}
@@ -111,15 +98,8 @@ public class EncoderAutonomous extends CommandGroup{
 
 		case "RIGHT":
 			if(scaleOnLeft) {
-				if(crossBaseline) {
-					addSequential(new AcrossBaseline(fromRight));
-					addSequential(new StartToScale());
-				}
-				else {
-					addSequential(new StartToOppoAutoLine(fromRight));
-					addSequential(new AutoLineToScale());
-				}
-
+				addSequential(new AcrossBaseline(fromRight));
+				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(fromLeft));
 				addSequential(new ScaleToSameSideBox(fromLeft));
 				if(switchOnLeft) {

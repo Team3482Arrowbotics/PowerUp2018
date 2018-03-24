@@ -9,6 +9,7 @@ import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class PlaceBoxOnScale extends CommandGroup{
 	boolean fromRight;
@@ -21,12 +22,12 @@ public class PlaceBoxOnScale extends CommandGroup{
 		} else {
 			turnMultiplier = 1;
 		}
-		addParallel(new Turn(turnMultiplier * 45));
+		addParallel(new Turn(turnMultiplier * 60));
 		addParallel(new SetElevatorPosition(Elevator.SCALE_POSITION));
-		Timer.delay(1);
+		addSequential(new WaitCommand(1));
 		addSequential(new Outtake(0.25));
 		addParallel(new SetIntakeOut());
-		Timer.delay(.25);
+		addSequential(new WaitCommand(.25));
 		addSequential(new SetIntakeIn());
 		addSequential(new SetElevatorPosition(Elevator.BOTTOM_POSITION));
 	}
