@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Turn extends Command{
 	double angle;
 	public Turn(double angle) {
+		super(0.5);
 		this.angle = angle;
 	}
 	protected void initialize() {
@@ -18,6 +19,7 @@ public class Turn extends Command{
 	}
 	protected void end() {
 		RobotMap.rotationController.disable();
+		RobotMap.drive.stopMotor();
 	}
 	@Override
 	protected boolean isFinished() {

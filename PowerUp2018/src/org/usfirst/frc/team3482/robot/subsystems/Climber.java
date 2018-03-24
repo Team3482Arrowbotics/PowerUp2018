@@ -12,7 +12,7 @@ public class Climber extends Subsystem implements Runnable {
 	protected static WPI_TalonSRX climberHook;
 	public static final int AXIS = Robot.oi.CLIMBER_AXIS;
 	private double AxisPos = 0;
-	public static final double AXIS_DEADZONE = 0.25;
+	public static final double AXIS_DEADZONE = 0.5;
 
 	// CONSTRUCTOR
 	public Climber() {
@@ -27,18 +27,18 @@ public class Climber extends Subsystem implements Runnable {
 
 	//RUNS EVERY TICK (see teleopPeriodic)
 	public void run() {
-
-		AxisPos = -Robot.oi.flightStick.getRawAxis(AXIS);
 		
-		if(AxisPos > AXIS_DEADZONE || AxisPos < -AXIS_DEADZONE) {
-			Robot.isClimberHook=true;
-			spinHook(AxisPos);
-		}
-		else {
-			Robot.isClimberHook=false;
-			spinHook(0);
-		}
-		
+//		AxisPos = -Robot.oi.flightStick.getRawAxis(AXIS);
+//		
+//		if(AxisPos > AXIS_DEADZONE || AxisPos < -AXIS_DEADZONE) {
+//			Robot.isClimberHook=true;
+//			spinHook(AxisPos);
+//		}
+//		else {
+//			Robot.isClimberHook=false;
+//			spinHook(0);
+//		}
+//		
 	}
 	
 	public void spinHook(double axisPos) {
@@ -49,19 +49,19 @@ public class Climber extends Subsystem implements Runnable {
 	public void climb()
 	{
 		climber.set(-1.0);
-		Robot.isClimberHook = true;
+		Robot.isClimbing = true;
 	}
 	
 	public void reverseClimb()
 	{
 		climber.set(1.0);
-		Robot.isClimberHook = true;
+		Robot.isClimbing = true;
 	}
 	
 	public void stop()
 	{
 		climber.set(0);
-		Robot.isClimberHook = false;
+		Robot.isClimbing = false;
 	}
 
 }

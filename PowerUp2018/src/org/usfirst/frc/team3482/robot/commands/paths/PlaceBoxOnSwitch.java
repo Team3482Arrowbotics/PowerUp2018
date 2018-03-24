@@ -8,16 +8,18 @@ import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class PlaceBoxOnSwitch extends CommandGroup{
 	public PlaceBoxOnSwitch() {
 		super();
 		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
-		Timer.delay(.75);
-		addSequential(new Outtake(0.25));
-		addParallel(new SetIntakeOut());
-		Timer.delay(.25);
+		addSequential(new WaitCommand(1));
+		addSequential(new Outtake(0.35));
+		addSequential(new SetIntakeOut());
+		addSequential(new WaitCommand(1));
 		addSequential(new SetIntakeIn());
+		addSequential(new WaitCommand(0.3));
 		addSequential(new SetElevatorPosition(Elevator.BOTTOM_POSITION));
 	}
 

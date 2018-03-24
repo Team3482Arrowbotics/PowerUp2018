@@ -2,6 +2,7 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
+import org.usfirst.frc.team3482.robot.subsystems.PWMLidar;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -44,6 +45,7 @@ public class RobotMap {
 //	public static CANifier c2;
 	public static PIDController counteractDrift; 
 	public static RotationAdjuster rotationAdjuster;
+	public static PWMLidar intakeLidar;
 	
 	public static void init() {
 		frontLeft = new WPI_TalonSRX(3);		
@@ -103,6 +105,8 @@ public class RobotMap {
 		climber = new WPI_TalonSRX(0);
 		
 		c = new CANifier(0);
+		
+		intakeLidar = new PWMLidar(4);
 //		c2 = new CANifier(4);
 	}
 }

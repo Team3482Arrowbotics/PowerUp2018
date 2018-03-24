@@ -1,35 +1,40 @@
 package org.usfirst.frc.team3482.robot.commands;
 
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
-import org.usfirst.frc.team3482.robot.commands.paths.StartPosition;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedCrossBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedDiagonal;
+import org.usfirst.frc.team3482.robot.commands.paths.TimedCrossAutonLine;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleDiagonal;
+import org.usfirst.frc.team3482.robot.commands.paths.TimedNextToSwitch;
+import org.usfirst.frc.team3482.robot.commands.paths.TimedToGoal;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class TimedAutonomous extends CommandGroup{
 	private boolean fromRight = true, fromLeft = false, toRight = true, toLeft = false;
-	public TimedAutonomous(boolean crossBaseline, boolean switchOnLeft, StartPosition sPos) {
+	public TimedAutonomous(boolean crossBaseline, boolean switchOnLeft, String sPos) {
 		
 		super();
-		
-		addSequential(new TimedMove(0.6, 0.5));
-
 		switch(sPos) {
-		case LEFT:
+		case "LEFT":
+			System.out.println("Left");
 			if(!switchOnLeft) {
-				if(crossBaseline) {
-					addSequential(new TimedCrossBaseline(fromLeft));
-				}
-				else {
-					addSequential(new TimedDiagonal(fromLeft));
-				}
+//				if(crossBaseline) {
+//					addSequential(new TimedCrossBaseline(fromLeft));
+//				}
+//				else {
+//					addSequential(new TimedDiagonal(fromLeft));
+//				}
+				addSequential(new TimedCrossAutonLine());
+			}
+			else {
+				addSequential(new TimedNextToSwitch());
+				addSequential(new TimedToGoal(fromLeft));
+				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;
 
-		case MIDDLE:
+		case "MIDDLE":
+			System.out.println("Middle");
 			if(switchOnLeft) {
 				if(crossBaseline) {
 					addSequential(new TimedMiddleBaseline(toLeft));
@@ -48,19 +53,23 @@ public class TimedAutonomous extends CommandGroup{
 			}
 			break;
 
-		case RIGHT:
+		case "RIGHT":
+			System.out.println("Right");
 			if(switchOnLeft) {
-				if(crossBaseline) {
-					addSequential(new TimedCrossBaseline(fromRight));
-				}
-				else {
-					addSequential(new TimedDiagonal(fromRight));
-				}
+//				if(crossBaseline) {
+//					addSequential(new TimedCrossBaseline(fromLeft));
+//				}
+//				else {
+//					addSequential(new TimedDiagonal(fromLeft));
+//				}
+				addSequential(new TimedCrossAutonLine());
+			}
+			else {
+				addSequential(new TimedNextToSwitch());
+				addSequential(new TimedToGoal(fromRight));
+				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;
 		}
-		
-		addSequential(new TimedMove(1.0, 0.5));
-		addSequential(new PlaceBoxOnSwitch());
 	}
 }

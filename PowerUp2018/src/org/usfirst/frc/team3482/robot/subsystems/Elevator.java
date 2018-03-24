@@ -17,11 +17,11 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static double absoluteTarget;
 	public static final int AXIS = Robot.oi.ELEVATOR_AXIS;
 	private double AxisPos;
-	public static final double AXIS_DEADZONE = 0.05;
+	public static final double AXIS_DEADZONE = 0.1;
 	public static final int MAX_POSITION = 335000, ELEVATOR_SPEED = 25000;
 	public static final double ELEVATOR_P_VALUE = 0.2, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
-			SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .4,
-			MANUAL_DOWN_SPEED = -.2, ELEVATOR_FALLING_RATIO = 0.6;
+			SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .8,
+			MANUAL_DOWN_SPEED = -.6, ELEVATOR_FALLING_RATIO = 0.55;
 	
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
 	// 15:1 Small Spool Max = 665000 Speed = 50000
@@ -74,7 +74,7 @@ public class Elevator extends Subsystem implements Runnable {
 		elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
 
 		// System.out.println("Set Pos: " + targetPos);
-		System.out.println("Position: " + getCurrentPos());
+		//System.out.println("Position: " + getCurrentPos());
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
 		// System.out.println("Velocity: "+getCurrentVelocity());
 		//System.out.println("Percent Output Motor 1: " + elevatorTalon.getMotorOutputPercent());
@@ -172,13 +172,13 @@ public class Elevator extends Subsystem implements Runnable {
 		// IF ENCODER VALUES FLIP (TOP IS 0, BOTTOM IS MAX)
 		// return ((getCurrentPos() / MAX_POSITION) * 0.75) + 0.25;
 
-		return (1 - ((getCurrentPos() / MAX_POSITION) * 0.75));
+		return (1 - ((getCurrentPos() / MAX_POSITION) * 0.85) + 0.15);
 	}
 
 	public static double getTurnRatio() {
 		// IF ENCODER VALUES FLIP (TOP IS 0, BOTTOM IS MAX)
 		// return ((getCurrentPos() / MAX_POSITION) * 0.5) + 0.5;
 
-		return (1 - ((getCurrentPos() / MAX_POSITION) * 0.5));
+		return (1 - ((getCurrentPos() / MAX_POSITION) * 0.65) + 0.35);
 	}
 }

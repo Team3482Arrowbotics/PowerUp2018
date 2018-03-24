@@ -10,13 +10,10 @@ import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleDiagonal;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class SwitchAutonomous extends CommandGroup{
-	
-	private boolean fromRight = true, fromLeft = false, toRight = true, toLeft = false;
-	
+		
 	public SwitchAutonomous() {
 		
 		super();
-		
 		addSequential(new TimedMove(1.5, 0.5));
 		addSequential(new PlaceBoxOnSwitch());
 	}

@@ -16,8 +16,8 @@ public class Intake extends Command{
 	}
 	protected void initialize(){
 		Robot.isSpintake = true;
-		RobotMap.intakeMotorLeft.set(-.75);
-		RobotMap.intakeMotorRight.set(.75);
+		RobotMap.intakeMotorLeft.set(-.8);
+		RobotMap.intakeMotorRight.set(.8);
 		System.out.println("Motors set!");
 	}
 	

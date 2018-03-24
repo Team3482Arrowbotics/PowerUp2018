@@ -22,11 +22,11 @@ public class EncoderAutonomous extends CommandGroup{
 			toRight = true, toLeft = false;
 	
 	StartPosition sPos;
-	public EncoderAutonomous(boolean crossBaseline, boolean switchOnLeft, boolean scaleOnLeft, StartPosition sPos) {
+	public EncoderAutonomous(boolean crossBaseline, boolean switchOnLeft, boolean scaleOnLeft, String sPos) {
 		super();
 		addSequential(new Move(6));
 		switch(sPos) {
-		case LEFT:
+		case "LEFT":
 			if(scaleOnLeft) {
 				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(fromLeft));
@@ -65,7 +65,7 @@ public class EncoderAutonomous extends CommandGroup{
 			}
 			break;
 
-		case MIDDLE:
+		case "MIDDLE":
 			if(scaleOnLeft) {
 				if(crossBaseline) {
 					addSequential(new AcrossBaselineFromMiddle(toLeft));
@@ -109,7 +109,7 @@ public class EncoderAutonomous extends CommandGroup{
 			}
 			break;
 
-		case RIGHT:
+		case "RIGHT":
 			if(scaleOnLeft) {
 				if(crossBaseline) {
 					addSequential(new AcrossBaseline(fromRight));

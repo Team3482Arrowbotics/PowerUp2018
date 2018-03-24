@@ -1,9 +1,10 @@
 package org.usfirst.frc.team3482.robot;
 
+import org.usfirst.frc.team3482.robot.commands.BlitzAutonomous;
 import org.usfirst.frc.team3482.robot.commands.EncoderAutonomous;
+import org.usfirst.frc.team3482.robot.commands.SwitchAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TestAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
-import org.usfirst.frc.team3482.robot.commands.paths.StartPosition;
 import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
@@ -32,7 +33,7 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator;
 	public static Climber climber;
 	public static LIDAR sideLidar;
-	public static LIDAR intakeLidar;
+	//public static LIDAR intakeLidar;
 	public static Ultrasonic rangeFinder;
 	public static UsbCamera camera;
 	public static CameraServer cameraServer;
@@ -41,7 +42,7 @@ public class Robot extends IterativeRobot {
 	public double turnSpeed;
 	public static boolean isSpintake;
 	public static boolean isSpoutake;
-	public static boolean isClimberHook;
+	public static boolean isClimbing;
 	public static boolean isEMovingUp;
 	public static boolean isEMovingDown;
 	public String colorsArray[];
@@ -50,7 +51,7 @@ public class Robot extends IterativeRobot {
 	// 230 encoder ticks per foot
 	// 19 ticks/inch
 	// 0.05 in per tick?
-	public SendableChooser<StartPosition> sPosChooser;
+	public SendableChooser<String> sPosChooser;
 	public SendableChooser<String> baselineChooser;
 	public SendableChooser<String> autoChooser;
 	Command autoCommand;
@@ -61,7 +62,7 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		isSpoutake = false;
 		isSpintake = false;
-		isClimberHook = false;
+		isClimbing = false;
 		isEMovingUp = false;
 		isEMovingDown = false;
 
@@ -73,16 +74,16 @@ public class Robot extends IterativeRobot {
 		elevator = new Elevator();
 		climber = new Climber();
 		sideLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel0);
-		intakeLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel1);
+		//intakeLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel1);
 		rangeFinder = new Ultrasonic(0);
 
 		RobotMap.encoders.reset();
 
-		sPosChooser = new SendableChooser<StartPosition>();
+		sPosChooser = new SendableChooser<String>();
 		sPosChooser.setName("Start Position");
-		sPosChooser.addObject("Middle", StartPosition.MIDDLE);
-		sPosChooser.addDefault("Left", StartPosition.LEFT);
-		sPosChooser.addObject("Right", StartPosition.RIGHT);
+		sPosChooser.addObject("Middle", "MIDDLE");
+		sPosChooser.addDefault("Left", "LEFT");
+		sPosChooser.addObject("Right", "RIGHT");
 
 		baselineChooser = new SendableChooser<String>();
 		baselineChooser.addDefault("Cross Baseline", "base");
@@ -90,14 +91,18 @@ public class Robot extends IterativeRobot {
 
 
 		autoChooser = new SendableChooser<String>();
-		autoChooser.addDefault("Cross The Line", "Blitz");
+		autoChooser.setName("Autonomous Path");
+		autoChooser.addDefault("No Autonomous", "Null");
+		autoChooser.addObject("Blitz", "Blitz");
 		autoChooser.addObject("Timed Autonomous", "Time");
 		autoChooser.addObject("Encoder Autonomous", "Encoders");
 		autoChooser.addObject("Individual Function Testing", "Test");
-		autoChooser.addDefault("Switch Straight Ahead", "Basic");
+		autoChooser.addObject("Switch Straight Ahead", "Basic");
+		
 
 		SmartDashboard.putData(sPosChooser);
-		SmartDashboard.putData(baselineChooser);
+		//SmartDashboard.putData(baselineChooser);
+		SmartDashboard.putData(autoChooser);
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
 
@@ -111,10 +116,11 @@ public class Robot extends IterativeRobot {
 					ledStrip.flash("cyan", 0.2);
 				} else if (isEMovingDown) {
 					ledStrip.flash("yellow", 0.1);
-				} else if (isClimberHook) {
+				} else if (isClimbing) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
-					ledStrip.ledBoxCondition("red", "green");
+					ledStrip.ledBoxCondition("green", "red");
+					//should be red then green but lidar is dead
 				}
 				//System.out.println("Side Lidar: "+sideLidar.getDistance());
 			}
@@ -133,6 +139,9 @@ public class Robot extends IterativeRobot {
 		scaleOnLeft = data[1].equals("L");
 
 		String crossingMethod = baselineChooser.getSelected();
+		if(crossingMethod == null) {
+			crossingMethod = "";
+		}
 
 		switch(crossingMethod) {
 		case "base":
@@ -142,12 +151,15 @@ public class Robot extends IterativeRobot {
 			crossBaseline = false;
 			break;
 		default:
-			crossBaseline = false;
+			crossBaseline = true;
 		}
 
-		StartPosition sPos = sPosChooser.getSelected();
-
+		String sPos = sPosChooser.getSelected();
+		
+		System.out.println(sPos);
+		
 		String autoType = autoChooser.getSelected();
+		System.out.println(autoType);
 		switch(autoType) {
 		case "Encoders":
 			new EncoderAutonomous(crossBaseline, switchOnLeft, scaleOnLeft, sPos).start();
@@ -158,10 +170,18 @@ public class Robot extends IterativeRobot {
 		case "Test":
 			new TestAutonomous().start();
 			break;
+		case "Blitz":
+			System.out.println("AAAAAAAAAAAAAA");
+			new BlitzAutonomous().start();
+			break;
+		case "Basic":
+			new SwitchAutonomous().start();
+			break;
+		default:
+			break;
 		}
-
-
-
+		//new TimedAutonomous(true, switchOnLeft, "RIGHT").start();
+		new BlitzAutonomous().start();
 	}
 
 	/**
@@ -182,12 +202,14 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		elevator.teleopRun();
-		climber.run();
+		System.out.println("Side Lidar: "+sideLidar.getDistance());
+		System.out.println("Intake Lidar: "+RobotMap.intakeLidar.getDistance());
+		//climber.run();
 
 		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
 		// Encoder: " + RobotMap.encoderRight.get());
-		speed = -oi.xBox.getRawAxis(1) * elevator.getSpeedRatio();
-		turnSpeed = oi.xBox.getRawAxis(4) * elevator.getTurnRatio();
+		speed = -oi.xBox.getRawAxis(1) * Elevator.getSpeedRatio();
+		turnSpeed = oi.xBox.getRawAxis(4) * Elevator.getTurnRatio();
 		RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		// if(turnSpeed <= 0.1) {
 		// RobotMap.rotationController.enable();
