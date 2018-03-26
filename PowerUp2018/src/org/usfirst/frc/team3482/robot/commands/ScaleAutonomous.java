@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3482.robot.commands;
 
-import org.usfirst.frc.team3482.robot.commands.paths.AcrossBaselineToScale;
+import org.usfirst.frc.team3482.robot.commands.paths.CrossFieldToScale;
+import org.usfirst.frc.team3482.robot.commands.paths.PassSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnScale;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
@@ -16,8 +17,8 @@ public class ScaleAutonomous extends CommandGroup{
 		case "LEFT":
 			System.out.println("Left");
 			if(!scaleOnLeft) {
-				addSequential(new StartToScale());
-				addSequential(new AcrossBaselineToScale(fromLeft));
+				addSequential(new PassSwitch());
+				addSequential(new CrossFieldToScale(fromLeft));
 				addSequential(new PlaceBoxOnScale(fromRight));
 			}
 			else {
@@ -26,22 +27,21 @@ public class ScaleAutonomous extends CommandGroup{
 			}
 			break;
 
-		case "MIDDLE":
-			System.out.println("Middle");
-			if(scaleOnLeft) {
-				addSequential(new TimedMiddleBaseline(toLeft));
-			}
-			else {
-				addSequential(new TimedMiddleBaseline(toRight));
-			}
-			break;
+//		case "MIDDLE":
+//			System.out.println("Middle");
+//			if(scaleOnLeft) {
+//				addSequential(new TimedMiddleBaseline(toLeft));
+//			}
+//			else {
+//				addSequential(new TimedMiddleBaseline(toRight));
+//			}
+//			break;
 
 		case "RIGHT":
 			System.out.println("Right");
 			if(scaleOnLeft) {
-				addSequential(new TimedNextToSwitch());
-				addSequential(new Move(36));
-				addSequential(new AcrossBaselineToScale(fromRight));
+				addSequential(new PassSwitch());
+				addSequential(new CrossFieldToScale(fromRight));
 				addSequential(new PlaceBoxOnScale(fromLeft));
 			}
 			else {

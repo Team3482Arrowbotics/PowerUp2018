@@ -5,10 +5,10 @@ import org.usfirst.frc.team3482.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class AcrossBaselineToScale extends CommandGroup{
+public class CrossFieldToScale extends CommandGroup{
 	boolean fromRight;
 	int turnMultiplier;
-	public AcrossBaselineToScale(boolean fromRight) {
+	public CrossFieldToScale(boolean fromRight) {
 		this.fromRight = fromRight;
 		if(fromRight) {
 			turnMultiplier = -1;

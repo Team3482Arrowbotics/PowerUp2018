@@ -47,7 +47,7 @@ public class Robot extends IterativeRobot {
 	// 230 encoder ticks per foot
 	// 19 ticks/inch
 	// 0.05 in per tick?
-	public SendableChooser sPosChooser;
+	public SendableChooser<String> sPosChooser;
 	//	public SendableChooser<String> baselineChooser;
 	public SendableChooser<String> autoChooser;
 	String startPos;
@@ -78,48 +78,35 @@ public class Robot extends IterativeRobot {
 
 		RobotMap.encoders.reset();
 
-		sPosChooser = new SendableChooser<>();
-		//		sPosChooser.setName("Start Position");
-		//		sPosChooser.addObject("Middle", "MIDDLE");
-		//		sPosChooser.addDefault("Left", "LEFT");
-		//		sPosChooser.addObject("Right", "RIGHT");
-		sPosChooser.addDefault("Left", startPos = "LEFT");
-		sPosChooser.addObject("Middle", startPos = "MIDDLE");
-		//sPosChooser.addObject("Right", startPos = "RIGHT");
-
-		//		baselineChooser = new SendableChooser<String>();
-		//		baselineChooser.addDefault("Cross Baseline", "base");
-		//		baselineChooser.addObject("Cross diagonally", "diag");
+		sPosChooser = new SendableChooser<String>();
+		sPosChooser.addObject("Middle", "MIDDLE");
+		sPosChooser.addDefault("Left", "LEFT");
+		sPosChooser.addObject("Right", "RIGHT");
 
 
 		autoChooser = new SendableChooser<String>();
-//		autoChooser.setName("Autonomous Path");
-//		autoChooser.addDefault("No Autonomous", "Null");
-//		autoChooser.addObject("Blitz", "Blitz");
-//		autoChooser.addObject("Timed Autonomous", "Time");
-//		autoChooser.addObject("Encoder Autonomous", "Encoders");
-//		autoChooser.addObject("Individual Function Testing", "Test");
-//		autoChooser.addObject("Switch Straight Ahead", "Basic");
-		
-		autoChooser.setName("Autonomous Path");
-		//autoChooser.addDefault("No Autonomous", "Null");
+		autoChooser.addDefault("No Autonomous", "Null");
 		autoChooser.addObject("Blitz", "Blitz");
-		autoChooser.addObject("Timed Autonomous", "Time");
-		autoChooser.addObject("Encoder Autonomous", "Encoders");
-		autoChooser.addDefault("Individual Function Testing", "Test");
-		autoChooser.addObject("Switch Straight Ahead", "Basic");
+		autoChooser.addObject("Timed", "Time");
+		autoChooser.addObject("Two Box", "Two Box");
+		autoChooser.addObject("Testing", "Test");
+		autoChooser.addObject("Switch", "Basic");
+		autoChooser.addObject("Scale", "Basic");
 
+		//		autoChooser.addDefault("No Autonomous", autoType = "Null");
+		//		autoChooser.addObject("Blitz", autoType = "Blitz");
+		//		autoChooser.addObject("Timed Autonomous", autoType = "Time");
+		//		autoChooser.addObject("Encoder Autonomous", autoType = "Encoders");
+		//		autoChooser.addObject("Individual Function Testing", autoType = "Test");
+		//		autoChooser.addObject("Switch Straight Ahead", autoType = "Basic");
 
 		SmartDashboard.putData(sPosChooser);
-		//SmartDashboard.putData(baselineChooser);
 		SmartDashboard.putData(autoChooser);
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
 
 		new Thread(() -> {
 			while (true) {
-				//				
-
 				if (RobotMap.intakeLidar.boxFullyInside()){
 					ledStrip.turnColor("green");
 				} else if (RobotMap.intakeLidar.boxInClampRange()) {
@@ -137,7 +124,6 @@ public class Robot extends IterativeRobot {
 				} else {
 					ledStrip.turnColor("red");
 				}
-				//System.out.println("Side Lidar: "+sideLidar.getDistance());
 			}
 		}).start();
 	}
@@ -176,11 +162,11 @@ public class Robot extends IterativeRobot {
 		System.out.println(autoType);
 		switch(autoType) {
 		case "Encoders":
-			//new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
+			new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
 			System.out.println("Running Encoder Auton");
 			break;
 		case "Timed":
-			//new TimedAutonomous(switchOnLeft, startPos).start();
+			new TimedAutonomous(switchOnLeft, startPos).start();
 			System.out.println("Running Timed Auton");
 			break;
 		case "Test":
@@ -191,14 +177,13 @@ public class Robot extends IterativeRobot {
 			System.out.println("AAAAAAAAAAAAAA");
 			new BlitzAutonomous().start();
 			break;
-		case "Basic":
+		case "Switch":
 			new SwitchAutonomous(switchOnLeft, startPos).start();
 			System.out.println("Running Switch Auton");
 			break;
 		default:
 			break;
 		}
-		//new SwitchAutonomous(switchOnLeft, "RIGHT").start();
 	}
 
 	/**
@@ -221,7 +206,6 @@ public class Robot extends IterativeRobot {
 		elevator.teleopRun();
 		System.out.println("Side Lidar: "+sideLidar.getDistance());
 		System.out.println("Intake Lidar: "+RobotMap.intakeLidar.getDistance());
-		//climber.run();
 
 		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
 		// Encoder: " + RobotMap.encoderRight.get());
@@ -236,8 +220,6 @@ public class Robot extends IterativeRobot {
 		// RobotMap.navx.reset();
 		// RobotMap.rotationController.disable();
 		// }
-
-
 		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
 
 		if (elevator.isTop()) {
