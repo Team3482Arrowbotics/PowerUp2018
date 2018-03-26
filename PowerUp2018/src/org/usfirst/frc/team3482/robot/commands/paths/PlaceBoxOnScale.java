@@ -22,7 +22,7 @@ public class PlaceBoxOnScale extends CommandGroup{
 		} else {
 			turnMultiplier = 1;
 		}
-		addParallel(new Turn(turnMultiplier * 60));
+		addParallel(new Turn(turnMultiplier * 90));
 		addParallel(new SetElevatorPosition(Elevator.SCALE_POSITION));
 		addSequential(new WaitCommand(1));
 		addSequential(new Outtake(0.25));

@@ -1,22 +1,21 @@
 package org.usfirst.frc.team3482.robot.commands;
 
-import org.usfirst.frc.team3482.robot.commands.paths.AcrossBaseline;
 import org.usfirst.frc.team3482.robot.commands.paths.AcrossBaselineToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnScale;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
+import org.usfirst.frc.team3482.robot.commands.paths.TimedNextToSwitch;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class ScaleAutonomous extends CommandGroup{
 	private boolean fromRight = true, fromLeft = false, toRight = true, toLeft = false;
-	public ScaleAutonomous(boolean switchOnLeft, String sPos) {
-
+	public ScaleAutonomous(boolean scaleOnLeft, String sPos) {
 		super();
 		switch(sPos) {
 		case "LEFT":
 			System.out.println("Left");
-			if(!switchOnLeft) {
+			if(!scaleOnLeft) {
 				addSequential(new StartToScale());
 				addSequential(new AcrossBaselineToScale(fromLeft));
 				addSequential(new PlaceBoxOnScale(fromRight));
@@ -29,7 +28,7 @@ public class ScaleAutonomous extends CommandGroup{
 
 		case "MIDDLE":
 			System.out.println("Middle");
-			if(switchOnLeft) {
+			if(scaleOnLeft) {
 				addSequential(new TimedMiddleBaseline(toLeft));
 			}
 			else {
@@ -39,8 +38,9 @@ public class ScaleAutonomous extends CommandGroup{
 
 		case "RIGHT":
 			System.out.println("Right");
-			if(switchOnLeft) {
-				addSequential(new StartToScale());
+			if(scaleOnLeft) {
+				addSequential(new TimedNextToSwitch());
+				addSequential(new Move(36));
 				addSequential(new AcrossBaselineToScale(fromRight));
 				addSequential(new PlaceBoxOnScale(fromLeft));
 			}

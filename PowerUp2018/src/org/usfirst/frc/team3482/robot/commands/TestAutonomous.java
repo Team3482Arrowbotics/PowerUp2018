@@ -1,11 +1,7 @@
 package org.usfirst.frc.team3482.robot.commands;
 
-import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
-import org.usfirst.frc.team3482.robot.commands.paths.StartPosition;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedCrossBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedDiagonal;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleDiagonal;
+import org.usfirst.frc.team3482.robot.commands.paths.FindFirstBox;
+import org.usfirst.frc.team3482.robot.commands.paths.GetBox;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -16,7 +12,7 @@ public class TestAutonomous extends CommandGroup{
 	public TestAutonomous() {
 		
 		super();
-		
-		addSequential(new PlaceBoxOnSwitch());
+		addSequential(new FindFirstBox(fromRight));
+		addSequential(new GetBox());
 	}
 }

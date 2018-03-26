@@ -18,9 +18,9 @@ public class SwitchAutonomous extends CommandGroup{
 		case "LEFT":
 			System.out.println("Left");
 			if(!switchOnLeft) {
-				addSequential(new WaitCommand(5));
-				addSequential(new ToOppositeSwitch(fromLeft));
-				addSequential(new PlaceBoxOnSwitch());
+//				addSequential(new WaitCommand(5));
+//				addSequential(new ToOppositeSwitch(fromLeft));
+//				addSequential(new PlaceBoxOnSwitch());
 			}
 			else {
 				addSequential(new TimedNextToSwitch());
@@ -42,9 +42,10 @@ public class SwitchAutonomous extends CommandGroup{
 		case "RIGHT":
 			System.out.println("Right");
 			if(switchOnLeft) {
-				addSequential(new WaitCommand(5));
-				addSequential(new ToOppositeSwitch(fromRight));
-				addSequential(new PlaceBoxOnSwitch());
+//				addSequential(new WaitCommand(5));
+//				addSequential(new ToOppositeSwitch(fromRight));
+//				addSequential(new PlaceBoxOnSwitch());
+				addSequential(new TimedNextToSwitch());
 			}
 			else {
 				addSequential(new TimedNextToSwitch());

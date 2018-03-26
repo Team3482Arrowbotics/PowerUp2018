@@ -39,4 +39,8 @@ public class Intake extends Subsystem {
 			leftPiston.set(Value.kReverse);
 		}
 	}
+	public Value getPosition()
+	{
+		return leftPiston.get();
+	}
 }

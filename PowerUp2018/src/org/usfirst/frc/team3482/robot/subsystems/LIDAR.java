@@ -21,11 +21,12 @@ public class LIDAR extends Subsystem{
 		return data[0];
 	}
 	public boolean findFirstBox(boolean backwards, int distance) {
+		System.out.println("Finding Box");
 		int counter = 0;
 		if(backwards) {
 			while(getDistance() > distance) {
 				counter ++; 
-				if(counter > 2000) {
+				if(counter > 10000) {
 					RobotMap.drive.arcadeDrive(0, 0);
 					return true;
 				}

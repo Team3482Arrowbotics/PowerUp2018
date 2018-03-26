@@ -12,7 +12,7 @@ public class BlitzAutonomous extends CommandGroup{
 		
 		super();
 		System.out.println("Blitzkreig!");
-		addSequential(new WaitCommand(7));
+		//addSequential(new WaitCommand(7));
 		addSequential(new TimedCrossAutonLine());
 	}
 }

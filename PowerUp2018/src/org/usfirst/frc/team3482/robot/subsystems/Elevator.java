@@ -20,7 +20,7 @@ public class Elevator extends Subsystem implements Runnable {
 	public static final double AXIS_DEADZONE = 0.1;
 	public static final int MAX_POSITION = 335000, ELEVATOR_SPEED = 25000;
 	public static final double ELEVATOR_P_VALUE = 0.2, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
-			SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .8,
+			BUMP_POSITION = MAX_POSITION * .2, SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .8,
 			MANUAL_DOWN_SPEED = -.6, ELEVATOR_FALLING_RATIO = 0.55;
 	
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000

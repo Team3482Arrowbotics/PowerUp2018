@@ -15,11 +15,11 @@ public class PlaceBoxOnSwitch extends CommandGroup{
 		super();
 		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
 		addSequential(new WaitCommand(1));
-		addSequential(new Outtake(0.35));
-		addSequential(new SetIntakeOut());
+		addParallel(new Outtake(0.35));
+		addParallel(new SetIntakeOut());
 		addSequential(new WaitCommand(1));
 		addSequential(new SetIntakeIn());
-		addSequential(new WaitCommand(0.3));
+		addSequential(new WaitCommand(0.6));
 		addSequential(new SetElevatorPosition(Elevator.BOTTOM_POSITION));
 	}
 

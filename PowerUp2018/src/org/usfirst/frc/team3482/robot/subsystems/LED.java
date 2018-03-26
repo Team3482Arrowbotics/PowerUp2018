@@ -1,10 +1,12 @@
 package org.usfirst.frc.team3482.robot.subsystems;
 
+import org.usfirst.frc.team3482.robot.Robot;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.CANifier.LEDChannel;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -66,7 +68,7 @@ public class LED extends Subsystem{
 	
 	public void ledBoxCondition(String colorBoxOut, String colorBoxIn) {
 		SmartDashboard.putNumber("LIDAR VALUE", RobotMap.intakeLidar.getDistance());
-		if(RobotMap.intakeLidar.getDistance() < 100) { //!RobotMap.intakePhotoelectric.get()
+		if(RobotMap.intakeLidar.getDistance() < 50 && Robot.intake.getPosition()==Value.kForward) { //!RobotMap.intakePhotoelectric.get()
 			//6 for approx. max number for box
 			turnColor(colorBoxIn);
 		}

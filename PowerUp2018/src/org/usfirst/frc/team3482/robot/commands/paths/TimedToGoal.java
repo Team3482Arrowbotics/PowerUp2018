@@ -1,7 +1,9 @@
 package org.usfirst.frc.team3482.robot.commands.paths;
 
+import org.usfirst.frc.team3482.robot.commands.SetElevatorPosition;
 import org.usfirst.frc.team3482.robot.commands.TimedMove;
 import org.usfirst.frc.team3482.robot.commands.Turn;
+import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -13,7 +15,8 @@ public class TimedToGoal extends CommandGroup{
 		{
 			turn=-1;
 		}
+		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
 		addSequential(new Turn(90 * turn));
-		addSequential(new TimedMove(2, .4));
+		addSequential(new TimedMove(1, .4));
 	}
 }

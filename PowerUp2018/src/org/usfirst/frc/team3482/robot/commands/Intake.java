@@ -26,8 +26,8 @@ public class Intake extends Command{
 	}
 	
 	protected void end(){
-		RobotMap.intakeMotorLeft.set(0);
-		RobotMap.intakeMotorRight.set(0);
+		RobotMap.intakeMotorLeft.set(-.15);
+		RobotMap.intakeMotorRight.set(.15);
 		Robot.ledStrip.turnOff();
 		Robot.isSpintake = false;
 	}

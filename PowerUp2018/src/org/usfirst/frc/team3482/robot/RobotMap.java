@@ -70,7 +70,7 @@ public class RobotMap {
 		driveController.setOutputRange(-.7, .7);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
-		driveController.setAbsoluteTolerance(1);
+		driveController.setAbsoluteTolerance(2);
 
 		intakeMotorLeft = new WPI_TalonSRX(8);
 		intakeMotorRight = new WPI_TalonSRX(4);
@@ -93,7 +93,7 @@ public class RobotMap {
 		rotationController.setInputRange(-180, 180);
 		rotationController.setOutputRange(-.7, .7);
 		rotationController.setContinuous(true);
-		rotationController.setAbsoluteTolerance(1);
+		rotationController.setAbsoluteTolerance(2);
 		
 		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
 		counteractDrift.setInputRange(-180, 180);

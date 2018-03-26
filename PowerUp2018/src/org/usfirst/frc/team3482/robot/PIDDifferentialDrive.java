@@ -57,11 +57,11 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 		//System.out.println("Current Speed: " + currentSpeed);
 		
 		if(rotation < this.m_deadband && rotation > -m_deadband) {
-			if(turning && speed > m_deadband || speed < -m_deadband) {
-				startAdjusting();
-				turning = false;
-				System.out.println("Does this wonky thing ever run?");
-			}
+//			if(turning && speed > m_deadband || speed < -m_deadband) {
+//				startAdjusting();
+//				turning = false;
+//				System.out.println("Does this wonky thing ever run?");
+//			}
 			curvatureDrive(speed, rot.adjustment, false);
 		} else {
 			if(!turning) {
