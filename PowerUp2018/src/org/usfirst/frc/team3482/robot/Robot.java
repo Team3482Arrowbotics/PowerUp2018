@@ -100,8 +100,8 @@ public class Robot extends IterativeRobot {
 		//		autoChooser.addObject("Individual Function Testing", autoType = "Test");
 		//		autoChooser.addObject("Switch Straight Ahead", autoType = "Basic");
 
-		SmartDashboard.putData(sPosChooser);
-		SmartDashboard.putData(autoChooser);
+		SmartDashboard.putData("Start Position" , sPosChooser);
+		SmartDashboard.putData("Autonomous Path" , autoChooser);
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
 
