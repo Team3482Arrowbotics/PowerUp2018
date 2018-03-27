@@ -1,10 +1,6 @@
 package org.usfirst.frc.team3482.robot;
 
-import org.usfirst.frc.team3482.robot.commands.BlitzAutonomous;
-import org.usfirst.frc.team3482.robot.commands.SwitchAutonomous;
-import org.usfirst.frc.team3482.robot.commands.TestAutonomous;
-import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
-import org.usfirst.frc.team3482.robot.commands.TwoBoxAutonomous;
+import org.usfirst.frc.team3482.robot.commands.paths.AutoConstants;
 import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
@@ -50,6 +46,7 @@ public class Robot extends IterativeRobot {
 	public SendableChooser<String> sPosChooser;
 	//	public SendableChooser<String> baselineChooser;
 	public SendableChooser<String> autoChooser;
+	public AutoConstants constants = new AutoConstants();
 	String startPos;
 	String autoType;
 	Command autoCommand;
@@ -90,8 +87,8 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Timed", "Time");
 		autoChooser.addObject("Two Box", "Two Box");
 		autoChooser.addObject("Testing", "Test");
-		autoChooser.addObject("Switch", "Basic");
-		autoChooser.addObject("Scale", "Basic");
+		autoChooser.addObject("Switch", "Switch");
+		autoChooser.addObject("Scale", "Scale");
 
 		//		autoChooser.addDefault("No Autonomous", autoType = "Null");
 		//		autoChooser.addObject("Blitz", autoType = "Blitz");
@@ -102,6 +99,7 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putData("Start Position" , sPosChooser);
 		SmartDashboard.putData("Autonomous Path" , autoChooser);
+		constants.set();
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
 
@@ -134,6 +132,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+		constants.get();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		String[] data = gameData.split("");
 		switchOnLeft = data[0].equals("L");
@@ -156,34 +155,39 @@ public class Robot extends IterativeRobot {
 		//		}
 
 		//String sPos = sPosChooser.getSelected();
-
-		System.out.println(startPos);
+		startPos =sPosChooser.getSelected();
+		System.out.println("Start Position: " +startPos);
 		autoType = autoChooser.getSelected();
 		System.out.println(autoType);
 		switch(autoType) {
-		case "Encoders":
-			new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
-			System.out.println("Running Encoder Auton");
+		case "Two Box":
+//			new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
+			System.out.println("Running Two Box Auton");
 			break;
 		case "Timed":
-			new TimedAutonomous(switchOnLeft, startPos).start();
+//			new TimedAutonomous(switchOnLeft, startPos).start();
 			System.out.println("Running Timed Auton");
 			break;
 		case "Test":
-			new TestAutonomous().start();
+//			new TestAutonomous().start();
 			System.out.println("Running Test Auton");
 			break;
 		case "Blitz":
 			System.out.println("AAAAAAAAAAAAAA");
-			new BlitzAutonomous().start();
+//			new BlitzAutonomous().start();
 			break;
 		case "Switch":
-			new SwitchAutonomous(switchOnLeft, startPos).start();
+//			new SwitchAutonomous(switchOnLeft, startPos).start();
 			System.out.println("Running Switch Auton");
+			break;
+		case "Scale":
+//			new ScaleAutonomous(scaleOnLeft, startPos).start();
+			System.out.println("Running Scale Auton");
 			break;
 		default:
 			break;
 		}
+		System.out.println("Switch Distance: "+ AutoConstants.nextToSwitchDistance);
 	}
 
 	/**
@@ -192,10 +196,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		elevator.run();
-		SmartDashboard.putNumber("Left Encoder: ", RobotMap.encoderLeft.getDistance());
-		SmartDashboard.putNumber("Right Encoder: ", RobotMap.encoderRight.getDistance());
-		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw());
+//		elevator.run();
+//		SmartDashboard.putNumber("Left Encoder: ", RobotMap.encoderLeft.getDistance());
+//		SmartDashboard.putNumber("Right Encoder: ", RobotMap.encoderRight.getDistance());
+//		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw());
 	}
 
 	/**

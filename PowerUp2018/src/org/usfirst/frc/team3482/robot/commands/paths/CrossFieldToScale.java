@@ -16,7 +16,7 @@ public class CrossFieldToScale extends CommandGroup{
 			turnMultiplier = 1;
 		}
 		addSequential(new Turn(turnMultiplier * 90));
-		addSequential(new Move(250));
+		addSequential(new Move(AutoConstants.crossFieldToScaleDistance));
 		addSequential(new Turn(turnMultiplier * -90));
 	}
 }

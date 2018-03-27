@@ -6,9 +6,8 @@ import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class PassSwitch extends CommandGroup {
-	public PassSwitch() {
-		addSequential(new SetElevatorPosition(Elevator.BUMP_POSITION));
-		addSequential(new Move(AutoConstants.passSwitchDistance));
+public class AwayFromWall extends CommandGroup {
+	public AwayFromWall() {
+		addSequential(new Move(36));
 	}
 }

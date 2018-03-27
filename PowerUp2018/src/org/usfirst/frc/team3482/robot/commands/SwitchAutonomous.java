@@ -1,13 +1,13 @@
 package org.usfirst.frc.team3482.robot.commands;
 
+import org.usfirst.frc.team3482.robot.commands.paths.ToSwitchFromMiddle;
+import org.usfirst.frc.team3482.robot.commands.paths.AwayFromWall;
+import org.usfirst.frc.team3482.robot.commands.paths.LastPushToSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedNextToSwitch;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedToGoal;
-import org.usfirst.frc.team3482.robot.commands.paths.ToOppositeSwitch;
+import org.usfirst.frc.team3482.robot.commands.paths.SidePushToSwitch;
+import org.usfirst.frc.team3482.robot.commands.paths.NextToSwitch;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class SwitchAutonomous extends CommandGroup{
 	private boolean fromRight = true, fromLeft = false, toRight = true, toLeft = false;
@@ -21,22 +21,26 @@ public class SwitchAutonomous extends CommandGroup{
 //				addSequential(new WaitCommand(5));
 //				addSequential(new ToOppositeSwitch(fromLeft));
 //				addSequential(new PlaceBoxOnSwitch());
+				addSequential(new NextToSwitch());
 			}
 			else {
-				addSequential(new TimedNextToSwitch());
-				addSequential(new TimedToGoal(fromLeft));
+				addSequential(new NextToSwitch());
+				addSequential(new SidePushToSwitch(fromLeft));
 				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;
 
 		case "MIDDLE":
 			System.out.println("Middle");
+			addSequential(new AwayFromWall());
 			if(switchOnLeft) {
-				addSequential(new TimedMiddleBaseline(toLeft));
+				addSequential(new ToSwitchFromMiddle(toLeft));
 			}
 			else {
-				addSequential(new TimedMiddleBaseline(toRight));
+				addSequential(new ToSwitchFromMiddle(toRight));
 			}
+			addSequential(new LastPushToSwitch());
+			addSequential(new PlaceBoxOnSwitch());
 			break;
 
 		case "RIGHT":
@@ -45,11 +49,11 @@ public class SwitchAutonomous extends CommandGroup{
 //				addSequential(new WaitCommand(5));
 //				addSequential(new ToOppositeSwitch(fromRight));
 //				addSequential(new PlaceBoxOnSwitch());
-				addSequential(new TimedNextToSwitch());
+				addSequential(new NextToSwitch());
 			}
 			else {
-				addSequential(new TimedNextToSwitch());
-				addSequential(new TimedToGoal(fromRight));
+				addSequential(new NextToSwitch());
+				addSequential(new SidePushToSwitch(fromRight));
 				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;

@@ -9,6 +9,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class StartToScale extends CommandGroup {
 	public StartToScale() {
 		addSequential(new SetElevatorPosition(Elevator.BUMP_POSITION));
-		addSequential(new Move(290));
+		addSequential(new Move(AutoConstants.toScaleDistance));
 	}
 }

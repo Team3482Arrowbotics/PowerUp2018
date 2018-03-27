@@ -9,14 +9,14 @@ public class ScaleToSameSideBox extends CommandGroup{
 	boolean fromRight;
 	int turnMultiplier;
 	public ScaleToSameSideBox(boolean fromRight) {
-		//Precondition: Assume position 45 (if Left) or -45 (if Right)
+		//Precondition: Assume position 90 (if Left) or -90 (if Right)
 		this.fromRight = fromRight;
 		if(fromRight) {
 			turnMultiplier = -1;
 		} else {
 			turnMultiplier = 1;
 		}
-		addSequential(new Turn(turnMultiplier * 135));
-		addSequential(new Move(63));
+		addSequential(new Turn(turnMultiplier * 90));
+		addSequential(new Move(AutoConstants.scaleToSameSideBoxDistance));
 	}
 }

@@ -3,8 +3,8 @@ package org.usfirst.frc.team3482.robot.commands;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedCrossAutonLine;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedNextToSwitch;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedToGoal;
+import org.usfirst.frc.team3482.robot.commands.paths.NextToSwitch;
+import org.usfirst.frc.team3482.robot.commands.paths.SidePushToSwitch;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -17,10 +17,10 @@ public class TimedAutonomous extends CommandGroup {
 		switch (sPos) {
 		case "LEFT":
 			System.out.println("Left");
-			addSequential(new TimedNextToSwitch());
+			addSequential(new NextToSwitch());
 			if (switchOnLeft) {
 				//addSequential(new TimedCrossAutonLine());
-				addSequential(new TimedToGoal(fromLeft));
+				addSequential(new SidePushToSwitch(fromLeft));
 				addSequential(new PlaceBoxOnSwitch());
 			}
 
@@ -44,8 +44,8 @@ public class TimedAutonomous extends CommandGroup {
 			if (switchOnLeft) {
 				addSequential(new TimedCrossAutonLine());
 			} else {
-				addSequential(new TimedNextToSwitch());
-				addSequential(new TimedToGoal(fromRight));
+				addSequential(new NextToSwitch());
+				addSequential(new SidePushToSwitch(fromRight));
 				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;

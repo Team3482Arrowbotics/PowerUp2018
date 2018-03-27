@@ -5,7 +5,7 @@ import org.usfirst.frc.team3482.robot.commands.paths.PassSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnScale;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.TimedMiddleBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.TimedNextToSwitch;
+import org.usfirst.frc.team3482.robot.commands.paths.NextToSwitch;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 

@@ -16,7 +16,7 @@ public class AcrossBaseline extends CommandGroup{
 			turnMultiplier = 1;
 		}
 		addSequential(new Turn(turnMultiplier * 90));
-		addSequential(new Move(200));
+		addSequential(new Move(AutoConstants.baselineDistance));
 		addSequential(new Turn(turnMultiplier * -90));
 	}
 }
