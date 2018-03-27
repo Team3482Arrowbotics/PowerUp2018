@@ -12,10 +12,10 @@ public class ToSwitchFromMiddle extends CommandGroup{
 	public ToSwitchFromMiddle(boolean toRight) {
 		if(toRight) {
 			turnMultiplier = -1;
-			distance = AutoConstants.middleToRightSwitchDistance;
+			distance = AutoConstants.middleToRightSwitch;
 		} else {
 			turnMultiplier = 1;
-			distance = AutoConstants.middleToLeftSwitchDistance;
+			distance = AutoConstants.middleToLeftSwitch;
 		}
 		
 		addSequential(new Turn(turnMultiplier * -90));

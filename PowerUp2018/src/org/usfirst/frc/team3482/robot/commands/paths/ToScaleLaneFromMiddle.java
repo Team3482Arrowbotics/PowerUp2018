@@ -5,18 +5,21 @@ import org.usfirst.frc.team3482.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class ScaleToSameSideBox extends CommandGroup{
+public class ToScaleLaneFromMiddle extends CommandGroup{
 	boolean fromRight;
 	int turnMultiplier;
-	public ScaleToSameSideBox(boolean fromRight) {
-		//Precondition: Assume position 90 (if Left) or -90 (if Right)
-		this.fromRight = fromRight;
-		if(fromRight) {
+	double distance;
+	public ToScaleLaneFromMiddle(boolean toRight) {
+		if(toRight) {
 			turnMultiplier = -1;
+			distance = AutoConstants.middleToRightScaleLane;
 		} else {
 			turnMultiplier = 1;
+			distance = AutoConstants.middleToLeftScaleLane;
 		}
+		
+		addSequential(new Turn(turnMultiplier * -90));
+		addSequential(new Move(distance));
 		addSequential(new Turn(turnMultiplier * 90));
-		addSequential(new Move(AutoConstants.scaleToSameSideBox));
 	}
 }

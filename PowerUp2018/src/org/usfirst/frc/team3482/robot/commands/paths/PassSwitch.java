@@ -9,6 +9,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class PassSwitch extends CommandGroup {
 	public PassSwitch() {
 		addSequential(new SetElevatorPosition(Elevator.BUMP_POSITION));
-		addSequential(new Move(AutoConstants.passSwitchDistance));
+		addSequential(new Move(AutoConstants.passSwitch));
 	}
 }

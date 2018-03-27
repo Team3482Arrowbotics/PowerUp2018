@@ -1,13 +1,13 @@
 package org.usfirst.frc.team3482.robot.commands;
 
 import org.usfirst.frc.team3482.robot.commands.paths.AcrossBaseline;
-import org.usfirst.frc.team3482.robot.commands.paths.CrossFieldToScale;
+import org.usfirst.frc.team3482.robot.commands.paths.CrossFieldToScaleLane;
 import org.usfirst.frc.team3482.robot.commands.paths.FindBox;
-import org.usfirst.frc.team3482.robot.commands.paths.GetBox;
+import org.usfirst.frc.team3482.robot.commands.paths.GoToBox;
+import org.usfirst.frc.team3482.robot.commands.paths.PickUpBox;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnScale;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.ScaleToSameSideBox;
-import org.usfirst.frc.team3482.robot.commands.paths.StartPosition;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.ToSwitchFromMiddle;
 
@@ -18,7 +18,6 @@ public class TwoBoxAutonomous extends CommandGroup{
 	boolean fromRight = true, fromLeft = false, 
 			toRight = true, toLeft = false;
 
-	StartPosition sPos;
 	public TwoBoxAutonomous(boolean switchOnLeft, boolean scaleOnLeft, String sPos) {
 		super();
 		addSequential(new Move(6));
@@ -30,28 +29,32 @@ public class TwoBoxAutonomous extends CommandGroup{
 				addSequential(new ScaleToSameSideBox(fromLeft));
 				if(switchOnLeft) {
 					addSequential(new FindBox(fromLeft));
-					addSequential(new GetBox());
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
-				} else {
-					addSequential(new CrossFieldToScale(fromLeft));
+				} else { //switch on right
+					addSequential(new CrossFieldToScaleLane(fromLeft));
 					addSequential(new FindBox(fromRight));
-					addSequential(new GetBox());
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
-			} else {
+			} else { //scale on right
 
 				addSequential(new AcrossBaseline(fromLeft));
 				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(fromRight));
 				addSequential(new ScaleToSameSideBox(fromRight));
 				if(switchOnLeft) {
-					addSequential(new CrossFieldToScale(fromRight));
-					addSequential(new FindBox());
-					addSequential(new GetBox());
+					addSequential(new CrossFieldToScaleLane(fromRight));
+					addSequential(new FindBox(fromLeft));
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
-				} else {
-					addSequential(new FindBox(true));
-					addSequential(new GetBox());
+				} else { //switch on right
+					addSequential(new FindBox(fromRight));
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
 			}
@@ -61,6 +64,8 @@ public class TwoBoxAutonomous extends CommandGroup{
 			if(scaleOnLeft) {
 
 				addSequential(new ToSwitchFromMiddle(toLeft));
+				
+				
 				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(fromLeft));
 				addSequential(new ScaleToSameSideBox(fromLeft));
@@ -68,27 +73,29 @@ public class TwoBoxAutonomous extends CommandGroup{
 				if(switchOnLeft) {
 					addSequential(new FindBox(fromLeft));
 
-				} else {
-					addSequential(new CrossFieldToScale(fromLeft));
+				} else { //switch on right
+					addSequential(new CrossFieldToScaleLane(fromLeft));
 					addSequential(new FindBox(fromRight));
 				}
-				addSequential(new GetBox());
+				addSequential(new GoToBox());
+				addSequential(new PickUpBox());
 				addSequential(new PlaceBoxOnSwitch());
 
-			} else {
+			} else { //scale on right
 				addSequential(new ToSwitchFromMiddle(toRight));
 
 				addSequential(new PlaceBoxOnScale(fromRight));
 				addSequential(new ScaleToSameSideBox(fromRight));
 
 				if(switchOnLeft) {
-					addSequential(new CrossFieldToScale(fromRight));
+					addSequential(new CrossFieldToScaleLane(fromRight));
 					addSequential(new FindBox(fromLeft));
 					
-				} else {
+				} else { //switch on right
 					addSequential(new FindBox(fromRight));
 				}
-				addSequential(new GetBox());
+				addSequential(new GoToBox());
+				addSequential(new PickUpBox());
 				addSequential(new PlaceBoxOnSwitch());
 			}
 			break;
@@ -101,12 +108,14 @@ public class TwoBoxAutonomous extends CommandGroup{
 				addSequential(new ScaleToSameSideBox(fromLeft));
 				if(switchOnLeft) {
 					addSequential(new FindBox(fromLeft));
-					addSequential(new GetBox());
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
 				} else {
-					addSequential(new CrossFieldToScale(fromLeft));
+					addSequential(new CrossFieldToScaleLane(fromLeft));
 					addSequential(new FindBox(fromRight));
-					addSequential(new GetBox());
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
 			} else {
@@ -114,13 +123,15 @@ public class TwoBoxAutonomous extends CommandGroup{
 				addSequential(new PlaceBoxOnScale(fromRight));
 				addSequential(new ScaleToSameSideBox(fromRight));
 				if(switchOnLeft) {
-					addSequential(new CrossFieldToScale(fromRight));
+					addSequential(new CrossFieldToScaleLane(fromRight));
 					addSequential(new FindBox(fromLeft));
-					addSequential(new GetBox());
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
 				} else {
 					addSequential(new FindBox(fromRight));
-					addSequential(new GetBox());
+					addSequential(new GoToBox());
+					addSequential(new PickUpBox());
 					addSequential(new PlaceBoxOnSwitch());
 				}
 			}

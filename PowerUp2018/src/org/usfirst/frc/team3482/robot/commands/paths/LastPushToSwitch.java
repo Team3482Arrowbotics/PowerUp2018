@@ -9,6 +9,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class LastPushToSwitch extends CommandGroup {
 	public LastPushToSwitch(){
 		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
-		addSequential(new Move(AutoConstants.lastPushDistance));
+		addSequential(new Move(AutoConstants.lastPush));
 	}
 }

@@ -1,30 +1,26 @@
 package org.usfirst.frc.team3482.robot.commands.paths;
 
 import org.usfirst.frc.team3482.robot.Robot;
+import org.usfirst.frc.team3482.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class FindBox extends Command{
-	boolean fromRight;
-	public static int boxDistance = 2000;
+public class FindBox extends CommandGroup{
+	int direction = 1;
 	public FindBox(boolean fromRight) {
-		this.fromRight = fromRight;
+		System.out.println("Finding Box");
+		//int counter = 0;
+		if(!fromRight) {
+			direction = -1;
+		}
+		System.out.println("Distance: "+Robot.sideLidar.getDistance());
+		while(Robot.sideLidar.getDistance() > 500) {
+			//counter ++; 
+			//if(counter > 10000) {
+				RobotMap.drive.arcadeDrive(0, 0);
+			//}
+			RobotMap.drive.arcadeDrive(direction * .5, 0);
+		}
+		RobotMap.drive.arcadeDrive(0, 0);
 	}
-	public FindBox() {
-		this.fromRight = false;
-	}
-	protected void initialize() {
-		Robot.sideLidar.findFirstBox(fromRight, boxDistance);
-	}
-	protected void execute() {
-		
-	}
-	protected void end() {
-		
-	}
-	@Override
-	protected boolean isFinished() {
-		return true;
-	}
-
 }

@@ -8,6 +8,6 @@ public class NextToSwitch extends CommandGroup{
 	
 	public NextToSwitch() {
 		super();
-		addSequential(new Move(AutoConstants.nextToSwitchDistance));
+		addSequential(new Move(AutoConstants.nextToSwitch));
 	}
 }

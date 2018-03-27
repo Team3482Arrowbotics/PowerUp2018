@@ -5,10 +5,10 @@ import org.usfirst.frc.team3482.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class CrossFieldToScale extends CommandGroup{
+public class CrossFieldToScaleLane extends CommandGroup{
 	boolean fromRight;
 	int turnMultiplier;
-	public CrossFieldToScale(boolean fromRight) {
+	public CrossFieldToScaleLane(boolean fromRight) {
 		this.fromRight = fromRight;
 		if(fromRight) {
 			turnMultiplier = -1;
@@ -16,7 +16,7 @@ public class CrossFieldToScale extends CommandGroup{
 			turnMultiplier = 1;
 		}
 		addSequential(new Turn(turnMultiplier * 90));
-		addSequential(new Move(AutoConstants.crossFieldToScaleDistance));
+		addSequential(new Move(AutoConstants.crossFieldToScale));
 		addSequential(new Turn(turnMultiplier * -90));
 	}
 }

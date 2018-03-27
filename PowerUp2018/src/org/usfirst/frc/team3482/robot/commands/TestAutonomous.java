@@ -1,7 +1,7 @@
 package org.usfirst.frc.team3482.robot.commands;
 
-import org.usfirst.frc.team3482.robot.commands.paths.FindFirstBox;
-import org.usfirst.frc.team3482.robot.commands.paths.GetBox;
+import org.usfirst.frc.team3482.robot.commands.paths.FindBox;
+import org.usfirst.frc.team3482.robot.commands.paths.GoToBox;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -12,7 +12,7 @@ public class TestAutonomous extends CommandGroup{
 	public TestAutonomous() {
 		
 		super();
-		addSequential(new FindFirstBox(fromRight));
-		addSequential(new GetBox());
+		addSequential(new FindBox(fromRight));
+		addSequential(new GoToBox());
 	}
 }

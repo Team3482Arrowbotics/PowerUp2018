@@ -44,7 +44,6 @@ public class Robot extends IterativeRobot {
 	// 19 ticks/inch
 	// 0.05 in per tick?
 	public SendableChooser<String> sPosChooser;
-	//	public SendableChooser<String> baselineChooser;
 	public SendableChooser<String> autoChooser;
 	public AutoConstants constants = new AutoConstants();
 	String startPos;
@@ -80,7 +79,6 @@ public class Robot extends IterativeRobot {
 		sPosChooser.addDefault("Left", "LEFT");
 		sPosChooser.addObject("Right", "RIGHT");
 
-
 		autoChooser = new SendableChooser<String>();
 		autoChooser.addDefault("No Autonomous", "Null");
 		autoChooser.addObject("Blitz", "Blitz");
@@ -89,13 +87,6 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Testing", "Test");
 		autoChooser.addObject("Switch", "Switch");
 		autoChooser.addObject("Scale", "Scale");
-
-		//		autoChooser.addDefault("No Autonomous", autoType = "Null");
-		//		autoChooser.addObject("Blitz", autoType = "Blitz");
-		//		autoChooser.addObject("Timed Autonomous", autoType = "Time");
-		//		autoChooser.addObject("Encoder Autonomous", autoType = "Encoders");
-		//		autoChooser.addObject("Individual Function Testing", autoType = "Test");
-		//		autoChooser.addObject("Switch Straight Ahead", autoType = "Basic");
 
 		SmartDashboard.putData("Start Position" , sPosChooser);
 		SmartDashboard.putData("Autonomous Path" , autoChooser);
@@ -138,27 +129,12 @@ public class Robot extends IterativeRobot {
 		switchOnLeft = data[0].equals("L");
 		scaleOnLeft = data[1].equals("L");
 
-		//		String crossingMethod = baselineChooser.getSelected();
-		//		if(crossingMethod == null) {
-		//			crossingMethod = "";
-		//		}
-		//
-		//		switch(crossingMethod) {
-		//		case "base":
-		//			crossBaseline = true;
-		//			break;
-		//		case "diag":
-		//			crossBaseline = false;
-		//			break;
-		//		default:
-		//			crossBaseline = true;
-		//		}
-
-		//String sPos = sPosChooser.getSelected();
 		startPos =sPosChooser.getSelected();
 		System.out.println("Start Position: " +startPos);
+		
 		autoType = autoChooser.getSelected();
 		System.out.println(autoType);
+		
 		switch(autoType) {
 		case "Two Box":
 //			new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
@@ -187,7 +163,6 @@ public class Robot extends IterativeRobot {
 		default:
 			break;
 		}
-		System.out.println("Switch Distance: "+ AutoConstants.nextToSwitchDistance);
 	}
 
 	/**
