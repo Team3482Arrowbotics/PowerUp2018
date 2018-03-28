@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3482.robot.subsystems;
 
+import org.usfirst.frc.team3482.robot.OI;
 import org.usfirst.frc.team3482.robot.Robot;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
@@ -15,14 +16,14 @@ public class Elevator extends Subsystem implements Runnable {
 	protected static double targetPos;
 	protected static double absolutePos;
 	protected static double absoluteTarget;
-	public static final int AXIS = Robot.oi.ELEVATOR_AXIS;
+	public static final int AXIS = OI.ELEVATOR_AXIS;
 	private double AxisPos;
 	public static final double AXIS_DEADZONE = 0.1;
 	public static final int MAX_POSITION = 335000, ELEVATOR_SPEED = 25000;
-	public static final double ELEVATOR_P_VALUE = 0.2, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
+	public static final double ELEVATOR_P_VALUE = 0.2, ELEVATOR_D_VALUE = 0.2, BOTTOM_POSITION = 0, TOP_POSITION = MAX_POSITION,
 			BUMP_POSITION = MAX_POSITION * .2, SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .8,
 			MANUAL_DOWN_SPEED = -.6, ELEVATOR_FALLING_RATIO = 0.55;
-	
+
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
 	// 15:1 Small Spool Max = 665000 Speed = 50000
 	// 10:1 Big Spool Max = 335000 Speed = 20000
@@ -60,19 +61,17 @@ public class Elevator extends Subsystem implements Runnable {
 			Robot.isEMovingUp = false;
 			Robot.isEMovingDown = false;
 		}
-		
-		
+
 		run();
 	}
 	// RUNS EVERY TICK (see teleopPeriodic)
 	public void run() {
-		
+
 		if (locked) {
 			elevatorTalon.set(ControlMode.Position, targetPos);
 		}
 
 		elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
-
 		// System.out.println("Set Pos: " + targetPos);
 		//System.out.println("Position: " + getCurrentPos());
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
@@ -87,60 +86,33 @@ public class Elevator extends Subsystem implements Runnable {
 	public void resetEncoder() {
 		RobotMap.elevatorTalon.setSelectedSensorPosition(0, 0, 0);
 		targetPos = 0;
-
-		// SOMETIMES ENCODER VALUES FLIP WHEN SWAPPING MOTORS
-		// IF BOTTOM IS MAX AND TOP IS 0, USE THIS
-
-		// RobotMap.elevatorTalon.setSelectedSensorPosition(MAX_POSITION, 0, 0);
-		// targetPos = MAX_POSITION;
 	}
 
-	// SET ELEVATOR POSITION
 	public void set(double axisPos) {
-		double axisRatio = axisPos;
+		double position = axisPos;
 
-		if(axisRatio<0)
+		if(position<0)
 		{
-			axisRatio*=ELEVATOR_FALLING_RATIO;
-		}
-		
-		axisRatio *= ELEVATOR_SPEED;
-		axisRatio += getCurrentPos();
-
-		if (axisRatio > MAX_POSITION) {
-			axisRatio = MAX_POSITION;
+			position*=ELEVATOR_FALLING_RATIO;
 		}
 
-		if (axisRatio < 0) {
-			axisRatio = 0;
+		position *= ELEVATOR_SPEED;
+		position += getCurrentPos();
+
+		if (position > MAX_POSITION) {
+			position = MAX_POSITION;
 		}
 
-		targetPos = axisRatio;
+		if (position < 0) {
+			position = 0;
+		}
+
+		targetPos = position;
 	}
 
-	public void autonomousSet(double pos) {
-		//System.out.println(elevatorTalon.configPeakOutputReverse(ELEVATOR_FALLING_RATIO, 1));
+	public void absoluteSet(double pos) {
 		targetPos = pos;
 	}
-	
-//	public void absoluteSet(double pos) {
-//		absolutePos = pos;
-//
-//		while (absolutePos - getCurrentPos() > 500) {
-//
-//			if (absolutePos - getCurrentPos() > 0) {
-//				absoluteTarget = set(1);
-//			}
-//			
-//			if (absolutePos - getCurrentPos() < 0) {
-//				absoluteTarget = set(-ELEVATOR_FALLING_RATIO);
-//			}
-//
-//			elevatorTalon.set(ControlMode.Position, absoluteTarget);
-//			elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
-//		}
-//		targetPos = getCurrentPos();
-//	}
 
 	public void lock(boolean islocked) {
 		targetPos = getCurrentPos();
@@ -148,13 +120,12 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 
 	public boolean isTop() {
-		if (getCurrentPos() > (MAX_POSITION - (MAX_POSITION / 100))) {
+		if (getCurrentPos() > (MAX_POSITION - (MAX_POSITION / 80))) {
 			return true;
 		}
 		return false;
 	}
 
-	// GETTERS AND SETTERS
 	public static double getCurrentPos() {
 		return elevatorTalon.getSelectedSensorPosition(0);
 	}
@@ -168,17 +139,10 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 
 	public static double getSpeedRatio() {
-
-		// IF ENCODER VALUES FLIP (TOP IS 0, BOTTOM IS MAX)
-		// return ((getCurrentPos() / MAX_POSITION) * 0.75) + 0.25;
-
 		return (1 - ((getCurrentPos() / MAX_POSITION) * 0.85) + 0.15);
 	}
 
 	public static double getTurnRatio() {
-		// IF ENCODER VALUES FLIP (TOP IS 0, BOTTOM IS MAX)
-		// return ((getCurrentPos() / MAX_POSITION) * 0.5) + 0.5;
-
 		return (1 - ((getCurrentPos() / MAX_POSITION) * 0.65) + 0.35);
 	}
 }

@@ -10,6 +10,6 @@ public class SetElevatorPosition extends InstantCommand {
 		this.pos = pos;
 	}
 	protected void initialize() {
-		Robot.elevator.autonomousSet(pos);
+		Robot.elevator.absoluteSet(pos);
 	}
 }

@@ -5,10 +5,6 @@ import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
 import org.usfirst.frc.team3482.robot.subsystems.LED;
-import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
-import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
-
-import com.ctre.phoenix.CANifier;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -28,9 +24,6 @@ public class Robot extends IterativeRobot {
 	public static Intake intake;
 	public static Elevator elevator;
 	public static Climber climber;
-	public static LIDAR sideLidar;
-	//public static LIDAR intakeLidar;
-	public static Ultrasonic rangeFinder;
 	public static UsbCamera camera;
 	public static CameraServer cameraServer;
 	public static boolean switchOnLeft, scaleOnLeft, crossBaseline;
@@ -39,10 +32,6 @@ public class Robot extends IterativeRobot {
 	public static boolean isSpintake, isSpoutake, isClimbing, isEMovingUp, isEMovingDown, boxInRange;
 	public String colorsArray[];
 	public Preferences prefs;
-
-	// 230 encoder ticks per foot
-	// 19 ticks/inch
-	// 0.05 in per tick?
 	public SendableChooser<String> sPosChooser;
 	public SendableChooser<String> autoChooser;
 	public AutoConstants constants = new AutoConstants();
@@ -68,11 +57,9 @@ public class Robot extends IterativeRobot {
 		intake = new Intake();
 		elevator = new Elevator();
 		climber = new Climber();
-		sideLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel0);
-		//intakeLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel1);
-		rangeFinder = new Ultrasonic(0);
+		
 
-		RobotMap.encoders.reset();
+//		RobotMap.encoders.reset();
 
 		sPosChooser = new SendableChooser<String>();
 		sPosChooser.addObject("Middle", "MIDDLE");
@@ -90,6 +77,7 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putData("Start Position" , sPosChooser);
 		SmartDashboard.putData("Autonomous Path" , autoChooser);
+		
 		constants.set();
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
@@ -112,6 +100,13 @@ public class Robot extends IterativeRobot {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
 					ledStrip.turnColor("red");
+				}
+				if (elevator.isTop()) {
+					oi.xBox.setRumble(RumbleType.kLeftRumble, 1.0);
+					oi.xBox.setRumble(RumbleType.kRightRumble, 1.0);
+				} else {
+					oi.xBox.setRumble(RumbleType.kLeftRumble, 0.0);
+					oi.xBox.setRumble(RumbleType.kRightRumble, 0.0);
 				}
 			}
 		}).start();
@@ -171,10 +166,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-//		elevator.run();
-//		SmartDashboard.putNumber("Left Encoder: ", RobotMap.encoderLeft.getDistance());
-//		SmartDashboard.putNumber("Right Encoder: ", RobotMap.encoderRight.getDistance());
-//		SmartDashboard.putNumber("Angle: ", RobotMap.navx.getYaw());
+		elevator.run();
 	}
 
 	/**
@@ -183,31 +175,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		elevator.teleopRun();
-		System.out.println("Side Lidar: "+sideLidar.getDistance());
+		System.out.println("Side Lidar: "+RobotMap.sideLidar.getDistance());
 		System.out.println("Intake Lidar: "+RobotMap.intakeLidar.getDistance());
 
-		// System.out.println("Left Encoder: " + RobotMap.encoderLeft.get() + " Right
-		// Encoder: " + RobotMap.encoderRight.get());
 		speed = -oi.xBox.getRawAxis(1) * Elevator.getSpeedRatio();
 		turnSpeed = oi.xBox.getRawAxis(4) * Elevator.getTurnRatio();
 		RobotMap.drive.arcadeDrive(speed, turnSpeed);
-		// if(turnSpeed <= 0.1) {
-		// RobotMap.rotationController.enable();
-		// RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
-		// } else {
-		// RobotMap.rotationController.reset();
-		// RobotMap.navx.reset();
-		// RobotMap.rotationController.disable();
-		// }
-		//SmartDashboard.putBoolean("Is box in: ", !RobotMap.intakePhotoelectric.get());
-
-		if (elevator.isTop()) {
-			oi.xBox.setRumble(RumbleType.kLeftRumble, 1.0);
-			oi.xBox.setRumble(RumbleType.kRightRumble, 1.0);
-		} else {
-			oi.xBox.setRumble(RumbleType.kLeftRumble, 0.0);
-			oi.xBox.setRumble(RumbleType.kRightRumble, 0.0);
-		}
+		
 		Scheduler.getInstance().run();
 	}
 

@@ -8,6 +8,7 @@ public class AutoConstants {
 	public static double passSwitch;
 	public static double toScale;
 	public static double crossFieldToScale;
+	public static double crossFieldToSwitch;
 	public static double middleToLeftSwitch;
 	public static double middleToRightSwitch;
 	public static double middleToRightScaleLane;
@@ -15,6 +16,8 @@ public class AutoConstants {
 	public static double lastPush;
 	public static double scaleToSameSideBox;
 	public static double baseline;
+	public static double backup;
+	public static double awayFromWall;
 	
 	public AutoConstants() {
 		nextToSwitch = 150;
@@ -22,12 +25,15 @@ public class AutoConstants {
 		baseline = 200;
 		toScale = 290;
 		crossFieldToScale = 250;
+		crossFieldToSwitch = 225;
 		middleToLeftSwitch = 25;
 		middleToRightSwitch = 25;
 		lastPush = 20;
 		scaleToSameSideBox = 63;
 		middleToLeftScaleLane = 80;
 		middleToRightScaleLane = 80;
+		backup = -20;
+		awayFromWall = 36;
 	}
 	
 	public void set() {
@@ -39,8 +45,11 @@ public class AutoConstants {
 		SmartDashboard.putNumber("Middle to Left Switch" , middleToLeftSwitch);
 		SmartDashboard.putNumber("Middle to Right Scale" , middleToRightScaleLane);
 		SmartDashboard.putNumber("Cross Field To Scale" , crossFieldToScale);
+		SmartDashboard.putNumber("Cross Field To Switch" , crossFieldToSwitch);
 		SmartDashboard.putNumber("Scale To Same Side Box" , scaleToSameSideBox);
 		SmartDashboard.putNumber("Cross Baseline" , baseline);
+		SmartDashboard.putNumber("Backup w/ Box" , backup);
+		SmartDashboard.putNumber("Move Away From Wall" , awayFromWall);
 	}
 	
 	public void get() {
@@ -51,8 +60,10 @@ public class AutoConstants {
 		middleToLeftSwitch = SmartDashboard.getNumber("Middle Baseline Left Distance" , middleToLeftSwitch);
 		middleToRightSwitch = SmartDashboard.getNumber("Middle Baseline Right Distance" , middleToRightSwitch);
 		crossFieldToScale = SmartDashboard.getNumber("Cross Field To Scale Distance" , crossFieldToScale);
+		crossFieldToSwitch = SmartDashboard.getNumber("Cross Field To Switch" , crossFieldToSwitch);
 		scaleToSameSideBox = SmartDashboard.getNumber("Scale To Same Side Box Distance" , scaleToSameSideBox);
 		baseline = 	SmartDashboard.getNumber("Baseline Distance" , baseline);
-
+		backup = SmartDashboard.getNumber("Backup", backup);
+		awayFromWall = SmartDashboard.getNumber("Move Away From Wall" , awayFromWall);
 	}
 }

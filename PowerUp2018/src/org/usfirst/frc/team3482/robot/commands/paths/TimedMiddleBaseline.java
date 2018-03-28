@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3482.robot.commands.paths;
 
 import org.usfirst.frc.team3482.robot.commands.TimedMove;
-import org.usfirst.frc.team3482.robot.commands.TimedTurn;
 import org.usfirst.frc.team3482.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;

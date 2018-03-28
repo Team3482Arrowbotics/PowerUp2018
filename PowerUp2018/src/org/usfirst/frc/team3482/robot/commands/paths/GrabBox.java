@@ -6,13 +6,12 @@ import org.usfirst.frc.team3482.robot.commands.SetIntakeIn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class PickUpBox extends CommandGroup{
+public class GrabBox extends CommandGroup{
 	
-	public PickUpBox() {
-		
-		addSequential(new Intake(.25));
+	public GrabBox() {
+		addSequential(new Intake(.1));
 		addSequential(new SetIntakeIn());
-		addParallel(new Intake(.5));
+		addParallel(new Intake(.2));
 		RobotMap.drive.stopMotor();
 	}
 }

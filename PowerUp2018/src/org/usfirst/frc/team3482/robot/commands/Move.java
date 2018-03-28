@@ -3,7 +3,9 @@ package org.usfirst.frc.team3482.robot.commands;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+// 230 encoder ticks per foot
+// 19 ticks/inch
+// 0.05 in per tick?
 public class Move extends Command{
 	double distance;
 	public Move(double distance) {
@@ -11,7 +13,7 @@ public class Move extends Command{
 	}
 	protected void initialize() { 
 		RobotMap.drive.setTurning(false);
-		RobotMap.encoders.reset();
+//		RobotMap.encoders.reset();
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
 		RobotMap.rotationController.enable();

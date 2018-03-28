@@ -10,22 +10,22 @@ public class Outtake extends Command {
 
 	public Outtake(double timeout) {
 		super(timeout);
+		outtakeSpeed = .8;
 	}
 
 	public Outtake() {
 		super();
+		outtakeSpeed = ((2 - (Robot.oi.flightStick.getRawAxis(3) + 1)) * 0.25 + .5);
 	}
 
 	protected void initialize() {
-		outtakeSpeed = ((2 - (Robot.oi.flightStick.getRawAxis(3) + 1)) * 0.25 + .5);
-		System.out.println("Outtake Speed: " + outtakeSpeed);
 		RobotMap.intakeMotorLeft.set(outtakeSpeed);
 		RobotMap.intakeMotorRight.set(-outtakeSpeed);
 		Robot.isSpoutake = true;
 	}
 
 	protected void execute() {
-		// Robot.ledStrip.flash("purple", 0.2);
+
 	}
 
 	protected void end() {

@@ -2,7 +2,9 @@ package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
+import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
 import org.usfirst.frc.team3482.robot.subsystems.PWMLidar;
+import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -28,37 +30,46 @@ public class RobotMap {
 	public static WPI_TalonSRX intakeMotorRight;
 	public static DoubleSolenoid intakePistonLeft;
 	public static DoubleSolenoid intakePistonRight;
-	public static DigitalInput intakePhotoelectric;
+//	public static DigitalInput intakePhotoelectric;
 	public static WPI_TalonSRX elevatorTalon;
 	public static WPI_TalonSRX elevatorTalon2;
  	public static Encoder encoderRight;
 	public static Encoder encoderLeft;
 	public static DrivePIDOutput drivePID;
-	public static TwoEncoderPID encoders;
+//	public static TwoEncoderPID encoders;
 	public static PIDController rotationController;
 	public static AHRSPID navx;
-	public static WPI_TalonSRX climberHook;
+//	public static WPI_TalonSRX climberHook;
 	public static WPI_TalonSRX climber;
-	public static PIDController climberHookController;
-	public static WPI_TalonSRX emptyTalon;
+//	public static PIDController climberHookController;
+//	public static WPI_TalonSRX emptyTalon;
 	public static CANifier c;
 //	public static CANifier c2;
 	public static PIDController counteractDrift; 
 	public static RotationAdjuster rotationAdjuster;
 	public static PWMLidar intakeLidar;
+	public static LIDAR sideLidar;
+//	public static Ultrasonic rangeFinder;
 	
 	public static void init() {
-		frontLeft = new WPI_TalonSRX(3);		
-		frontRight = new WPI_TalonSRX(12);
-		backLeft = new WPI_TalonSRX(2);
-		backRight = new WPI_TalonSRX(6);
+//		frontLeft = new WPI_TalonSRX(3);		
+//		frontRight = new WPI_TalonSRX(12);
+//		backLeft = new WPI_TalonSRX(2);
+//		backRight = new WPI_TalonSRX(6);
+		
+		//Rookiebot values
+		frontLeft = new WPI_TalonSRX(8);
+		frontRight = new WPI_TalonSRX(4);
+		backLeft = new WPI_TalonSRX(1);
+		backRight = new WPI_TalonSRX(0);
+		//Rookiebot values
 		
 		encoderLeft = new Encoder(0, 1);
 		encoderRight = new Encoder(2, 3);
 		encoderRight.setReverseDirection(true);
 		encoderLeft.setDistancePerPulse(0.05);
 		encoderRight.setDistancePerPulse(0.05);
-		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
+//		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
 		
 		rotationAdjuster = new RotationAdjuster();
 		
@@ -83,6 +94,7 @@ public class RobotMap {
 		elevatorTalon = new WPI_TalonSRX(5);
 		elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		elevatorTalon.config_kP(0, Elevator.ELEVATOR_P_VALUE, 0);
+		elevatorTalon.config_kD(0, Elevator.ELEVATOR_D_VALUE, 0);
 		elevatorTalon.setInverted(false);
 		
 		elevatorTalon2 = new WPI_TalonSRX(7);
@@ -101,12 +113,14 @@ public class RobotMap {
 		counteractDrift.setContinuous(true);
 		counteractDrift.setAbsoluteTolerance(1);
 		
-		climberHook = new WPI_TalonSRX(9);
+//		climberHook = new WPI_TalonSRX(9);
 		climber = new WPI_TalonSRX(0);
 		
 		c = new CANifier(0);
 		
 		intakeLidar = new PWMLidar(4);
+		sideLidar = new LIDAR(RobotMap.c, CANifier.PWMChannel.PWMChannel0);
+//		rangeFinder = new Ultrasonic(0);
 //		c2 = new CANifier(4);
 	}
 }

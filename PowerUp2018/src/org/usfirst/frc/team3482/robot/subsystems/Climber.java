@@ -1,8 +1,9 @@
 package org.usfirst.frc.team3482.robot.subsystems;
 import org.usfirst.frc.team3482.robot.Robot;
 import org.usfirst.frc.team3482.robot.RobotMap;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Climber extends Subsystem implements Runnable {
@@ -10,14 +11,14 @@ public class Climber extends Subsystem implements Runnable {
 	//FIELDS
 	protected static WPI_TalonSRX climber;
 	protected static WPI_TalonSRX climberHook;
-	public static final int AXIS = Robot.oi.CLIMBER_AXIS;
-	private double AxisPos = 0;
+//	public static final int AXIS = Robot.oi.CLIMBER_AXIS;
+//	private double AxisPos = 0;
 	public static final double AXIS_DEADZONE = 0.5;
 
 	// CONSTRUCTOR
 	public Climber() {
 		climber = RobotMap.climber;
-		climberHook = RobotMap.climberHook;
+//		climberHook = RobotMap.climberHook;
 	}
 	
 	@Override
