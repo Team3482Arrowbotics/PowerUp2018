@@ -4,13 +4,11 @@ import org.usfirst.frc.team3482.robot.subsystems.DrivePIDOutput;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.LIDAR;
 import org.usfirst.frc.team3482.robot.subsystems.PWMLidar;
-import org.usfirst.frc.team3482.robot.subsystems.Ultrasonic;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
@@ -52,17 +50,10 @@ public class RobotMap {
 //	public static Ultrasonic rangeFinder;
 	
 	public static void init() {
-//		frontLeft = new WPI_TalonSRX(3);		
-//		frontRight = new WPI_TalonSRX(12);
-//		backLeft = new WPI_TalonSRX(2);
-//		backRight = new WPI_TalonSRX(6);
-		
-		//Rookiebot values
-		frontLeft = new WPI_TalonSRX(8);
-		frontRight = new WPI_TalonSRX(4);
-		backLeft = new WPI_TalonSRX(1);
-		backRight = new WPI_TalonSRX(0);
-		//Rookiebot values
+		frontLeft = new WPI_TalonSRX(3);		
+		frontRight = new WPI_TalonSRX(12);
+		backLeft = new WPI_TalonSRX(2);
+		backRight = new WPI_TalonSRX(6);
 		
 		encoderLeft = new Encoder(0, 1);
 		encoderRight = new Encoder(2, 3);
@@ -95,9 +86,15 @@ public class RobotMap {
 		elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		elevatorTalon.config_kP(0, Elevator.ELEVATOR_P_VALUE, 0);
 		elevatorTalon.config_kD(0, Elevator.ELEVATOR_D_VALUE, 0);
+		elevatorTalon.config_kI(0, Elevator.ELEVATOR_I_VALUE, 0);
 		elevatorTalon.setInverted(false);
 		
+		elevatorTalon.configContinuousCurrentLimit(Elevator.ELEVATOR_CURRENT_LIMIT, 0);
+//		elevatorTalon.configPeakCurrentLimit(0, 0);
+		
 		elevatorTalon2 = new WPI_TalonSRX(7);
+		elevatorTalon2.setInverted(true);
+		elevatorTalon2.follow(elevatorTalon);
 		
 		navx = new AHRSPID(Port.kMXP);
 		

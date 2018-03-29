@@ -18,6 +18,7 @@ public class AutoConstants {
 	public static double baseline;
 	public static double backup;
 	public static double awayFromWall;
+	public static double pastSwitchToScale;
 	
 	public AutoConstants() {
 		nextToSwitch = 150;
@@ -34,22 +35,25 @@ public class AutoConstants {
 		middleToRightScaleLane = 80;
 		backup = -20;
 		awayFromWall = 36;
+		pastSwitchToScale = 36;
 	}
 	
 	public void set() {
+		SmartDashboard.putNumber("Move Away From Wall" , awayFromWall);
 		SmartDashboard.putNumber("Next To Switch" , nextToSwitch);
 		SmartDashboard.putNumber("Pass Switch" , passSwitch);
 		SmartDashboard.putNumber("To Scale" , toScale);
 		SmartDashboard.putNumber("Last Push" , lastPush);
-		SmartDashboard.putNumber("Middle to Right Switch" , middleToRightSwitch);
-		SmartDashboard.putNumber("Middle to Left Switch" , middleToLeftSwitch);
-		SmartDashboard.putNumber("Middle to Right Scale" , middleToRightScaleLane);
 		SmartDashboard.putNumber("Cross Field To Scale" , crossFieldToScale);
 		SmartDashboard.putNumber("Cross Field To Switch" , crossFieldToSwitch);
 		SmartDashboard.putNumber("Scale To Same Side Box" , scaleToSameSideBox);
 		SmartDashboard.putNumber("Cross Baseline" , baseline);
+		SmartDashboard.putNumber("Past Switch To Scale" , pastSwitchToScale);
+		SmartDashboard.putNumber("Middle to Right Switch" , middleToRightSwitch);
+		SmartDashboard.putNumber("Middle to Left Switch" , middleToLeftSwitch);
 		SmartDashboard.putNumber("Backup w/ Box" , backup);
-		SmartDashboard.putNumber("Move Away From Wall" , awayFromWall);
+//		SmartDashboard.putNumber("Middle to Right Scale" , middleToRightScaleLane);
+//		SmartDashboard.putNumber("Middle to Left Scale" , middleToLeftScaleLane);
 	}
 	
 	public void get() {
@@ -65,5 +69,8 @@ public class AutoConstants {
 		baseline = 	SmartDashboard.getNumber("Baseline Distance" , baseline);
 		backup = SmartDashboard.getNumber("Backup", backup);
 		awayFromWall = SmartDashboard.getNumber("Move Away From Wall" , awayFromWall);
+		pastSwitchToScale = SmartDashboard.getNumber("Past Switch To Scale" , pastSwitchToScale);
+//		middleToRightScaleLane = SmartDashboard.getNumber("Middle to Right Scale" , middleToRightScaleLane);
+//		middleToLeftScaleLane = SmartDashboard.getNumber("Middle to Left Scale" , middleToLeftScaleLane);
 	}
 }

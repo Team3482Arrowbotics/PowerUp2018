@@ -3,7 +3,6 @@ package org.usfirst.frc.team3482.robot.subsystems;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Ultrasonic extends AnalogInput {
 	public static final double BOX_THRESHOLD = 1.0;

@@ -2,6 +2,7 @@ package org.usfirst.frc.team3482.robot.commands;
 
 import org.usfirst.frc.team3482.robot.commands.paths.CrossFieldToScaleLane;
 import org.usfirst.frc.team3482.robot.commands.paths.PassSwitch;
+import org.usfirst.frc.team3482.robot.commands.paths.PastSwitchToScale;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnScale;
 import org.usfirst.frc.team3482.robot.commands.paths.StartToScale;
 
@@ -14,12 +15,13 @@ public class ScaleAutonomous extends CommandGroup{
 		switch(sPos) {
 		case "LEFT":
 			System.out.println("Left");
-			if(!scaleOnLeft) {
+			if(!scaleOnLeft) { //Scale on right
 				addSequential(new PassSwitch());
 				addSequential(new CrossFieldToScaleLane(fromLeft));
+				addSequential(new PastSwitchToScale());
 				addSequential(new PlaceBoxOnScale(fromRight));
 			}
-			else {
+			else { //Scale on left
 				addSequential(new StartToScale());
 				addSequential(new PlaceBoxOnScale(fromLeft));
 			}

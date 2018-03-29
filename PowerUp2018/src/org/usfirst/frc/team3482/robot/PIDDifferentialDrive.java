@@ -77,10 +77,8 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 		
 	}
 
-	private void startAdjusting() {
-		RobotMap.counteractDrift.setSetpoint(RobotMap.navx.getYaw());
-		RobotMap.counteractDrift.enable();
-		
-	}
-
+//	private void startAdjusting() {
+//		RobotMap.counteractDrift.setSetpoint(RobotMap.navx.getYaw());
+//		RobotMap.counteractDrift.enable();	
+//	}
 }
