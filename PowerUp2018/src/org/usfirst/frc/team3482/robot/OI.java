@@ -28,6 +28,8 @@ public class OI {
 	private JoystickButton resetPID;
 	private JoystickButton goToSwitch;
 	private JoystickButton goToScale;
+	private JoystickButton bumpElevator;
+	private JoystickButton dropElevator;
 
 	public static final int ELEVATOR_AXIS = 1;
 	public static final int CLIMBER_AXIS = 2;
@@ -36,6 +38,12 @@ public class OI {
 		flightStick = new Joystick(0);
 		xBox = new Joystick(1);
 		arcadeButtons = new Joystick(2);
+		
+		bumpElevator = new JoystickButton(xBox, 4);
+		bumpElevator.whenPressed(new SetElevatorPosition(Elevator.BUMP_POSITION));
+		
+		dropElevator = new JoystickButton(xBox, 5);
+		dropElevator.whenPressed(new SetElevatorPosition(Elevator.BOTTOM_POSITION));
 		
 		spouttake = new JoystickButton(flightStick, 1);
 		spouttake.whileHeld(new Outtake());
@@ -66,7 +74,5 @@ public class OI {
 		
 		goToScale = new JoystickButton(flightStick, 12);
 		goToScale.whenPressed(new SetElevatorPosition(Elevator.SCALE_POSITION));
-		
-		
 	}
 }
