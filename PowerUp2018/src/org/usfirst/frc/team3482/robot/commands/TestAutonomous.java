@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3482.robot.commands;
 
-import org.usfirst.frc.team3482.robot.commands.paths.FindBox;
-import org.usfirst.frc.team3482.robot.commands.paths.GoToBox;
+import org.usfirst.frc.team3482.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -12,7 +11,9 @@ public class TestAutonomous extends CommandGroup{
 	public TestAutonomous() {
 		
 		super();
-		addSequential(new FindBox(fromRight));
-		addSequential(new GoToBox());
+		RobotMap.drive.disable();
+		System.out.println("Test Auton");
+		addSequential(new TimedMove(5, .25));
+		RobotMap.drive.enable();
 	}
 }

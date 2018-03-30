@@ -19,6 +19,9 @@ public class AutoConstants {
 	public static double backup;
 	public static double awayFromWall;
 	public static double pastSwitchToScale;
+	public static double timedAwayFromWall;
+	public static double timedCrossBaseline;
+	public static double timedLastPush;
 	
 	public AutoConstants() {
 		nextToSwitch = 150;
@@ -36,6 +39,9 @@ public class AutoConstants {
 		backup = -20;
 		awayFromWall = 36;
 		pastSwitchToScale = 36;
+		timedAwayFromWall = 1;
+		timedCrossBaseline = 1.5;
+		timedLastPush = 1.7;
 	}
 	
 	public void set() {
@@ -52,6 +58,9 @@ public class AutoConstants {
 		SmartDashboard.putNumber("Middle to Right Switch" , middleToRightSwitch);
 		SmartDashboard.putNumber("Middle to Left Switch" , middleToLeftSwitch);
 		SmartDashboard.putNumber("Backup w/ Box" , backup);
+		SmartDashboard.putNumber("Away From Wall Time" , timedAwayFromWall);
+		SmartDashboard.putNumber("Sideways TravelTime" , timedCrossBaseline);
+		SmartDashboard.putNumber("Last Push Time" , timedLastPush);
 //		SmartDashboard.putNumber("Middle to Right Scale" , middleToRightScaleLane);
 //		SmartDashboard.putNumber("Middle to Left Scale" , middleToLeftScaleLane);
 	}
@@ -70,6 +79,9 @@ public class AutoConstants {
 		backup = SmartDashboard.getNumber("Backup", backup);
 		awayFromWall = SmartDashboard.getNumber("Move Away From Wall" , awayFromWall);
 		pastSwitchToScale = SmartDashboard.getNumber("Past Switch To Scale" , pastSwitchToScale);
+		timedAwayFromWall = SmartDashboard.getNumber("Away From Wall Time" , timedAwayFromWall);
+		timedCrossBaseline = SmartDashboard.getNumber("Sideways TravelTime" , timedCrossBaseline);
+		timedLastPush = SmartDashboard.getNumber("Last Push Time" , timedLastPush);
 //		middleToRightScaleLane = SmartDashboard.getNumber("Middle to Right Scale" , middleToRightScaleLane);
 //		middleToLeftScaleLane = SmartDashboard.getNumber("Middle to Left Scale" , middleToLeftScaleLane);
 	}

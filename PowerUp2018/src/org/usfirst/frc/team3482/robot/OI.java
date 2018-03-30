@@ -5,10 +5,11 @@ import org.usfirst.frc.team3482.robot.commands.Climb;
 import org.usfirst.frc.team3482.robot.commands.Intake;
 import org.usfirst.frc.team3482.robot.commands.ManualElevatorSpeed;
 import org.usfirst.frc.team3482.robot.commands.Outtake;
+import org.usfirst.frc.team3482.robot.commands.ResetPID;
 import org.usfirst.frc.team3482.robot.commands.ReverseClimb;
 import org.usfirst.frc.team3482.robot.commands.SetElevatorPosition;
 import org.usfirst.frc.team3482.robot.commands.SwitchIntake;
-import org.usfirst.frc.team3482.robot.commands.ResetPID;
+import org.usfirst.frc.team3482.robot.commands.TeleopAutonTest;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -30,6 +31,7 @@ public class OI {
 	private JoystickButton goToScale;
 	private JoystickButton bumpElevator;
 	private JoystickButton dropElevator;
+	private JoystickButton autoTestButton;
 
 	public static final int ELEVATOR_AXIS = 1;
 	public static final int CLIMBER_AXIS = 2;
@@ -59,6 +61,10 @@ public class OI {
 		
 		climbButton = new JoystickButton(flightStick, 6);
 		climbButton.whileHeld(new Climb());
+		
+		autoTestButton = new JoystickButton(flightStick, 4);
+		//autoTestButton.whenPressed(new TimedAutonomous(Robot.switchOnLeft, "MIDDLE"));
+		autoTestButton.whenPressed(new TeleopAutonTest());
 		
 		resetPID = new JoystickButton(flightStick, 8);
 		resetPID.whenPressed(new ResetPID());

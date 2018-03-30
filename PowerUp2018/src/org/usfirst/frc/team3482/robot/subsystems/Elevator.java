@@ -20,16 +20,16 @@ public class Elevator extends Subsystem implements Runnable {
 	private double AxisPos;
 	public static final double AXIS_DEADZONE = 0.1;
 	public static final int MAX_POSITION = 335000, AXIS_TO_POS_RATIO = 25000, ELEVATOR_CURRENT_LIMIT = 40;
-	public static final double ELEVATOR_P_VALUE = 0.2, ELEVATOR_D_VALUE = 1, ELEVATOR_I_VALUE = 0.0001,
-								BOTTOM_POSITION = 0, BUMP_POSITION = MAX_POSITION * .1,
-								SWITCH_POSITION = MAX_POSITION * .33, SCALE_POSITION = MAX_POSITION * 0.9,
-								MANUAL_UP_SPEED = .7, MANUAL_DOWN_SPEED = -.3, ELEVATOR_FALLING_RATIO = 0.8;
-	public static double maxMotorOutput;
+	public static final double ELEVATOR_P_VALUE = 0.2, ELEVATOR_D_VALUE = 0, ELEVATOR_I_VALUE = 0, BOTTOM_POSITION = 0,
+			BUMP_POSITION = MAX_POSITION * .1, SWITCH_POSITION = MAX_POSITION * .33,
+			SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .7, MANUAL_DOWN_SPEED = -.3,
+			ELEVATOR_FALLING_RATIO = 0.4;
+	
 
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000
 	// 15:1 Small Spool Max = 665000 Speed = 50000
 	// 10:1 Big Spool Max = 335000 Speed = 20000
-	//10:1 Fat Spool Max = 280000 Speed = 12000 P = .15
+	// 10:1 Fat Spool Max = 280000 Speed = 12000 P = .15
 	// Old setup: Max = 33750 P = 1.5 Speed = 1000
 
 	public static boolean locked;
@@ -40,7 +40,6 @@ public class Elevator extends Subsystem implements Runnable {
 		elevatorTalon2 = RobotMap.elevatorTalon2;
 		locked = true;
 		resetEncoder();
-		maxMotorOutput = 0;
 	}
 
 	@Override
@@ -48,49 +47,46 @@ public class Elevator extends Subsystem implements Runnable {
 
 	}
 
-	public void teleopRun()
-	{
+	public void teleopRun() {
 		AxisPos = -Robot.oi.flightStick.getRawAxis(AXIS);
 
 		if (AxisPos > AXIS_DEADZONE) {
 			Robot.isEMovingUp = true;
 			Robot.isEMovingDown = false;
-			elevatorTalon.enableCurrentLimit(false);
+			//elevatorTalon.enableCurrentLimit(false);
 			set(AxisPos);
 		} else if (AxisPos < -AXIS_DEADZONE) {
 			Robot.isEMovingUp = false;
 			Robot.isEMovingDown = true;
-			elevatorTalon.enableCurrentLimit(true);
-			set(AxisPos); // * ELEVATOR_FALLING_RATIO);
+			//elevatorTalon.enableCurrentLimit(true);
+			set(AxisPos * ELEVATOR_FALLING_RATIO);
 		} else {
 			Robot.isEMovingUp = false;
 			Robot.isEMovingDown = false;
-			elevatorTalon.enableCurrentLimit(true);
-			maxMotorOutput = 0;
+			//elevatorTalon.enableCurrentLimit(true);
 		}
 		run();
 	}
+
 	// RUNS EVERY TICK (see teleopPeriodic)
 	public void run() {
 
 		if (locked) {
 			elevatorTalon.set(ControlMode.Position, targetPos);
 		}
-		
-		if(Math.abs(maxMotorOutput)>Math.abs(elevatorTalon2.getMotorOutputPercent()))
-		{
-			maxMotorOutput = elevatorTalon2.getMotorOutputPercent();
-		}
-		
-		System.out.println("Max Motor Output: " + maxMotorOutput);
+
+//		System.out.println("Motor Output: " + elevatorTalon.getMotorOutputPercent());
+//		System.out.println("Second Motor Output: " + elevatorTalon2.getMotorOutputPercent());
+
 
 		//elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
-		
-		// System.out.println("Set Pos: " + targetPos);
+
+		//System.out.println("Set Pos: " + targetPos);
 		//System.out.println("Position: " + getCurrentPos());
 		// RobotMap.elevatorTalon.getClosedLoopError(0));
 		// System.out.println("Velocity: "+getCurrentVelocity());
-		//System.out.println("Percent Output Motor 1: " + elevatorTalon.getMotorOutputPercent());
+		// System.out.println("Percent Output Motor 1: " +
+		// elevatorTalon.getMotorOutputPercent());
 		// System.out.println("Percent Output Motor 2:
 		// "+elevatorTalon2.getMotorOutputPercent());
 		// System.out.println("Speed Ratio: "+ getSpeedRatio());
@@ -103,18 +99,18 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 
 	public void set(double axisPos) {
-		
+
 		double position = axisPos;
 
 		position *= AXIS_TO_POS_RATIO;
-		
+
 		position += getCurrentPos();
 
-		if (position > MAX_POSITION) {
+		if (position > MAX_POSITION && axisPos > 0) {
 			position = MAX_POSITION;
 		}
 
-		if (position < 0) {
+		if (position < 0 && axisPos < 0) {
 			position = 0;
 		}
 
@@ -123,7 +119,7 @@ public class Elevator extends Subsystem implements Runnable {
 
 	public void absoluteSet(double pos) {
 		targetPos = pos;
-		elevatorTalon.enableCurrentLimit(true);
+		//elevatorTalon.enableCurrentLimit(true);
 	}
 
 	public void lock(boolean islocked) {

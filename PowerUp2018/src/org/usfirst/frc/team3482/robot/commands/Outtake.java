@@ -6,7 +6,7 @@ import org.usfirst.frc.team3482.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Outtake extends Command {
-	private double outtakeSpeed;
+	public static double outtakeSpeed;
 
 	public Outtake(double timeout) {
 		super(timeout);
@@ -15,7 +15,6 @@ public class Outtake extends Command {
 
 	public Outtake() {
 		super();
-		outtakeSpeed = ((2 - (Robot.oi.flightStick.getRawAxis(3) + 1)) * 0.25 + .5);
 	}
 
 	protected void initialize() {

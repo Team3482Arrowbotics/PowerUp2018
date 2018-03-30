@@ -8,8 +8,9 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	// turns if true, straight if false
 	boolean turning;
 	RotationAdjuster rot;
-	public static final double MAX_ACCELERATION = 0.05;
+	public static final double MAX_ACCELERATION = 0.03;
 	public double currentSpeed = 0;
+	public static boolean enabled = true;
 
 	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, RotationAdjuster r,
 			boolean turn) {
@@ -81,4 +82,19 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 //		RobotMap.counteractDrift.setSetpoint(RobotMap.navx.getYaw());
 //		RobotMap.counteractDrift.enable();	
 //	}
+	
+	public void enable()
+	{
+		enabled = true;
+	}
+	
+	public void disable()
+	{
+		enabled = false;
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
 }

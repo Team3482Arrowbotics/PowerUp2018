@@ -14,7 +14,7 @@ public class TimedMiddleBaseline extends CommandGroup{
 			turn=1;
 		}
 		addSequential(new Turn(90 * turn));
-		addSequential(new TimedMove(0.3, 0.5));
+		addSequential(new TimedMove(AutoConstants.timedCrossBaseline, 0.5));
 		addSequential(new Turn(90 * -turn));
 	}
 }

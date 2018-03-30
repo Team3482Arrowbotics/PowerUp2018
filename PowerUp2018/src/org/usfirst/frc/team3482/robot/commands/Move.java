@@ -13,11 +13,11 @@ public class Move extends Command{
 	}
 	protected void initialize() { 
 		RobotMap.drive.setTurning(false);
-//		RobotMap.encoders.reset();
+		RobotMap.encoderRight.reset();
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
-		RobotMap.rotationController.enable();
-		RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
+		//RobotMap.rotationController.enable();
+		//RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
 	}
 	protected void end() {
 		RobotMap.driveController.disable();

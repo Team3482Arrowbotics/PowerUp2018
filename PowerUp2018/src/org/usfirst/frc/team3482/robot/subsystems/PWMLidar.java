@@ -54,7 +54,7 @@ public class PWMLidar {
 	
 	public boolean boxInClampRange()
 	{
-		return RobotMap.intakeLidar.getDistance() < 50 && Robot.intake.getPosition()==Value.kForward;
+		return RobotMap.intakeLidar.getDistance() < 50 && RobotMap.intakeLidar.getDistance() > 25 && Robot.intake.getPosition()==Value.kForward;
 	}
 	
 	public boolean boxFullyInside()

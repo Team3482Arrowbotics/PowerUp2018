@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Turn extends Command{
 	double angle;
+	int counter;
 	public Turn(double angle) {
 		super(0.5);
 		this.angle = angle;
+		counter = 0;
 	}
 	protected void initialize() {
 		RobotMap.drive.setTurning(true);
@@ -17,6 +19,10 @@ public class Turn extends Command{
 		RobotMap.rotationController.enable();
 		RobotMap.rotationController.setSetpoint(angle);
 	}
+	protected void execute(){
+		counter++;
+		System.out.println(counter);
+	}
 	protected void end() {
 		RobotMap.rotationController.disable();
 		RobotMap.drive.stopMotor();
@@ -24,8 +30,8 @@ public class Turn extends Command{
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		System.out.println( "PID Error: " + RobotMap.rotationController.getError());
-		System.out.println( "PID Speed: " + RobotMap.rotationController.get());
-		return RobotMap.rotationController.onTarget();
+		//System.out.println( "PID Error: " + RobotMap.rotationController.getError());
+		//System.out.println( "PID Speed: " + RobotMap.rotationController.get());
+		return RobotMap.rotationController.onTarget() || counter > 70;
 	}
 }

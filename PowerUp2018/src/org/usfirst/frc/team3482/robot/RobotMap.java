@@ -56,10 +56,12 @@ public class RobotMap {
 		backRight = new WPI_TalonSRX(6);
 		
 		encoderLeft = new Encoder(0, 1);
-		encoderRight = new Encoder(2, 3);
+		encoderRight = new Encoder(5, 6);
 		encoderRight.setReverseDirection(true);
 		encoderLeft.setDistancePerPulse(0.05);
 		encoderRight.setDistancePerPulse(0.05);
+		encoderLeft.reset();
+		encoderRight.reset();
 //		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
 		
 		rotationAdjuster = new RotationAdjuster();
@@ -89,7 +91,7 @@ public class RobotMap {
 		elevatorTalon.config_kI(0, Elevator.ELEVATOR_I_VALUE, 0);
 		elevatorTalon.setInverted(false);
 		
-		elevatorTalon.configContinuousCurrentLimit(Elevator.ELEVATOR_CURRENT_LIMIT, 0);
+//		elevatorTalon.configContinuousCurrentLimit(Elevator.ELEVATOR_CURRENT_LIMIT, 0);
 //		elevatorTalon.configPeakCurrentLimit(0, 0);
 		
 		elevatorTalon2 = new WPI_TalonSRX(7);

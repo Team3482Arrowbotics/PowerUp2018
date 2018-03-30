@@ -1,5 +1,12 @@
 package org.usfirst.frc.team3482.robot;
 
+import org.usfirst.frc.team3482.robot.commands.BlitzAutonomous;
+import org.usfirst.frc.team3482.robot.commands.Outtake;
+import org.usfirst.frc.team3482.robot.commands.ScaleAutonomous;
+import org.usfirst.frc.team3482.robot.commands.SwitchAutonomous;
+import org.usfirst.frc.team3482.robot.commands.TestAutonomous;
+import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
+import org.usfirst.frc.team3482.robot.commands.TwoBoxAutonomous;
 import org.usfirst.frc.team3482.robot.commands.paths.AutoConstants;
 import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
@@ -14,6 +21,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -35,13 +43,14 @@ public class Robot extends IterativeRobot {
 	public SendableChooser<String> sPosChooser;
 	public SendableChooser<String> autoChooser;
 	public AutoConstants constants = new AutoConstants();
-	String startPos;
-	String autoType;
-	Command autoCommand;
+	public static String startPos;
+	public static String autoType;
+	public static Command autoCommand;
 
 
 	@Override
 	public void robotInit() {
+		RobotMap.init();
 		oi = new OI();
 		isSpoutake = false;
 		isSpintake = false;
@@ -50,9 +59,9 @@ public class Robot extends IterativeRobot {
 		isEMovingDown = false;
 		boxInRange = false;
 
-		colorsArray = new String[] { "red", "purple", "white", "red", "white", "purple" };
+		colorsArray = new String[] { "red", "green", "yellow", "cyan", "white", "purple" };
 
-		RobotMap.init();
+		
 		ledStrip = new LED();
 		intake = new Intake();
 		elevator = new Elevator();
@@ -69,7 +78,7 @@ public class Robot extends IterativeRobot {
 		autoChooser = new SendableChooser<String>();
 		autoChooser.addDefault("No Autonomous", "Null");
 		autoChooser.addObject("Blitz", "Blitz");
-		autoChooser.addObject("Timed", "Time");
+		autoChooser.addObject("Timed", "Timed");
 		autoChooser.addObject("Two Box", "Two Box");
 		autoChooser.addObject("Testing", "Test");
 		autoChooser.addObject("Switch", "Switch");
@@ -88,14 +97,8 @@ public class Robot extends IterativeRobot {
 					ledStrip.turnColor("green");
 				} else if (RobotMap.intakeLidar.boxInClampRange()) {
 					ledStrip.turnColor("yellow");
-				} else if (isSpintake) {
-					ledStrip.flash("white", 0.1);
 				} else if (isSpoutake) {
 					ledStrip.flash("purple", 0.2);
-				} else if (isEMovingUp) {
-					ledStrip.flash("cyan", 0.2);
-				} else if (isEMovingDown) {
-					ledStrip.flash("yellow", 0.1);
 				} else if (isClimbing) {
 					ledStrip.flashRainbow(colorsArray, 0.15);
 				} else {
@@ -114,6 +117,8 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		SmartDashboard.putNumber("Side Lidar Distance", RobotMap.sideLidar.getDistance());
+		SmartDashboard.putNumber("Intake Lidar Distance", RobotMap.intakeLidar.getDistance());
 	}
 
 	@Override
@@ -132,32 +137,34 @@ public class Robot extends IterativeRobot {
 		
 		switch(autoType) {
 		case "Two Box":
-//			new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos).start();
+			autoCommand = new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos);
 			System.out.println("Running Two Box Auton");
 			break;
 		case "Timed":
-//			new TimedAutonomous(switchOnLeft, startPos).start();
+			autoCommand = new TimedAutonomous(switchOnLeft, startPos);
 			System.out.println("Running Timed Auton");
 			break;
 		case "Test":
-//			new TestAutonomous().start();
+			autoCommand = new TestAutonomous();
 			System.out.println("Running Test Auton");
 			break;
 		case "Blitz":
 			System.out.println("AAAAAAAAAAAAAA");
-//			new BlitzAutonomous().start();
+			autoCommand = new BlitzAutonomous();
 			break;
 		case "Switch":
-//			new SwitchAutonomous(switchOnLeft, startPos).start();
+			autoCommand = new SwitchAutonomous(switchOnLeft, startPos);
 			System.out.println("Running Switch Auton");
 			break;
 		case "Scale":
-//			new ScaleAutonomous(scaleOnLeft, startPos).start();
+			autoCommand = new ScaleAutonomous(scaleOnLeft, startPos);
 			System.out.println("Running Scale Auton");
 			break;
 		default:
+			autoCommand = new WaitCommand(0);
 			break;
 		}
+		autoCommand.start();
 	}
 
 	/**
@@ -173,15 +180,30 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control.
 	 */
 	@Override
+	public void teleopInit(){
+		if(autoCommand != null)
+			autoCommand.cancel();
+		RobotMap.driveController.disable();
+	}
+	
 	public void teleopPeriodic() {
 		elevator.teleopRun();
-		System.out.println("Side Lidar: "+RobotMap.sideLidar.getDistance());
-		System.out.println("Intake Lidar: "+RobotMap.intakeLidar.getDistance());
+//		System.out.println("Side Lidar: "+RobotMap.sideLidar.getDistance());
+//		System.out.println("Intake Lidar: "+RobotMap.intakeLidar.getDistance());
+		System.out.println("Drive Encoder Right Value: " +RobotMap.encoderRight.getDistance());
+//		System.out.println("Drive Encoder Left Value: " +RobotMap.encoderLeft.getDistance());
 
 		speed = -oi.xBox.getRawAxis(1) * Elevator.getSpeedRatio();
 		turnSpeed = oi.xBox.getRawAxis(4) * Elevator.getTurnRatio();
-		RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		
+		if(RobotMap.drive.isEnabled())
+		{
+			System.out.println("Drive Enabled");
+			RobotMap.drive.arcadeDrive(speed, turnSpeed);
+		}
+		
+		Outtake.outtakeSpeed = ((2 - (Robot.oi.flightStick.getRawAxis(3) + 1)) * 0.25 + .5);
+		constants.get();
 		Scheduler.getInstance().run();
 	}
 
