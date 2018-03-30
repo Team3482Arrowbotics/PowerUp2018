@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3482.robot.subsystems;
 
+import java.util.ArrayList;
+
 import org.usfirst.frc.team3482.robot.Robot;
 import org.usfirst.frc.team3482.robot.RobotMap;
 
@@ -13,6 +15,8 @@ public class PWMLidar {
 	Counter counter;
 	private int printedWarningCount = 5;
 	static final int CALIBRATION_OFFSET = 0;
+	double last = 0;
+	public boolean drasticChange = false;
 
 	public PWMLidar(int channel) {
 		this.channel = channel;
@@ -24,6 +28,7 @@ public class PWMLidar {
 	}
 
 	public double getDistance() {
+		
 		double cm;
 		if (counter.get() < 1) {
 			if (printedWarningCount-- > 0) {
@@ -34,6 +39,13 @@ public class PWMLidar {
 		// Period is in microseconds, multiply by 1 million to make numbers
 		// nice, divide by 10 to get cm
 		cm = (counter.getPeriod() * 1000000.0 / 10.0) + CALIBRATION_OFFSET;
+		if(Math.abs(last - cm) > 100 && last != 0){
+			drasticChange = true;
+			System.out.println("DRASTIC");
+		} else{
+			drasticChange = false;
+		}
+		last = cm;
 		return cm;
 	}
 
@@ -49,17 +61,16 @@ public class PWMLidar {
 		}
 		Robot.intake.setPistons(false);
 		RobotMap.drive.arcadeDrive(0, 0);
-		
+
 	}
-	
-	public boolean boxInClampRange()
-	{
-		return RobotMap.intakeLidar.getDistance() < 50 && RobotMap.intakeLidar.getDistance() > 25 && Robot.intake.getPosition()==Value.kForward;
+
+	public boolean boxInClampRange() {
+		return RobotMap.intakeLidar.getDistance() < 50 && RobotMap.intakeLidar.getDistance() > 25
+				&& Robot.intake.getPosition() == Value.kForward;
 	}
-	
-	public boolean boxFullyInside()
-	{
-		return RobotMap.intakeLidar.getDistance() < 25 && Robot.intake.getPosition()==Value.kForward;
+
+	public boolean boxFullyInside() {
+		return RobotMap.intakeLidar.getDistance() < 25 && Robot.intake.getPosition() == Value.kForward;
 	}
 
 }

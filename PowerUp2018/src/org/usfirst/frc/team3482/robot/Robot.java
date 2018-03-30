@@ -90,6 +90,7 @@ public class Robot extends IterativeRobot {
 		constants.set();
 
 		camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setFPS(20);
 
 		new Thread(() -> {
 			while (true) {
@@ -119,6 +120,7 @@ public class Robot extends IterativeRobot {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		SmartDashboard.putNumber("Side Lidar Distance", RobotMap.sideLidar.getDistance());
 		SmartDashboard.putNumber("Intake Lidar Distance", RobotMap.intakeLidar.getDistance());
+		SmartDashboard.putBoolean("DrasticChange?", RobotMap.intakeLidar.drasticChange);
 	}
 
 	@Override
