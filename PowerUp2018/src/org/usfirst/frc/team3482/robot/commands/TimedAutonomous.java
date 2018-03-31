@@ -17,7 +17,7 @@ public class TimedAutonomous extends CommandGroup {
 
 	public TimedAutonomous(boolean switchOnLeft, String sPos) {
 		super();
-		RobotMap.drive.disable();
+		addSequential(new EnableDrive(false));
 		RobotMap.driveController.enable();
 		addSequential(new Intake(0.01));
 		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
@@ -35,8 +35,8 @@ public class TimedAutonomous extends CommandGroup {
 			break;
 
 		case "MIDDLE":
-			System.out.println("Middle");
-			addSequential(new TimedMove(AutoConstants.timedAwayFromWall, 0.5));
+			System.out.println("MIDDLE");
+			addSequential(new TimedMove(2, 0.5));
 			if (switchOnLeft) {
 				addSequential(new TimedMiddleBaseline(toLeft));
 			} else {
@@ -45,6 +45,7 @@ public class TimedAutonomous extends CommandGroup {
 			}
 			addSequential(new TimedMove(AutoConstants.timedLastPush, 0.5));
 			addSequential(new PlaceBoxOnSwitch());
+			System.out.println("done");
 			break;
 
 		case "RIGHT":
@@ -58,7 +59,7 @@ public class TimedAutonomous extends CommandGroup {
 			}
 			break;
 		}
-		RobotMap.drive.enable();
+		addSequential(new EnableDrive(true));
 		RobotMap.driveController.disable();
 	}
 }

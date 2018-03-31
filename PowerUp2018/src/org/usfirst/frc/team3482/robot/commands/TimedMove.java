@@ -9,6 +9,7 @@ public class TimedMove extends TimedCommand{
 	public TimedMove(double timeout, double speed) {
 		super(timeout);
 		this.speed = speed;
+		System.out.println("Moving by time");
 	}
 	
 	protected void execute() {

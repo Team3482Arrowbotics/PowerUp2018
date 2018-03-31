@@ -20,10 +20,10 @@ public class Elevator extends Subsystem implements Runnable {
 	private double AxisPos;
 	public static final double AXIS_DEADZONE = 0.1;
 	public static final int MAX_POSITION = 335000, AXIS_TO_POS_RATIO = 25000, ELEVATOR_CURRENT_LIMIT = 40;
-	public static final double ELEVATOR_P_VALUE = 0.2, ELEVATOR_D_VALUE = 0, ELEVATOR_I_VALUE = 0, BOTTOM_POSITION = 0,
-			BUMP_POSITION = MAX_POSITION * .1, SWITCH_POSITION = MAX_POSITION * .33,
+	public static final double ELEVATOR_P_VALUE = 0.2, ELEVATOR_D_VALUE = 10, ELEVATOR_I_VALUE = 0, BOTTOM_POSITION = 0,
+			BUMP_POSITION = MAX_POSITION * .075, SWITCH_POSITION = MAX_POSITION * .33,
 			SCALE_POSITION = MAX_POSITION * 0.9, MANUAL_UP_SPEED = .7, MANUAL_DOWN_SPEED = -.3,
-			ELEVATOR_FALLING_RATIO = 0.4;
+			ELEVATOR_FALLING_RATIO = .9;
 	
 
 	// 15:1 Gearbox Big Spool values: Max = 515000 P = 0.1, Speed = 20000

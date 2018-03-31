@@ -41,7 +41,7 @@ public class OI {
 		xBox = new Joystick(1);
 		arcadeButtons = new Joystick(2);
 		
-		bumpElevator = new JoystickButton(xBox, 4);
+		bumpElevator = new JoystickButton(xBox, 6);
 		bumpElevator.whenPressed(new SetElevatorPosition(Elevator.BUMP_POSITION));
 		
 		dropElevator = new JoystickButton(xBox, 5);
@@ -62,10 +62,6 @@ public class OI {
 		climbButton = new JoystickButton(flightStick, 6);
 		climbButton.whileHeld(new Climb());
 		
-		autoTestButton = new JoystickButton(flightStick, 4);
-		//autoTestButton.whenPressed(new TimedAutonomous(Robot.switchOnLeft, "MIDDLE"));
-		autoTestButton.whenPressed(new TeleopAutonTest());
-		
 		resetPID = new JoystickButton(flightStick, 8);
 		resetPID.whenPressed(new ResetPID());
 		
@@ -75,10 +71,14 @@ public class OI {
 		manualElevatorDown = new JoystickButton(flightStick, 10);
 		manualElevatorDown.whileHeld(new ManualElevatorSpeed(Elevator.MANUAL_DOWN_SPEED));
 		
-		goToSwitch = new JoystickButton(flightStick, 11);
-		goToSwitch.whenPressed(new SetElevatorPosition(Elevator.SWITCH_POSITION));
+		autoTestButton = new JoystickButton(flightStick, 12);
+//		//autoTestButton.whenPressed(new TimedAutonomous(Robot.switchOnLeft, "MIDDLE"));
+//		autoTestButton.whenPressed(new TeleopAutonTest(250));
 		
-		goToScale = new JoystickButton(flightStick, 12);
-		goToScale.whenPressed(new SetElevatorPosition(Elevator.SCALE_POSITION));
+//		goToSwitch = new JoystickButton(flightStick, 11);
+//		goToSwitch.whenPressed(new SetElevatorPosition(Elevator.SWITCH_POSITION));
+//		
+//		goToScale = new JoystickButton(flightStick, 12);
+//		goToScale.whenPressed(new SetElevatorPosition(Elevator.SCALE_POSITION));
 	}
 }

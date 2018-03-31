@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3482.robot.commands;
 
 import org.usfirst.frc.team3482.robot.commands.paths.ToSwitchFromMiddle;
+import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.commands.paths.AwayFromWall;
 import org.usfirst.frc.team3482.robot.commands.paths.LastPushToSwitch;
 import org.usfirst.frc.team3482.robot.commands.paths.PlaceBoxOnSwitch;
@@ -14,6 +15,7 @@ public class SwitchAutonomous extends CommandGroup{
 	public SwitchAutonomous(boolean switchOnLeft, String sPos) {
 
 		super();
+		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
 		switch(sPos) {
 		case "LEFT":
 			System.out.println("Left");

@@ -28,7 +28,7 @@ public class PWMLidar {
 	}
 
 	public double getDistance() {
-		
+
 		double cm;
 		if (counter.get() < 1) {
 			if (printedWarningCount-- > 0) {
@@ -39,11 +39,12 @@ public class PWMLidar {
 		// Period is in microseconds, multiply by 1 million to make numbers
 		// nice, divide by 10 to get cm
 		cm = (counter.getPeriod() * 1000000.0 / 10.0) + CALIBRATION_OFFSET;
-		if(Math.abs(last - cm) > 100 && last != 0){
+		if (Math.abs(last - cm) > 100 && last != 0 && cm < 60) {
 			drasticChange = true;
-			System.out.println("DRASTIC");
-		} else{
-			drasticChange = false;
+			// System.out.println("DRASTIC");
+		} else {
+			if (cm > 65)
+				drasticChange = false;
 		}
 		last = cm;
 		return cm;
@@ -65,14 +66,12 @@ public class PWMLidar {
 	}
 
 	public boolean boxInClampRange() {
-		return RobotMap.intakeLidar.getDistance() < 50 && RobotMap.intakeLidar.getDistance() > 25
-				&& Robot.intake.getPosition() == Value.kForward;
+		return RobotMap.intakeLidar.getDistance() < 50 && RobotMap.intakeLidar.getDistance() > 25 && !drasticChange;
 	}
 
 	public boolean boxFullyInside() {
-		return RobotMap.intakeLidar.getDistance() < 25 && Robot.intake.getPosition() == Value.kForward;
+		return RobotMap.intakeLidar.getDistance() < 25 && !drasticChange;
 	}
-
 }
 
 // package org.usfirst.frc.team3504.robot;

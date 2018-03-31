@@ -143,8 +143,8 @@ public class Robot extends IterativeRobot {
 			System.out.println("Running Two Box Auton");
 			break;
 		case "Timed":
-			autoCommand = new TimedAutonomous(switchOnLeft, startPos);
 			System.out.println("Running Timed Auton");
+			autoCommand = new TimedAutonomous(switchOnLeft, startPos);
 			break;
 		case "Test":
 			autoCommand = new TestAutonomous();
@@ -174,6 +174,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		constants.get();
 		Scheduler.getInstance().run();
 		elevator.run();
 	}
@@ -192,7 +193,7 @@ public class Robot extends IterativeRobot {
 		elevator.teleopRun();
 //		System.out.println("Side Lidar: "+RobotMap.sideLidar.getDistance());
 //		System.out.println("Intake Lidar: "+RobotMap.intakeLidar.getDistance());
-		System.out.println("Drive Encoder Right Value: " +RobotMap.encoderRight.getDistance());
+//		System.out.println("Drive Encoder Right Value: " +RobotMap.encoderRight.getDistance());
 //		System.out.println("Drive Encoder Left Value: " +RobotMap.encoderLeft.getDistance());
 
 		speed = -oi.xBox.getRawAxis(1) * Elevator.getSpeedRatio();

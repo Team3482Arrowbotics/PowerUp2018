@@ -14,11 +14,14 @@ public class TestAutonomous extends CommandGroup{
 	public TestAutonomous() {
 		
 		super();
-		RobotMap.drive.disable();
-		System.out.println("Test Auton");
-		addSequential(new FindBox(fromRight));
-		addSequential(new GoToBox());
-		addSequential(new GrabBox());
-		RobotMap.drive.enable();
+//		addSequential(new EnableDrive(false));
+//		System.out.println("Test Auton");
+//		addSequential(new FindBox(fromRight));
+//		addSequential(new GoToBox());
+//		addSequential(new GrabBox());
+//		System.out.println("Starting Move");
+		addSequential(new Move(2));
+//		System.out.println("Done Moving");
+		addSequential(new EnableDrive(true));
 	}
 }

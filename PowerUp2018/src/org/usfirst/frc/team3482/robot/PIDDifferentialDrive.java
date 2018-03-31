@@ -8,8 +8,8 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	// turns if true, straight if false
 	boolean turning;
 	RotationAdjuster rot;
-	public static final double MAX_ACCELERATION = 0.03;
-	public double currentSpeed = 0;
+	public static final double MAX_ACCELERATION = 0.04, MAX_TURN_ACCELERATION = 0.1;
+	public double currentSpeed = 0, currentRotation = 0;
 	public static boolean enabled = true;
 
 	public PIDDifferentialDrive(SpeedController leftMotor, SpeedController rightMotor, RotationAdjuster r,
@@ -43,7 +43,7 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	}
 
 	public void arcadeDrive(double speed, double rotation) {
-	
+		System.out.println("arcade driving");
 		//Acceleration Control (Prevents bot tipping)
 		if (Math.abs(speed - currentSpeed) > MAX_ACCELERATION) {
 			if (speed < currentSpeed) {
@@ -52,8 +52,16 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 				speed = currentSpeed + MAX_ACCELERATION;
 			}
 		}
+		if (Math.abs(rotation - currentRotation) > MAX_TURN_ACCELERATION) {
+			if (rotation < currentRotation) {
+				rotation = currentRotation - MAX_TURN_ACCELERATION;
+			} else {
+				rotation = currentRotation + MAX_TURN_ACCELERATION;
+			}
+		}
 		
 		currentSpeed = speed;
+		currentRotation = rotation;
 		
 		//System.out.println("Current Speed: " + currentSpeed);
 		
@@ -83,14 +91,9 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 //		RobotMap.counteractDrift.enable();	
 //	}
 	
-	public void enable()
+	public void enable(boolean enable)
 	{
-		enabled = true;
-	}
-	
-	public void disable()
-	{
-		enabled = false;
+		enabled = enable;
 	}
 	
 	public boolean isEnabled()

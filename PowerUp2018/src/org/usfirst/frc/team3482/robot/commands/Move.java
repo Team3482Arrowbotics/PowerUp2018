@@ -13,12 +13,16 @@ public class Move extends Command{
 	}
 	protected void initialize() { 
 		RobotMap.drive.setTurning(false);
+		System.out.println("Encoder Value: " + RobotMap.encoderRight.getDistance());
 		RobotMap.encoderRight.reset();
+		System.out.println("Encoder Value Post Reset: " + RobotMap.encoderRight.getDistance());
+		System.out.println("Target Position: " + distance);
 		RobotMap.driveController.enable();
 		RobotMap.driveController.setSetpoint(distance);
 		//RobotMap.rotationController.enable();
 		//RobotMap.rotationController.setSetpoint(RobotMap.navx.getYaw());
 	}
+	
 	protected void end() {
 		RobotMap.driveController.disable();
 	}
