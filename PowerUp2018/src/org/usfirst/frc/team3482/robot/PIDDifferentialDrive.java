@@ -8,7 +8,7 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	// turns if true, straight if false
 	boolean turning;
 	RotationAdjuster rot;
-	public static final double MAX_ACCELERATION = 0.04, MAX_TURN_ACCELERATION = 0.1;
+	public static final double MAX_ACCELERATION = 0.04, MAX_TURN_ACCELERATION = 0.105;
 	public double currentSpeed = 0, currentRotation = 0;
 	public static boolean enabled = true;
 

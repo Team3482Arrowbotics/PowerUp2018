@@ -71,7 +71,7 @@ public class RobotMap {
 		drive = new PIDDifferentialDrive(left, right, rotationAdjuster);
 		drivePID = new DrivePIDOutput();
 		driveController = new PIDController(0.1, 0, 0, encoderRight, drive);
-		driveController.setOutputRange(-.6, .6);
+		driveController.setOutputRange(-.5, .5);
 		drive.setDeadband(0.1);
 		drive.setSafetyEnabled(false);
 		driveController.setAbsoluteTolerance(2);
@@ -108,7 +108,7 @@ public class RobotMap {
 		
 		counteractDrift = new PIDController(0.05, 0, 0, navx, rotationAdjuster);
 		counteractDrift.setInputRange(-180, 180);
-		counteractDrift.setOutputRange(-.7, .7);
+		counteractDrift.setOutputRange(-.5, .5);
 		counteractDrift.setContinuous(true);
 		counteractDrift.setAbsoluteTolerance(1);
 		

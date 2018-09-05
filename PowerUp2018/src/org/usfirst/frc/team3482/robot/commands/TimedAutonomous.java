@@ -21,6 +21,7 @@ public class TimedAutonomous extends CommandGroup {
 		RobotMap.driveController.enable();
 		addSequential(new Intake(0.01));
 		addSequential(new SetElevatorPosition(Elevator.SWITCH_POSITION));
+		
 		switch (sPos) {
 		case "LEFT":
 			System.out.println("Left");

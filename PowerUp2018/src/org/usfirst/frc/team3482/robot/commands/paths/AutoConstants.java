@@ -33,7 +33,7 @@ public class AutoConstants {
 		crossFieldToSwitch = 225;
 		middleToLeftSwitch = 25;
 		middleToRightSwitch = 25;
-		lastPush = 40;
+		lastPush = 30;
 		scaleToSameSideBox = 63;
 		middleToLeftScaleLane = 80;
 		middleToRightScaleLane = 80;
