@@ -63,7 +63,7 @@ public class RobotMap {
 		encoderLeft.reset();
 		encoderRight.reset();
 //		encoders = new TwoEncoderPID(encoderLeft, encoderRight);
-		
+// 		reeeeeeeeeee upload plssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 		rotationAdjuster = new RotationAdjuster();
 		
 		left = new SpeedControllerGroup(frontLeft, backLeft);
