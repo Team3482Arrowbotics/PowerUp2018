@@ -48,7 +48,7 @@ public class Elevator extends Subsystem implements Runnable {
 	}
 
 	public void teleopRun() {
-		AxisPos = -Robot.oi.flightStick.getRawAxis(AXIS);
+		AxisPos = -Robot.oi.xBox.getRawAxis(AXIS);
 
 		if (AxisPos > AXIS_DEADZONE) {
 			Robot.isEMovingUp = true;
@@ -70,27 +70,26 @@ public class Elevator extends Subsystem implements Runnable {
 
 	// RUNS EVERY TICK (see teleopPeriodic)
 	public void run() {
-
 		if (locked) {
 			elevatorTalon.set(ControlMode.Position, targetPos);
+			System.out.println("Motor Output: " + getCurrentPos());
 		}
+		
+		System.out.println("Motor Output: " + elevatorTalon.getMotorOutputPercent());
+        System.out.println("Second Motor Output: " + elevatorTalon2.getMotorOutputPercent());
+		
 
-//		System.out.println("Motor Output: " + elevatorTalon.getMotorOutputPercent());
-//		System.out.println("Second Motor Output: " + elevatorTalon2.getMotorOutputPercent());
-
-
-		//elevatorTalon2.set(ControlMode.PercentOutput, -elevatorTalon.getMotorOutputPercent());
-
-		//System.out.println("Set Pos: " + targetPos);
-		//System.out.println("Position: " + getCurrentPos());
-		// RobotMap.elevatorTalon.getClosedLoopError(0));
-		// System.out.println("Velocity: "+getCurrentVelocity());
-		// System.out.println("Percent Output Motor 1: " +
-		// elevatorTalon.getMotorOutputPercent());
-		// System.out.println("Percent Output Motor 2:
-		// "+elevatorTalon2.getMotorOutputPercent());
-		// System.out.println("Speed Ratio: "+ getSpeedRatio());
-		// System.out.println("Turn Ratio: "+ getTurnRatio());
+		elevatorTalon2.set(ControlMode.PercentOutput, elevatorTalon.getMotorOutputPercent());
+		
+		System.out.println("Set Pos: " + targetPos);
+		System.out.println("Position: " + getCurrentPos());
+		//RobotMap.elevatorTalon.getClosedLoopError(0));
+		System.out.println("Velocity: "+getCurrentVelocity());
+		System.out.println("Percent Output Motor 1: " +elevatorTalon.getMotorOutputPercent());
+		System.out.println("Percent Output Motor 2:"+elevatorTalon2.getMotorOutputPercent());
+		 System.out.println("Speed Ratio: "+ getSpeedRatio());
+		 System.out.println("Turn Ratio: "+ getTurnRatio());
+		 
 	}
 
 	public void resetEncoder() {

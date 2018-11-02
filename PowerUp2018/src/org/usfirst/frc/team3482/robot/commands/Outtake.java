@@ -18,13 +18,14 @@ public class Outtake extends Command {
 	}
 
 	protected void initialize() {
-		RobotMap.intakeMotorLeft.set(outtakeSpeed);
-		RobotMap.intakeMotorRight.set(-outtakeSpeed);
+		RobotMap.intakeMotorLeft.set(0.8);
+		RobotMap.intakeMotorRight.set(-0.8);
 		Robot.isSpoutake = true;
 	}
 
 	protected void execute() {
-
+		System.out.println("Inverse Intake Speed Left: " + RobotMap.intakeMotorLeft.get());
+		System.out.println("Inverse Intake Speed Right: " + RobotMap.intakeMotorRight.get());
 	}
 
 	protected void end() {

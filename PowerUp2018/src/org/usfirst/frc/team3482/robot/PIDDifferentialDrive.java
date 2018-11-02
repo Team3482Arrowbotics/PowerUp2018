@@ -8,7 +8,8 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	// turns if true, straight if false
 	boolean turning;
 	RotationAdjuster rot;
-	public static final double MAX_ACCELERATION = 0.04, MAX_TURN_ACCELERATION = 0.105;
+	// factor 0.04, turn 0.105
+	public static final double MAX_ACCELERATION = 0.08, MAX_TURN_ACCELERATION = 0.085;
 	public double currentSpeed = 0, currentRotation = 0;
 	public static boolean enabled = true;
 
@@ -43,7 +44,7 @@ public class PIDDifferentialDrive extends DifferentialDrive implements PIDOutput
 	}
 
 	public void arcadeDrive(double speed, double rotation) {
-		System.out.println("arcade driving");
+		//System.out.println("arcade driving");
 		//Acceleration Control (Prevents bot tipping)
 		if (Math.abs(speed - currentSpeed) > MAX_ACCELERATION) {
 			if (speed < currentSpeed) {

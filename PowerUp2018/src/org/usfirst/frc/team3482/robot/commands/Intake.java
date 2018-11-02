@@ -22,11 +22,13 @@ public class Intake extends Command{
 	
 	protected void execute() {
 		//Robot.ledStrip.flash("white", 0.1);
+		System.out.println("Intake Speed Left: " + RobotMap.intakeMotorLeft.get());
+		System.out.println("Intake Speed Right: " + RobotMap.intakeMotorRight.get());
 	}
 	
 	protected void end(){
-		RobotMap.intakeMotorLeft.set(-.2);
-		RobotMap.intakeMotorRight.set(.2);
+		RobotMap.intakeMotorLeft.set(-0.2);
+		RobotMap.intakeMotorRight.set(0.2);
 		Robot.ledStrip.turnOff();
 		Robot.isSpintake = false;
 	}

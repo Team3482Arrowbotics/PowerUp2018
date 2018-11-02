@@ -1,13 +1,17 @@
 package org.usfirst.frc.team3482.robot;
 
 import org.usfirst.frc.team3482.robot.commands.BlitzAutonomous;
+import org.usfirst.frc.team3482.robot.commands.Move;
 import org.usfirst.frc.team3482.robot.commands.Outtake;
 import org.usfirst.frc.team3482.robot.commands.ScaleAutonomous;
 import org.usfirst.frc.team3482.robot.commands.SwitchAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TestAutonomous;
 import org.usfirst.frc.team3482.robot.commands.TimedAutonomous;
+import org.usfirst.frc.team3482.robot.commands.TimedMove;
+import org.usfirst.frc.team3482.robot.commands.Turn;
 import org.usfirst.frc.team3482.robot.commands.TwoBoxAutonomous;
 import org.usfirst.frc.team3482.robot.commands.paths.AutoConstants;
+import org.usfirst.frc.team3482.robot.commands.paths.TimedCrossAutonLine;
 import org.usfirst.frc.team3482.robot.subsystems.Climber;
 import org.usfirst.frc.team3482.robot.subsystems.Elevator;
 import org.usfirst.frc.team3482.robot.subsystems.Intake;
@@ -83,6 +87,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Testing", "Test");
 		autoChooser.addObject("Switch", "Switch");
 		autoChooser.addObject("Scale", "Scale");
+		autoChooser.addDefault("Straight to Line", "TimedCrossAutonLine");
 
 		SmartDashboard.putData("Start Position" , sPosChooser);
 		SmartDashboard.putData("Autonomous Path" , autoChooser);
@@ -136,7 +141,7 @@ public class Robot extends IterativeRobot {
 		
 		autoType = autoChooser.getSelected();
 		System.out.println(autoType);
-		
+		System.out.println("Running AutoInit");
 		switch(autoType) {
 		case "Two Box":
 			autoCommand = new TwoBoxAutonomous(switchOnLeft, scaleOnLeft, startPos);
@@ -162,11 +167,15 @@ public class Robot extends IterativeRobot {
 			autoCommand = new ScaleAutonomous(scaleOnLeft, startPos);
 			System.out.println("Running Scale Auton");
 			break;
+		case "Straight to Line": 
+			autoCommand = new Move(25);
+			System.out.println("Running Straight Line Auton");
 		default:
 			autoCommand = new WaitCommand(0);
 			break;
 		}
-		autoCommand.start();
+		//autoCommand.start();
+		new SwitchAutonomous(true, startPos).start();
 	}
 
 	/**
@@ -201,7 +210,7 @@ public class Robot extends IterativeRobot {
 		
 		if(RobotMap.drive.isEnabled())
 		{
-			System.out.println("Drive Enabled");
+			//System.out.println("Drive Enabled");
 			RobotMap.drive.arcadeDrive(speed, turnSpeed);
 		}
 		
